@@ -1,4 +1,5 @@
-package ileinterdite;
+package view;
+
 public class VueAventurier implements Observe {
 
 	/**

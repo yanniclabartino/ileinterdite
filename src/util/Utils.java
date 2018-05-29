@@ -5,6 +5,7 @@
  */
 package util;
 
+import ileinterdite.Parameters;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;

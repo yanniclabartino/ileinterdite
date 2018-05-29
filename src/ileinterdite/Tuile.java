@@ -1,5 +1,6 @@
 package ileinterdite;
 import java.util.*;
+import ileinterdite.Utils.EtatTuile;
 
 public class Tuile {
 
