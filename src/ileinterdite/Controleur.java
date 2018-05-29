@@ -17,8 +17,8 @@ public class Controleur implements Observateur {
     private int niveauEau;
     private ArrayList<CarteBleue> piocheBleues;
     private ArrayList<CarteBleue> defausseBleues;
-    private ArrayList<CarteOrange> defausseOranges;
     private ArrayList<CarteOrange> piocheOranges;
+    private ArrayList<CarteOrange> defausseOranges;
 
     public void traiterMessage(Message m) {
     }
@@ -42,9 +42,11 @@ public class Controleur implements Observateur {
     }
 
     public void piocheCarteBleue() {
+        
     }
 
     public void gererCarteBleue() {
+        
     }
 
     public void bouger(int ligne, int colonne) {

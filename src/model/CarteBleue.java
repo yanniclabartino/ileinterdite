@@ -1,14 +1,19 @@
 package model;
 
 import util.NomTuile;
-import model.Carte;
 
-public class CarteBleue extends Carte {
+public class CarteBleue{
 
 	private Tuile innonde;
 	private NomTuile nomTuile;
 
-	public void piocheCarte() {
-	}
+    public Tuile getInnonde() {
+        return innonde;
+    }
+
+    public NomTuile getNomTuile() {
+        return nomTuile;
+    }
+        
 
 }
