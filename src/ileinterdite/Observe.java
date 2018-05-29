@@ -1,8 +1,6 @@
 package ileinterdite;
 public interface Observe {
-
-	Observateur getObservateur();
-
+    
 	/**
 	 * 
 	 * @param o

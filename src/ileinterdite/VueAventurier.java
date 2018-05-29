@@ -19,6 +19,7 @@ public class VueAventurier implements Observe {
 	 * 
 	 * @param o
 	 */
+        @Override
 	public void addObservateur(Observateur o) {
 		// TODO - implement VueAventurier.addObservateur
 		throw new UnsupportedOperationException();
@@ -28,6 +29,7 @@ public class VueAventurier implements Observe {
 	 * 
 	 * @param m
 	 */
+        @Override
 	public void notifierObservateur(Message m) {
 		// TODO - implement VueAventurier.notifierObservateur
 		throw new UnsupportedOperationException();

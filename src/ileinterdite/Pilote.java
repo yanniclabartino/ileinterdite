@@ -1,12 +1,17 @@
 package ileinterdite;
+
+import java.util.ArrayList;
+
 public class Pilote extends Aventurier {
 
 	/**
 	 * 
 	 * @param tDepart
 	 * @param g
+     * @return 
 	 */
-	public ArrayList calculTuileDispo(Tuile tDepart, Grille g) {
+        @Override
+	public ArrayList<Tuile> calculTuileDispo(Tuile tDepart, Grille g) {
 		// TODO - implement Pilote.calculTuileDispo
 		throw new UnsupportedOperationException();
 	}
@@ -15,8 +20,10 @@ public class Pilote extends Aventurier {
 	 * 
 	 * @param tDepart
 	 * @param g
+     * @return 
 	 */
-	public ArrayList calculTuileAss(Tuile tDepart, Grille g) {
+        @Override
+	public ArrayList<Tuile> calculTuileAss(Tuile tDepart, Grille g) {
 		// TODO - implement Pilote.calculTuileAss
 		throw new UnsupportedOperationException();
 	}
