@@ -1,3 +1,5 @@
+package ileinterdite;
+
 public enum Actions {
 	BOUGER,
 	ASSECHER,

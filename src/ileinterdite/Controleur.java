@@ -6,6 +6,8 @@ import model.Grille;
 import model.Trésor;
 import model.Aventurier;
 import java.util.*;
+import model.Tuile;
+import util.NomTuile;
 import view.VueAventurier;
 
 public class Controleur implements Observateur {
@@ -56,5 +58,11 @@ public class Controleur implements Observateur {
     }
 
     public static void main(String[] args) {
+        ArrayList<Tuile> Tuiles = new ArrayList();
+        Tuiles.add(new Tuile(NomTuile.LE_PONT_DES_ABIMES));
+        Tuiles.add(new Tuile(NomTuile.LA_PORTE_DE_BRONZE));
+        Tuiles.add(new Tuile(NomTuile.LA_CAVERNE_DES_OMBRES));
+        ,new Tuile(NomTuile.LA_PORTE_DE_FER),        new Tuile(NomTuile.LA_PORTE_D_OR),     new Tuile(NomTuile.LES_FALAISES_DE_L_OUBLI), null},
+        {new Tuile(NomTuile.LE_PALAIS_DE_CORAIL),new Tuile(NomTuile.LA_PORTE_D_ARGENT),    new Tuile(NomTuile.LES_DUNES_DE_L_ILLUSION),new Tuile(NomTuile.HELIPORT),          new Tuile(NomTuile.LA_PORTE_DE_CUIVRE),      new Tuile(NomTuile.LE_JARDIN_DES_HURLEMENTS)},
     }
 }
