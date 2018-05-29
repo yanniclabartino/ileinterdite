@@ -22,6 +22,7 @@ public class Controleur implements Observateur {
     private ArrayList<CarteOrange> piocheOranges;
     private ArrayList<CarteOrange> defausseOranges;
 
+    @Override
     public void traiterMessage(Message m) {
     }
     public void gererDeplacement() {
