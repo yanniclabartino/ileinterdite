@@ -5,13 +5,13 @@
  */
 package util;
 
-import ileinterdite.Parameters;
+import util.Parameters;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import javax.swing.JOptionPane;
-import model.aventuriers.Aventurier;
+import model.Aventurier;
 
 /**
  *
