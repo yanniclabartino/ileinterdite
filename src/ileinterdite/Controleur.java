@@ -24,45 +24,34 @@ public class Controleur implements Observateur {
 
     public void traiterMessage(Message m) {
     }
-
     public void gererDeplacement() {
     }
-
     public void gererAssechement() {
     }
-
     public void gererDonnation() {
     }
-
     public void gererGainTresor() {
     }
-
     public void piocheCarteOrange() {
     }
-
     public void gererCarteOrange() {
     }
-
     public void piocheCarteBleue() {
 
     }
-
     public void gererCarteBleue() {
 
     }
-
     public void bouger(int ligne, int colonne) {
     }
-
     public void calculTouteTuileDispo(Grille g) {
     }
 
-    public static void main(String[] args) {
+    public Controleur(){
         ArrayList<Tuile> Tuiles = new ArrayList();
         for (int i = 1; i < 24; i++) {
             Tuiles.add(new Tuile(NomTuile.getFromNb(i)));
         }
-
         /*
         Tuiles.add(new Tuile(NomTuile.LE_PONT_DES_ABIMES));
         Tuiles.add(new Tuile(NomTuile.LA_PORTE_DE_BRONZE));
@@ -70,5 +59,11 @@ public class Controleur implements Observateur {
         ,new Tuile(NomTuile.LA_PORTE_DE_FER),        new Tuile(NomTuile.LA_PORTE_D_OR),     new Tuile(NomTuile.LES_FALAISES_DE_L_OUBLI), null},
         {new Tuile(NomTuile.LE_PALAIS_DE_CORAIL),new Tuile(NomTuile.LA_PORTE_D_ARGENT),    new Tuile(NomTuile.LES_DUNES_DE_L_ILLUSION),new Tuile(NomTuile.HELIPORT),          new Tuile(NomTuile.LA_PORTE_DE_CUIVRE),      new Tuile(NomTuile.LE_JARDIN_DES_HURLEMENTS)},
          */
+        grille = new Grille(Tuiles);
+        
+        
+        
     }
+    
+    public static void main(String[] args) { new Controleur(); }
 }
