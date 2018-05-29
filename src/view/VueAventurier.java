@@ -118,8 +118,10 @@ public class VueAventurier implements Observe {
     public void notifierObservateur(Message m) {
     }
 
+    
+    /*
     public static void main(String[] args) {
         // Instanciation de la fenêtre 
         VueAventurier vueAventurier = new VueAventurier("Manon", "Explorateur", Pion.ROUGE.getCouleur());
-    }
+    }*/
 }
