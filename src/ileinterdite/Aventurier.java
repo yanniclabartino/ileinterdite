@@ -1,3 +1,5 @@
+package ileinterdite;
+
 import java.util.*;
 
 public abstract class Aventurier {
@@ -24,14 +26,16 @@ public abstract class Aventurier {
 	 * 
 	 * @param tDepart
 	 * @param g
+     * @return 
 	 */
-	public abstract ArrayList calculTuileDispo(Tuile tDepart, Grille g);
+	public abstract ArrayList<Tuile> calculTuileDispo(Tuile tDepart, Grille g);
 
 	/**
 	 * 
 	 * @param tPosition
 	 * @param g
+     * @return 
 	 */
-	public abstract Tuile calculTuileAssecher(Tuile tPosition, Grille g);
+	public abstract ArrayList<Tuile> calculTuileAss(Tuile tPosition, Grille g);
 
 }

@@ -1,3 +1,5 @@
+package ileinterdite;
+
 public abstract class CarteOrange extends Carte {
 
 	private Aventurier piochée;

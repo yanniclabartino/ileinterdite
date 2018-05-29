@@ -1,3 +1,5 @@
+package ileinterdite;
+
 public class CarteBleue extends Carte {
 
 	private Tuile innonde;
