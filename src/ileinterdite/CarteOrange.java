@@ -1,6 +1,6 @@
 public abstract class CarteOrange extends Carte {
 
-	Aventurier piochée;
+	private Aventurier piochée;
 
 	public void piocheCarte() {
 		// TODO - implement CarteOrange.piocheCarte

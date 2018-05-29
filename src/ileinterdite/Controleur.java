@@ -2,15 +2,15 @@ import java.util.*;
 
 public class Controleur implements Observateur {
 
-	VueAventurier ihm;
-	Grille grille;
-	Aventurier joueur;
-	ArrayList<CarteOrange> piocheOranges;
-	Trésor trésor;
-	ArrayList<CarteOrange> defausseOranges;
+	private VueAventurier ihm;
+	private Grille grille;
+	private Aventurier joueur;
+	private ArrayList<CarteOrange> piocheOranges;
+	private Trésor trésor;
+	private ArrayList<CarteOrange> defausseOranges;
 	private int niveauEau;
-	ArrayList<CarteBleue> piocheBleues;
-	ArrayList<CarteBleue> defausseBleues;
+	private ArrayList<CarteBleue> piocheBleues;
+	private ArrayList<CarteBleue> defausseBleues;
 
 	/**
 	 * 

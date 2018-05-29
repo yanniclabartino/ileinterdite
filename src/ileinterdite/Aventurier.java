@@ -2,8 +2,8 @@ import java.util.*;
 
 public abstract class Aventurier {
 
-	Tuile appartient;
-	ArrayList<CarteOrange> possède;
+	private Tuile appartient;
+	private ArrayList<CarteOrange> possède;
 	private Pion couleur;
 
 	public Tuile getTuile() {

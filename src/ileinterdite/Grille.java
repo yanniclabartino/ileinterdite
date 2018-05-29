@@ -1,6 +1,6 @@
 public class Grille {
 
-	Tuile tuile;
+	private Tuile tuile;
 
 	/**
 	 * 
