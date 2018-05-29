@@ -1,5 +1,5 @@
 package ileinterdite;
-
+//
 import java.util.*;
 
 public abstract class Aventurier {
