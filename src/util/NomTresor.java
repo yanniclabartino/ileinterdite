@@ -1,4 +1,4 @@
-package ileinterdite;
+package util;
 public enum NomTresor {
 	LE_CRISTAL_ARDENT,
 	LA_STATUE_DU_ZEPHYR,

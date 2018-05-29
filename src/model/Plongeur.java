@@ -1,8 +1,9 @@
-package ileinterdite;
+package model;
 
+import model.Aventurier;
 import java.util.ArrayList;
 
-public class Pilote extends Aventurier {
+public class Plongeur extends Aventurier {
 
 	/**
 	 * 
@@ -12,7 +13,7 @@ public class Pilote extends Aventurier {
 	 */
         @Override
 	public ArrayList<Tuile> calculTuileDispo(Tuile tDepart, Grille g) {
-		// TODO - implement Pilote.calculTuileDispo
+		// TODO - implement Plongeur.calculTuileDispo
 		throw new UnsupportedOperationException();
 	}
 
@@ -24,7 +25,7 @@ public class Pilote extends Aventurier {
 	 */
         @Override
 	public ArrayList<Tuile> calculTuileAss(Tuile tDepart, Grille g) {
-		// TODO - implement Pilote.calculTuileAss
+		// TODO - implement Plongeur.calculTuileAss
 		throw new UnsupportedOperationException();
 	}
 }

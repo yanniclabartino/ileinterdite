@@ -1,5 +1,10 @@
 package ileinterdite;
 
+import model.CarteBleue;
+import model.CarteOrange;
+import model.Grille;
+import model.Trésor;
+import model.Aventurier;
 import java.util.*;
 
 public class Controleur implements Observateur {

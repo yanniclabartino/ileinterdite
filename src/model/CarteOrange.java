@@ -1,4 +1,7 @@
-package ileinterdite;
+package model;
+
+import model.Carte;
+import model.Aventurier;
 
 public abstract class CarteOrange extends Carte {
 

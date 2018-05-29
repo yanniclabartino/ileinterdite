@@ -1,4 +1,6 @@
-package ileinterdite;
+package model;
+import util.NomTuile;
+import model.Aventurier;
 import java.util.*;
 import ileinterdite.Utils.EtatTuile;
 

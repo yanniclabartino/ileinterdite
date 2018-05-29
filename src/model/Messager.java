@@ -1,4 +1,5 @@
-package ileinterdite;
+package model;
+import model.Aventurier;
 import java.util.ArrayList;
 
 public class Messager extends Aventurier {

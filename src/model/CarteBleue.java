@@ -1,4 +1,7 @@
-package ileinterdite;
+package model;
+
+import util.NomTuile;
+import model.Carte;
 
 public class CarteBleue extends Carte {
 

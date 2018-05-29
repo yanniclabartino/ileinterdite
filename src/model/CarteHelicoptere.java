@@ -1,4 +1,4 @@
-package ileinterdite;
+package model;
 
 public class CarteHelicoptere extends CarteOrange {
 }

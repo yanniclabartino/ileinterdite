@@ -1,5 +1,6 @@
-package ileinterdite;
+package model;
 
+import model.Aventurier;
 import java.util.ArrayList;
 
 public class Navigateur extends Aventurier {
