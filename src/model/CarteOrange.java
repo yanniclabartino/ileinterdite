@@ -4,10 +4,13 @@ import model.Aventurier;
 
 public abstract class CarteOrange {
 
-	private Aventurier piochée;
+    private Aventurier piochée;
 
-	public void piocheCarte(Aventurier a) {
-            
-	}
+    public void setOwner(Aventurier a) {
+        this.piochée = a;
+    }
 
+    void delOwner() {
+        this.piochée = null;
+    }
 }

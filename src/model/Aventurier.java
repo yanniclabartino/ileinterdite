@@ -22,12 +22,14 @@ public abstract class Aventurier {
                 appartient = tArrivee;
 	}
         
-        public void addCarte(CarteOrange c){
+        public void piocheCarte(CarteOrange c){
             this.possède.add(c);
+            c.setOwner(this);
         }
 
-        public void suppCarte(CarteOrange c){
+        public void defausseCarte(CarteOrange c){
             this.possède.remove(c);
+            c.delOwner();
         }
         
         
