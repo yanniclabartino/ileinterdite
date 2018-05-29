@@ -7,14 +7,14 @@ public class Grille {
 	 * 
 	 * @param ligne
 	 * @param colonne
+     * @return 
 	 */
 	public Tuile getTuile(int ligne, int colonne) {
 		return this.tuile[ligne][colonne];
 	}
 
-	public Grille getGrille() {
-		// TODO - implement Grille.getGrille
-		throw new UnsupportedOperationException();
+	public Tuile[][] getGrille() {
+		return this.tuile;
 	}
 
 }
