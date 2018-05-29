@@ -1,3 +1,4 @@
+package ileinterdite;
 public class Plongeur extends Aventurier {
 
 	/**

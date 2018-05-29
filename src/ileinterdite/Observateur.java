@@ -1,3 +1,4 @@
+package ileinterdite;
 public interface Observateur {
 
 	/**

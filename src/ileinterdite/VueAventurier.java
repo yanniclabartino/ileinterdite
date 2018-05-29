@@ -1,3 +1,4 @@
+package ileinterdite;
 public class VueAventurier implements Observe {
 
 	/**

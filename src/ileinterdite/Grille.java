@@ -1,3 +1,4 @@
+package ileinterdite;
 public class Grille {
 
 	private Tuile tuile;

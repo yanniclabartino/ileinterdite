@@ -1,3 +1,4 @@
+package ileinterdite;
 public class Message {
 
 	private Actions type;

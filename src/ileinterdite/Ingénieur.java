@@ -1,4 +1,4 @@
-
+package ileinterdite;
 import java.util.ArrayList;
 
 public class Ingénieur extends Aventurier {

@@ -1,3 +1,4 @@
+package ileinterdite;
 public enum NomTuile {
 	LE_PONT_DES_ABIMES,
 	LA_PORTE_DE_BRONZE,
