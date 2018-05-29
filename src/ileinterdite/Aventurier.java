@@ -18,8 +18,7 @@ public abstract class Aventurier {
 	 * @param tArrivee
 	 */
 	public void setTuile(Tuile tArrivee) {
-		// TODO - implement Aventurier.setTuile
-		throw new UnsupportedOperationException();
+                appartient = tArrivee;
 	}
 
 	/**
