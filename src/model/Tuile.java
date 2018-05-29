@@ -5,20 +5,28 @@ import util.Utils.EtatTuile;
 
 public class Tuile {
 
-	ArrayList<Aventurier> possède;
-	private EtatTuile etat;
-	private int ligne;
-	private int colonne;
-	private NomTuile nom;
+    ArrayList<Aventurier> possede;
+    private EtatTuile etat;
+    private int ligne;
+    private int colonne;
+    private NomTuile nom;
 
-	public void suppAventurier(Aventurier a) {
-	}
-
-	public void addAventurier(Aventurier a) {
-	}
+    public Tuile(NomTuile nom) {
+        this.nom = nom;
+    }
         
-	public void setEtat(EtatTuile nouvelEtat) {
-		this.etat = nouvelEtat;
-	}
+
+
+    public void suppAventurier(Aventurier a) {
+        possede.remove(a);
+    }
+
+    public void addAventurier(Aventurier a) {
+        possede.add(a);
+    }
+
+    public void setEtat(EtatTuile nouvelEtat) {
+            this.etat = nouvelEtat;
+    }
 
 }
