@@ -1,7 +1,7 @@
 package ileinterdite;
 public class Grille {
 
-	private Tuile tuile;
+	private Tuile tuile[][];
 
 	/**
 	 * 
@@ -9,7 +9,7 @@ public class Grille {
 	 * @param colonne
 	 */
 	public Tuile getTuile(int ligne, int colonne) {
-		return this.tuile;
+		return this.tuile[ligne][colonne];
 	}
 
 	public Grille getGrille() {
