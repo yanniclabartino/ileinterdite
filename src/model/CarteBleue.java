@@ -9,8 +9,6 @@ public class CarteBleue extends Carte {
 	private NomTuile nomTuile;
 
 	public void piocheCarte() {
-		// TODO - implement CarteBleue.piocheCarte
-		throw new UnsupportedOperationException();
 	}
 
 }

@@ -1,10 +1,7 @@
 package ileinterdite;
+
 public interface Observateur {
 
-	/**
-	 * 
-	 * @param m
-	 */
-	void traiterMessage(Message m);
+    void traiterMessage(Message m);
 
 }

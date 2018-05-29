@@ -11,28 +11,12 @@ public class Tuile {
 	private int colonne;
 	private NomTuile nom;
 
-	/**
-	 * 
-	 * @param a
-	 */
 	public void suppAventurier(Aventurier a) {
-		// TODO - implement Tuile.suppAventurier
-		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * 
-	 * @param a
-	 */
 	public void addAventurier(Aventurier a) {
-		// TODO - implement Tuile.addAventurier
-		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * 
-	 * @param nouvelEtat
-	 */
+        
 	public void setEtat(EtatTuile nouvelEtat) {
 		this.etat = nouvelEtat;
 	}

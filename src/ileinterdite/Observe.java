@@ -1,4 +1,5 @@
 package ileinterdite;
+
 public interface Observe {
     
 	/**
