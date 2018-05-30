@@ -77,7 +77,10 @@ public class VueAventurier implements Observe {
         this.panelBoutons.add(btnAutreAction);
         this.panelBoutons.add(btnTerminerTour);
 
-        this.window.setVisible(true);
+        this.window.setVisible(false);
+    }
+    public void setVisible(boolean v){
+        this.window.setVisible(v);
     }
 
     public void setPosition(String pos) {
