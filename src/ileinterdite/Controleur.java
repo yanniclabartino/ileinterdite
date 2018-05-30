@@ -40,7 +40,6 @@ public class Controleur implements Observateur {
     public void gererCarteOrange() {
     }
     public void piocheCarteBleue() {
-
     }
     public void gererCarteBleue() {
 
@@ -67,6 +66,12 @@ public class Controleur implements Observateur {
         //Initialisation de la Grille
         grille = new Grille(Tuiles);
 
+        //Création des Trésors
+        trésors[1] = new Trésor(NomTresor.LE_CRISTAL_ARDENT);
+        trésors[2] = new Trésor(NomTresor.LA_PIERRE_SACREE);
+        trésors[3] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
+        trésors[4] = new Trésor(NomTresor.LE_CALICE_DE_L_ONDE);
+        
         /*
                 INTERFACE TEXTE.
         */
@@ -93,7 +98,7 @@ public class Controleur implements Observateur {
         } while (choix != "0");
         
         //sélection des noms de joueurs.
-        for (int i = 0 ; i < nbJoueurs ; i++){
+        for (int i = 1 ; i < nbJoueurs ; i++){
             System.out.println("Nom joueur n°"+i+" : ");
             choix = sc.nextLine();
             nomJoueurs[i]=choix;
@@ -110,8 +115,20 @@ public class Controleur implements Observateur {
         joueurs = Utils.melangerAventuriers(joueurs);
         
         //Création d'une vue pour chaque aventurier...
-        for (int i = 0 ; i < nbJoueurs ; i++){
-            ihm[i] = new VueAventurier(nomJoueurs[i], joueurs.get(i+1).getNomAventurier(), joueurs.get(i+1).getCouleur().getCouleur());
+        for (int i = 1 ; i < nbJoueurs ; i++){
+            ihm[i] = new VueAventurier(nomJoueurs[i], joueurs.get(i-1).getNomAventurier(), joueurs.get(i-1).getCouleur().getCouleur());
+        }
+        
+        //boucle du jeu
+        boolean fin = false;
+        while (!fin){
+            
+            
+            for (int i = 1 ; i < nbJoueurs ; i++){
+                if (trésors[i].isGagne()){
+                    
+                }
+            }
         }
         
     }
