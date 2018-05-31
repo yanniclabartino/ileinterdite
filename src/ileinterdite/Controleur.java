@@ -33,7 +33,7 @@ public class Controleur implements Observateur {
     public void traiterMessage(Message m) {
     }
     public void gererDeplacement(Aventurier joueur) {
-        if (joueur.getCouleur() == Utils.Pion.JAUNE && ) {
+        if (joueur.getCouleur() == Utils.Pion.JAUNE) {
             for (int i = 1; i < 3; i++) {
                 joueur.calculTuileDispo(grille);
             }
