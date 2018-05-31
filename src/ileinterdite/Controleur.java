@@ -134,11 +134,16 @@ public class Controleur implements Observateur {
         while (!fin){
             
             
-            for (int i = 1 ; i < nbJoueurs ; i++){
-                if (trésors[i].isGagne()){
-                    
+            /*
+            //On regarde si tout les trésors sont gagnés...
+            fin = true;
+            int i = 1;
+            while(i < nbJoueurs && fin!=false){
+                if (!trésors[i].isGagne()){
+                    fin = false;
                 }
-            }
+                i++;
+            }*/
         }
         
     }
