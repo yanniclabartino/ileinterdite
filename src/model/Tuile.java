@@ -15,7 +15,17 @@ public class Tuile {
         this.nom = nom;
     }
         
+  public int getColonne() {
+        return colonne;
+    }
 
+    public EtatTuile getEtat() {
+        return etat;
+    }
+
+    public int getLigne() {
+        return ligne;
+    }
 
     public void suppAventurier(Aventurier a) {
         possede.remove(a);

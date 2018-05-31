@@ -28,8 +28,23 @@ public class Controleur implements Observateur {
     public void traiterMessage(Message m) {
     }
     public void gererDeplacement() {
+        if (joueur.getCouleur() == Utils.Pion.JAUNE && ) {
+            for (int i = 1; i < 3; i++) {
+                joueur.calculTuileDispo(grille);
+            }
+
+        } else {
+            joueur.calculTuileDispo(grille);
+        }
     }
     public void gererAssechement() {
+        if (joueur.getCouleur() == Utils.Pion.ROUGE && ) {
+            for (int i = 1; i < 3; i++) {
+                joueur.calculTuileAss(grille);
+            }
+        } else {
+            joueur.calculTuileAss(grille);
+        }
     }
     public void gererDonnation() {
     }
