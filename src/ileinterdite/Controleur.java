@@ -1,6 +1,5 @@
 package ileinterdite;
 
-import java.awt.Color;
 import model.CarteBleue;
 import model.CarteOrange;
 import model.Grille;
@@ -8,8 +7,14 @@ import model.Trésor;
 import model.Aventurier;
 import java.util.*;
 import model.Explorateur;
+import model.Ingénieur;
+import model.Messager;
+import model.Navigateur;
+import model.Pilote;
+import model.Plongeur;
 import model.Tuile;
 import util.*;
+//import util.Utils.Pion;
 import view.VueAventurier;
 
 public class Controleur implements Observateur {
@@ -27,7 +32,7 @@ public class Controleur implements Observateur {
     @Override
     public void traiterMessage(Message m) {
     }
-    public void gererDeplacement() {
+    public void gererDeplacement(Aventurier joueur) {
         if (joueur.getCouleur() == Utils.Pion.JAUNE && ) {
             for (int i = 1; i < 3; i++) {
                 joueur.calculTuileDispo(grille);
@@ -37,7 +42,7 @@ public class Controleur implements Observateur {
             joueur.calculTuileDispo(grille);
         }
     }
-    public void gererAssechement() {
+    public void gererAssechement(Aventurier joueur) {
         if (joueur.getCouleur() == Utils.Pion.ROUGE && ) {
             for (int i = 1; i < 3; i++) {
                 joueur.calculTuileAss(grille);
@@ -88,16 +93,14 @@ public class Controleur implements Observateur {
         int nbJoueurs = 2;
         String[] nomJoueurs = null;
         
-        //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 6)
+        //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 4)
         do {
-        System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 6) : ");
+        System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 4) : ");
         choix = sc.nextLine();
             switch (choix) {
                 case "2": {nbJoueurs=2;break;}
                 case "3": {nbJoueurs=3;break;}
                 case "4": {nbJoueurs=4;break;}
-                case "5": {nbJoueurs=5;break;}
-                case "6": {nbJoueurs=6;break;}
                 case "0": return; default:
                                     System.out.println("Choix non valide");
                                     break;
