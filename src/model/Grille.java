@@ -37,6 +37,12 @@ public class Grille {
     public Tuile getTuile(int ligne, int colonne) {
             return this.tuile[ligne][colonne];
     }
+    
+    public Tuile getTuile(NomTuile nom){
+    //une méthode qui trouve la tuile de NomTuile nom dans la grille et qui la renvoi
+        Tuile t;
+        // for 
+    }
 
     public Tuile[][] getGrille() {
             return this.tuile;
