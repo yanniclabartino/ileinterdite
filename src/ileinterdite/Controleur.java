@@ -28,19 +28,24 @@ public class Controleur implements Observateur {
     private ArrayList<CarteBleue> defausseBleues;
     private ArrayList<CarteOrange> piocheOranges;
     private ArrayList<CarteOrange> defausseOranges;
+    private boolean pouvoirPiloteDispo = true;
 
     @Override
     public void traiterMessage(Message m) {
     }
     public void gererDeplacement(Aventurier joueur) {
-        if (joueur.getCouleur() == Utils.Pion.JAUNE) {
-            for (int i = 1; i < 3; i++) {
-                joueur.calculTuileDispo(grille);
+    //Gère les déplacements d'un aventurier
+        Scanner sc = new Scanner(System.in);
+        String choix;
+        if (joueur.getCouleur() == Utils.Pion.JAUNE && pouvoirPiloteDispo) {
+            System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (utilisable une fois par tour) :");
+            System.out.print("(oui/non) => "); 
+            choix = sc.nextLine();
+            if (choix =="oui" || choix=="Oui" || choix=="O" || choix=="o") {
+                pouvoirPiloteDispo=false;
             }
-
-        } else {
-            joueur.calculTuileDispo(grille);
         }
+        
     }
     public void gererAssechement(Aventurier joueur) {
         if (joueur.getCouleur() == Utils.Pion.ROUGE && ) {
@@ -51,6 +56,33 @@ public class Controleur implements Observateur {
             joueur.calculTuileAss(grille);
         }
     }
+    
+    public void afficheGrilleTexte(Grille g){
+        /*
+                        +-------+-------+
+                        |       |    (4)|
+                +-------+-------+-------+-------+
+                |       |   #   |       |       |
+        +-------+-------+-------+-------+-------+-------+
+        |       |       |       |(H)~   |       |       |
+        +-------+-------+-------+-------+-------+-------+
+        |       |    (1)|       |       |    (X)|       |
+        +-------+-------+-------+-------+-------+-------+
+                |       |   ~   |       |       |
+                +-------+-------+-------+-------+
+                        |       |       |             
+                        +-------+-------+
+        //# = tuile coulée
+        //~ = tuile ionnondé
+        //(X) = position du joueur actif
+        //(H) = héliport
+        //(nbJoueurSurCase) = nombre de joueur sur la case
+        //(X) prime sur (nbJoueurSurCase) si le joueur actif est sur une case avec d'autre joueurs.
+        */
+        
+        
+    }
+    
     public void gererDonnation() {
     }
     public void gererGainTresor() {
@@ -62,7 +94,6 @@ public class Controleur implements Observateur {
     public void piocheCarteBleue() {
     }
     public void gererCarteBleue() {
-
     }
     public void bouger(int ligne, int colonne) {
     }
@@ -121,6 +152,7 @@ public class Controleur implements Observateur {
         joueurs.add(new Explorateur(grille.getTuile(5,3), Pion.VERT));
         joueurs.add(new Messager(grille.getTuile(2,3), Pion.BLANC));
         joueurs.add(new Plongeur(grille.getTuile(3,2), Pion.NOIR));
+        
         //Mélange de ceux-ci dans joueurs.
         joueurs = Utils.melangerAventuriers(joueurs);
         
