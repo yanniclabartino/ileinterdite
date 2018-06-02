@@ -8,24 +8,24 @@ public class Grille {
 
     public Grille(ArrayList<Tuile> tuiles){
         int index = 0;//index pour parcourir l'arraylist des tuiles
-        for (int i = 1; i<7; i++){//chaques lignes
+        for (int i = 0; i<6; i++){//chaques lignes
             switch(i){
-                case 1 : case 6 ://ligne 1
-                    for(int j = 3; j<5; j++){
+                case 0 : case 5 ://ligne 1, 6
+                    for(int j = 2; j<4; j++){
                         this.tuile[i][j]=tuiles.get(index);
                         index++;
                     }
                     break;
                 
-                case 2 :case 5 : //ligne 2
-                    for(int j = 2; j<6; j++){
+                case 1 :case 4 : //ligne 2, 5
+                    for(int j = 1; j<5; j++){
                         this.tuile[i][j]=tuiles.get(index);
                         index++;
                     }
                     break;
                 
-                case 3 :case 4 : //ligne 3, 4 et 5
-                    for(int j = 1; j<7; j++){
+                case 2 :case 3 : //ligne 3, 4
+                    for(int j = 0; j<6; j++){
                         this.tuile[i][j]=tuiles.get(index);
                         index++;
                     }
