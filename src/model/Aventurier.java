@@ -11,7 +11,7 @@ public abstract class Aventurier {
     private Pion couleur;
 
     Aventurier(Tuile t, Pion p) {
-        setTuile(t);
+        this.appartient=t;
         this.couleur = p;
     }
 

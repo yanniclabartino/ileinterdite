@@ -12,6 +12,7 @@ public class Tuile {
     private NomTuile nom;
 
     public Tuile(NomTuile nom) {
+        possede = new ArrayList<>();
         this.nom = nom;
     }
         

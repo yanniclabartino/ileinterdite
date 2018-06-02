@@ -7,26 +7,26 @@ public class Grille {
     private Tuile tuile[][];
 
     public Grille(ArrayList<Tuile> tuiles){
-        tuile = new Tuile[5][5];
+        tuile = new Tuile[6][6];
         int index = 0;//index pour parcourir l'arraylist des tuiles
         for (int i = 0; i<5; i++){//chaques lignes
             switch(i){
                 case 0 : case 5 ://ligne 1, 6
-                    for(int j = 2; j<3; j++){
+                    for(int j = 2; j<4; j++){
                         this.tuile[i][j]=tuiles.get(index);
                         index++;
                     }
                     break;
                 
                 case 1 :case 4 : //ligne 2, 5
-                    for(int j = 1; j<4; j++){
+                    for(int j = 1; j<5; j++){
                         this.tuile[i][j]=tuiles.get(index);
                         index++;
                     }
                     break;
                 
                 case 2 :case 3 : //ligne 3, 4
-                    for(int j = 0; j<5; j++){
+                    for(int j = 0; j<6; j++){
                         this.tuile[i][j]=tuiles.get(index);
                         index++;
                     }
