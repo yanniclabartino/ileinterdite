@@ -162,6 +162,7 @@ public class Controleur implements Observateur {
     }
 
     public Controleur() {
+        //Génération des 24 tuiles
         ArrayList<Tuile> Tuiles = new ArrayList();
         for (int i = 1; i < 25; i++) {
             Tuiles.add(new Tuile(NomTuile.getFromNb(i)));
@@ -178,9 +179,6 @@ public class Controleur implements Observateur {
         trésors[2] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
         trésors[3] = new Trésor(NomTresor.LE_CALICE_DE_L_ONDE);
 
-        /*
-                INTERFACE TEXTE.
-         */
         //Declaration de variable utiles
         Scanner sc = new Scanner(System.in);
         String choix;
@@ -228,21 +226,9 @@ public class Controleur implements Observateur {
         }
 
         //boucle du jeu
-        boolean fin = false;
-        /*
-        while (!fin) {
-            //On regarde si tout les trésors sont gagnés...
-            fin = true;
-            int i = 1;
-            while(i < nbJoueurs && fin!=false){
-                if (!trésors[i].isGagne()){
-                    fin = false;
-                }
-                i++;
-            }
-        }*/
+        //A FAIRE
         
-        //test graphiques
+        //test graphique
         afficheGrilleTexte(grille, joueurs.get(1));
         
     }
