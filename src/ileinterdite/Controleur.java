@@ -135,8 +135,6 @@ public class Controleur implements Observateur {
                         System.out.print("   ");
                     }
                     System.out.print("|");
-                } else {
-                    System.out.print("        ");
                 }
                 if (x==5){
                     System.out.println();
