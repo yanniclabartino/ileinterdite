@@ -95,11 +95,7 @@ public class Controleur implements Observateur {
                     System.out.println("        +-------+-------+-------+-------+");
                     System.out.print("        |");
                     break;
-                case 2:
-                    System.out.println("+-------+-------+-------+-------+-------+-------+");
-                    System.out.print("|");
-                    break;
-                case 3:
+                case 2: case 3:
                     System.out.println("+-------+-------+-------+-------+-------+-------+");
                     System.out.print("|");
                     break;
@@ -140,7 +136,7 @@ public class Controleur implements Observateur {
                     }
                     System.out.print("|");
                 } else {
-                    System.out.print("       ");
+                    System.out.print("        ");
                 }
                 if (x==5){
                     System.out.println();
@@ -178,43 +174,44 @@ public class Controleur implements Observateur {
         grille = new Grille(Tuiles);
 
         //Création des Trésors
-        trésors[1] = new Trésor(NomTresor.LE_CRISTAL_ARDENT);
-        trésors[2] = new Trésor(NomTresor.LA_PIERRE_SACREE);
-        trésors[3] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
-        trésors[4] = new Trésor(NomTresor.LE_CALICE_DE_L_ONDE);
+        trésors = new Trésor[4];
+        trésors[0] = new Trésor(NomTresor.LE_CRISTAL_ARDENT);
+        trésors[1] = new Trésor(NomTresor.LA_PIERRE_SACREE);
+        trésors[2] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
+        trésors[3] = new Trésor(NomTresor.LE_CALICE_DE_L_ONDE);
 
         /*
                 INTERFACE TEXTE.
          */
         //Declaration de variable utiles
         Scanner sc = new Scanner(System.in);
-        String choix = "0";
+        String choix;
+        Integer choixInt;
+        boolean choixConforme = false;
         int nbJoueurs = 2;
-        String[] nomJoueurs = null;
-
-        //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 4)
+        String[] nomJoueurs;
+        
+        //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 6)
         do {
-            System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 4) : ");
+            System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 6) : ");
             choix = sc.nextLine();
-            switch (choix) {
-                case "2": {nbJoueurs = 2; break;}
-                case "3": {nbJoueurs = 3; break;}
-                case "4": {nbJoueurs = 4; break;}
-                default:
-                    System.out.println("Choix non valide");
-                    choix = "0";
-                    break;
+            choixInt = new Integer(choix);
+            if (choixInt >= 2 || choixInt <= 6) {
+                nbJoueurs = choixInt;
+                choixConforme = true;
             }
-        } while (!choix.equals("0"));
+        } while (!choixConforme);
 
         //sélection des noms de joueurs.
-        for (int i = 1; i < nbJoueurs; i++) {
-            System.out.println("Nom joueur n°" + i + " : ");
+        nomJoueurs = new String[nbJoueurs];
+        for (int i = 0; i < nbJoueurs; i++) {
+            System.out.println("Nom joueur n°" + (i+1) + " : ");
             choix = sc.nextLine();
             nomJoueurs[i] = choix;
         }
 
-        //Création des Aventuriers.
+        //Création des Aventuriers.       
+        joueurs = new ArrayList<>();
         joueurs.add(new Pilote(grille.getTuile(4, 3), Pion.BLEU));
         joueurs.add(new Navigateur(grille.getTuile(4, 2), Pion.JAUNE));
         joueurs.add(new Ingénieur(grille.getTuile(4, 1), Pion.ROUGE));
@@ -226,6 +223,7 @@ public class Controleur implements Observateur {
         joueurs = Utils.melangerAventuriers(joueurs);
 
         //Création d'une vue pour chaque aventurier...
+        ihm = new VueAventurier[nbJoueurs];
         for (int i = 1; i < nbJoueurs; i++) {
             ihm[i] = new VueAventurier(nomJoueurs[i], joueurs.get(i - 1).getNomAventurier(), joueurs.get(i - 1).getCouleur().getCouleur());
         }
