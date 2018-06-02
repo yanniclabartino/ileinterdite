@@ -61,94 +61,9 @@ public class Controleur implements Observateur {
         */
     }
 
-    public void afficheGrilleTexte(Grille g, Aventurier joueur) {
-        /*
-                        +-------+-------+
-                        |       |    (4)|
-                +-------+-------+-------+-------+
-                |       |   #   |       |       |
-        +-------+-------+-------+-------+-------+-------+
-        |       |       |       |(H)~   |       |       |
-        +-------+-------+-------+-------+-------+-------+
-        |       |    (1)|       |       |    (X)|       |
-        +-------+-------+-------+-------+-------+-------+
-                |       |   ~   |       |       |
-                +-------+-------+-------+-------+
-                        |       |       |             
-                        +-------+-------+
-        //# = tuile coulée
-        //~ = tuile ionnondé
-        //(X) = position du joueur actif
-        //(H) = héliport
-        //(nbJoueurSurCase) = nombre de joueur sur la case
-        //(X) prime sur (nbJoueurSurCase) si le joueur actif est sur une case avec d'autre joueurs.
-         */
-
-        Tuile tuileActive;
-        for (int y = 0; y < 6; y++) {
-            switch (y) {
-                case 0:
-                    System.out.println("                +-------+-------+");
-                    System.out.print("                |");
-                    break;
-                case 1:
-                    System.out.println("        +-------+-------+-------+-------+");
-                    System.out.print("        |");
-                    break;
-                case 2: case 3:
-                    System.out.println("+-------+-------+-------+-------+-------+-------+");
-                    System.out.print("|");
-                    break;
-                case 4:
-                    System.out.println("+-------+-------+-------+-------+-------+-------+");
-                    System.out.print("        |");
-                    break;
-                case 5:
-                    System.out.println("        +-------+-------+-------+-------+");
-                    System.out.print("                |");
-                    break;
-                default:
-                    break;
-            }
-            for (int x = 0; x < 6; x++) {
-                tuileActive=getGrille().getTuile(x, y);
-                if (tuileActive!=null){
-                    if (tuileActive.getNom()==NomTuile.HELIPORT) {
-                        System.out.print("(H)");
-                    } else {
-                        System.out.print("   ");
-                    }
-                    if (tuileActive.getEtat()==Utils.EtatTuile.INONDEE) {
-                        System.out.print("~");
-                    } else if (tuileActive.getEtat()==Utils.EtatTuile.COULEE){
-                        System.out.print("#");
-                    } else {
-                        System.out.print(" ");
-                    }
-                    if (tuileActive.getPossede().size() > 0){
-                        if (tuileActive.getPossede().contains(joueur)) {
-                            System.out.print("(X)");
-                        } else {
-                            System.out.print("("+tuileActive.getPossede().size()+")");
-                        }
-                    } else {
-                        System.out.print("   ");
-                    }
-                    System.out.print("|");
-                }
-                if (x==5){
-                    System.out.println();
-                }
-            }
-        }
-        System.out.println("                +-------+-------+");
-    }
-
     public void gererDonnation() {}
     public void gererGainTresor() {}
-    public void piocheCarteOrange() {}
     public void gererCarteOrange() {}
-    public void piocheCarteBleue() {}
     public void gererCarteBleue() {}
 
     public Grille getGrille() {
@@ -229,7 +144,7 @@ public class Controleur implements Observateur {
         //A FAIRE
         
         //test graphique
-        afficheGrilleTexte(grille, joueurs.get(1));
+        grille.afficheGrilleTexte(joueurs.get(1));
         
     }
 
