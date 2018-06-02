@@ -192,6 +192,7 @@ public class Controleur implements Observateur {
         //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 6)
         do {
             System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 6) : ");
+            System.out.print("    => ");
             choix = sc.nextLine();
             choixInt = new Integer(choix);
             if (choixInt >= 2 || choixInt <= 6) {
