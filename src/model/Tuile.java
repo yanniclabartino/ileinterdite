@@ -26,6 +26,10 @@ public class Tuile {
     public NomTuile getNom() {
         return nom;
     }
+
+    public ArrayList<Aventurier> getPossede() {
+        return possede;
+    }
     
     public int getLigne() {
         return ligne;
