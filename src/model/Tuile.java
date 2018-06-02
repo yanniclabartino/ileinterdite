@@ -15,7 +15,7 @@ public class Tuile {
         this.nom = nom;
     }
         
-  public int getColonne() {
+    public int getColonne() {
         return colonne;
     }
 
@@ -23,6 +23,10 @@ public class Tuile {
         return etat;
     }
 
+    public NomTuile getNom() {
+        return nom;
+    }
+    
     public int getLigne() {
         return ligne;
     }
