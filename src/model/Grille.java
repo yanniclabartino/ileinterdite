@@ -40,8 +40,21 @@ public class Grille {
     
     public Tuile getTuile(NomTuile nom){
     //une méthode qui trouve la tuile de NomTuile nom dans la grille et qui la renvoi
-        Tuile t;
-        // for 
+        int x = 0;
+        int y = 0;
+        while (this.getTuile(x, y).getNom()!=nom && y <= 5) {
+            x++;
+            if (x > 5){
+                x = 0;
+                y++;
+            }
+        }
+        if (this.getTuile(x, y).getNom()==nom) { 
+            return this.getTuile(x, y);
+        } else {
+            System.err.println("TUILE "+nom.toString()+" NON-TROUVEE !");
+            return null;
+        }
     }
 
     public Tuile[][] getGrille() {
