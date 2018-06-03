@@ -30,6 +30,11 @@ public abstract class Aventurier {
     public void setTuile(Tuile tArrivee) {
         appartient = tArrivee;
     }
+    
+    public void seDeplace(Tuile tArrivee) {
+        tArrivee.addAventurier(this);
+        this.getTuile().suppAventurier(this);
+    }
 
     public void piocheCarte(CarteOrange c) {
         this.possède.add(c);
@@ -41,8 +46,8 @@ public abstract class Aventurier {
         c.delOwner();
     }
 
-    public abstract ArrayList<Tuile> calculTuileDispo(Tuile tDepart, Grille g);
+    public abstract ArrayList<Tuile> calculTuileDispo(Grille g);
 
-    public abstract ArrayList<Tuile> calculTuileAss(Tuile tPosition, Grille g);
+    public abstract ArrayList<Tuile> calculTuileAss(Grille g);
 
 }

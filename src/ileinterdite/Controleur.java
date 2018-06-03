@@ -24,9 +24,9 @@ public class Controleur implements Observateur {
     private VueAventurier[] ihm;
     private Trésor[] trésors;
     private ArrayList<Aventurier> joueurs;
-    private ArrayList<CarteBleue> piocheBleues;
+    private Stack<CarteBleue> piocheBleues;
     private ArrayList<CarteBleue> defausseBleues;
-    private ArrayList<CarteOrange> piocheOranges;
+    private Stack<CarteOrange> piocheOranges;
     private ArrayList<CarteOrange> defausseOranges;
     private boolean pouvoirPiloteDispo = true;
 
@@ -36,14 +36,48 @@ public class Controleur implements Observateur {
 
     public void gererDeplacement(Aventurier joueur) {
         //Gère les déplacements d'un aventurier
+        Grille g = getGrille();
+        ArrayList<Tuile> tuilesDispo = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         String choix;
+        Integer X,Y;
+        //Pouvoir pilote :
         if (joueur.getCouleur() == Utils.Pion.JAUNE && pouvoirPiloteDispo) {
             System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (utilisable une fois par tour) :");
             System.out.print("(oui/non) => ");
             choix = sc.nextLine();
             if (choix == "oui" || choix == "Oui" || choix == "O" || choix == "o") {
                 pouvoirPiloteDispo = false;
+                tuilesDispo = calculTouteTuileDispo(g);
+            } else {
+                tuilesDispo = joueur.calculTuileDispo(g);
+            }
+        } else {
+            tuilesDispo = joueur.calculTuileDispo(g);
+            g.afficheGrilleTexte(joueur);
+            System.out.println("Voici la liste des tuiles disponible :");
+            for (Tuile t : tuilesDispo){
+                t.affiche();
+            }
+            boolean choixValide = false;
+            while (!choixValide){
+                System.out.println("\n\tChoix de la tuile :");
+                System.out.print("X = ");
+                choix = sc.nextLine();
+                X = new Integer(choix);
+                System.out.print("Y = ");
+                choix = sc.nextLine();
+                Y = new Integer(choix);
+                Tuile tuileChoisie = g.getTuile(X, Y);
+                if (tuilesDispo.contains(tuileChoisie)){
+                    choixValide = true;
+                    joueur.seDeplace(tuileChoisie);
+                    //Voir VP pour savoir s'il est plus judicieux
+                    //de passer par une unique méthode (qu'on
+                    //détail par la suite niveau MVC)
+                } else {
+                    System.out.println("\tCHOIX NON-VALIDE.");
+                }
             }
         }
 
@@ -73,7 +107,8 @@ public class Controleur implements Observateur {
     public void bouger(int ligne, int colonne) {
     }
 
-    public void calculTouteTuileDispo(Grille g) {
+    public ArrayList calculTouteTuileDispo(Grille g) {
+        return null; // a faire
     }
 
     public Controleur() {

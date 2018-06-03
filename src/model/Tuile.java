@@ -48,4 +48,8 @@ public class Tuile {
             this.etat = nouvelEtat;
     }
 
+    //interface texte
+    public void affiche() {
+        System.out.println(getNom().toString()+" : ("+getLigne()+","+getColonne()+")");
+    }
 }

@@ -11,7 +11,7 @@ public class Ingénieur extends Aventurier {
     }
 
     @Override
-    public ArrayList calculTuileDispo(Tuile tDepart, Grille g) {
+    public ArrayList calculTuileDispo( Grille g) {
         ArrayList<Tuile> tuileDispo = new ArrayList<Tuile>();
         int c = this.getTuile().getColonne();
         int l = this.getTuile().getLigne();
@@ -38,7 +38,7 @@ public class Ingénieur extends Aventurier {
         return tuileDispo;
     }
 
-    public ArrayList calculTuileAss(Tuile tDepart, Grille g) {
+    public ArrayList calculTuileAss(Grille g) {
         ArrayList<Tuile> tuileDispoAss = new ArrayList<Tuile>();
         int c = this.getTuile().getColonne();
         int l = this.getTuile().getLigne();
