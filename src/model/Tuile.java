@@ -42,6 +42,7 @@ public class Tuile {
 
     public void addAventurier(Aventurier a) {
         possede.add(a);
+        a.setTuile(this);
     }
 
     public void setEtat(EtatTuile nouvelEtat) {
@@ -50,6 +51,6 @@ public class Tuile {
 
     //interface texte
     public void affiche() {
-        System.out.println(getNom().toString()+" : ("+getLigne()+","+getColonne()+")");
+        System.out.println(getNom().toString()+"["+this.getEtat().toString()+"]"+" : ("+getLigne()+","+getColonne()+")");
     }
 }

@@ -86,8 +86,10 @@ public class Controleur implements Observateur {
     public void gererAssechement(Aventurier joueur) {
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = joueur.calculTuileAss(g);
+        Utils.EtatTuile sec = Utils.EtatTuile.ASSECHEE;
         Scanner sc = new Scanner(System.in);
         String choix;
+        Integer X,Y;
         int nbAssechement = 1;
         if (joueur.getCouleur() == Utils.Pion.ROUGE && tuilesDispo.size() >= 2){
             System.out.println("Voulez-vous assecher 2 tuiles pour cette action ?");
@@ -106,7 +108,20 @@ public class Controleur implements Observateur {
         for (int i = 0 ; i < nbAssechement ; i++){
             boolean choixValide = false;
             while (!choixValide){
-                //à finir
+                System.out.println("\n\tChoix de la tuile :");
+                System.out.print("X = ");
+                choix = sc.nextLine();
+                X = new Integer(choix);
+                System.out.print("Y = ");
+                choix = sc.nextLine();
+                Y = new Integer(choix);
+                Tuile tuileChoisie = g.getTuile(X, Y);
+                if (tuilesDispo.contains(tuileChoisie)){
+                    choixValide=true;
+                    tuileChoisie.setEtat(sec);
+                } else {
+                    System.out.println("CHOIX NON-VALIDE.");
+                }
             }
         }
     }

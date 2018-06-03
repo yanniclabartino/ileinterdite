@@ -32,8 +32,8 @@ public abstract class Aventurier {
     }
     
     public void seDeplace(Tuile tArrivee) {
-        tArrivee.addAventurier(this);
         this.getTuile().suppAventurier(this);
+        tArrivee.addAventurier(this);
     }
 
     public void piocheCarte(CarteOrange c) {
