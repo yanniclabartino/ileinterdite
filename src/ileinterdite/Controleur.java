@@ -5,7 +5,6 @@ import model.CarteOrange;
 import model.Grille;
 import model.Trésor;
 import model.Aventurier;
-import java.util.*;
 import model.Explorateur;
 import model.Ingénieur;
 import model.Messager;
@@ -16,6 +15,7 @@ import model.Tuile;
 import util.*;
 import util.Utils.Pion;
 import view.VueAventurier;
+import java.util.*;
 
 public class Controleur implements Observateur {
 
@@ -84,19 +84,35 @@ public class Controleur implements Observateur {
     }
 
     public void gererAssechement(Aventurier joueur) {
-        /*
-        if (joueur.getCouleur() == Utils.Pion.ROUGE &&) {
-            for (int i = 1; i < 3; i++) {
-                joueur.calculTuileAss(grille);
+        Grille g = getGrille();
+        ArrayList<Tuile> tuilesDispo = joueur.calculTuileAss(g);
+        Scanner sc = new Scanner(System.in);
+        String choix;
+        int nbAssechement = 1;
+        if (joueur.getCouleur() == Utils.Pion.ROUGE && tuilesDispo.size() >= 2){
+            System.out.println("Voulez-vous assecher 2 tuiles pour cette action ?");
+            System.out.print("\t(oui/non)=> ");
+            choix = sc.nextLine();
+            choix = choix.toUpperCase().substring(0,1);
+            if (choix.equals("O")) {
+                nbAssechement = 2;
             }
-        } else {
-            joueur.calculTuileAss(grille);
         }
-        */
+        System.out.println("Voici la liste des tuiles disponible :");
+        for (Tuile t : tuilesDispo){
+            t.affiche();
+        }
+        g.afficheGrilleTexte(joueur);
+        for (int i = 0 ; i < nbAssechement ; i++){
+            boolean choixValide = false;
+            while (!choixValide){
+                //à finir
+            }
+        }
     }
 
-    public void gererDonnation() {}
-    public void gererGainTresor() {}
+    public void gererDonnation() {/*Pour plus tard*/}
+    public void gererGainTresor() {/*Pour plus tard*/}
     public void gererCarteOrange() {}
     public void gererCarteBleue() {}
 
