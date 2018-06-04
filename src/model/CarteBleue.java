@@ -5,15 +5,13 @@ import util.NomTuile;
 public class CarteBleue{
 
 	private Tuile innonde;
-	private NomTuile nomTuile;
+
+    public CarteBleue(Tuile innonde) {
+        this.innonde = innonde;
+    }
 
     public Tuile getInnonde() {
         return innonde;
     }
-
-    public NomTuile getNomTuile() {
-        return nomTuile;
-    }
-        
 
 }

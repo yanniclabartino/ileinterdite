@@ -59,8 +59,14 @@ public class Grille {
         }
     }
 
-    public Tuile[][] getGrille() {
-            return this.tuile;
+    public ArrayList<Tuile> getGrille() {
+            ArrayList<Tuile> tuilesGrille = new ArrayList<>();
+            for (int j = 0; j < 6 ; j++){
+                for (int i = 0; i < 6 ; i++) {
+                    tuilesGrille.add(this.getTuile(i, j));
+                }
+            }
+            return tuilesGrille;
     }
     public void afficheGrilleTexte(Aventurier joueur) {
         /*

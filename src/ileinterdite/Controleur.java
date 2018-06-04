@@ -1,23 +1,10 @@
 package ileinterdite;
 
-import model.CarteBleue;
-import model.CarteOrange;
-import model.Grille;
-import model.Trésor;
-import model.Aventurier;
-import model.Explorateur;
-import model.Ingénieur;
-import model.Messager;
-import model.Navigateur;
-import model.Pilote;
-import model.Plongeur;
-import model.Tuile;
+import model.*;
 import util.*;
 import util.Utils.Pion;
 import view.VueAventurier;
 import java.util.*;
-import model.CarteHelicoptere;
-import model.CarteMonteeDesEaux;
 
 public class Controleur implements Observateur {
 
@@ -141,7 +128,7 @@ public class Controleur implements Observateur {
         
     }
 
-    public Grille getGrille() {
+    public final Grille getGrille() {
         return grille;
     }
     
@@ -240,21 +227,45 @@ public class Controleur implements Observateur {
         }
         */
         
-        //Création des cartes oranges (trésors)
-        ArrayList<CarteOrange> temp = new ArrayList<>();
+        //Création des cartes oranges (trésor)
+        piocheOranges = new Stack<>();
+        defausseOranges = new ArrayList<>();
+        
+        ArrayList<CarteOrange> tmpOranges = new ArrayList<>();
         for (int i = 0 ; i < 3 ; i++){
-            temp.add(new CarteMonteeDesEaux());
-            temp.add(new CarteHelicoptere());
+            tmpOranges.add(new CarteMonteeDesEaux());
+            tmpOranges.add(new CarteHelicoptere());
         }
-        for (){
-            
+        for (int i = 0;i<5;i++){
+            tmpOranges.add(new CarteTrésor(NomTresor.LE_CRISTAL_ARDENT));
+            tmpOranges.add(new CarteTrésor(NomTresor.LA_STATUE_DU_ZEPHYR));
+            tmpOranges.add(new CarteTrésor(NomTresor.LE_CALICE_DE_L_ONDE));
+            tmpOranges.add(new CarteTrésor(NomTresor.LA_PIERRE_SACREE));
+        }
+        tmpOranges.add(new CarteSacDeSable());
+        tmpOranges.add(new CarteSacDeSable());
+        
+        Collections.shuffle(tmpOranges);
+        for (CarteOrange c : tmpOranges) {
+            piocheOranges.push(c);
         }
         
-        //Création des cartes bleues (innondations)
-        // A FAIRE
+        //Création des cartes bleues (innondation)
+        piocheBleues = new Stack<>();
+        defausseBleues = new ArrayList<>();
+        
+        ArrayList<CarteBleue> tmpBleues = new ArrayList<>();
+        for (Tuile t : grille.getGrille()){
+            tmpBleues.add(new CarteBleue(t));
+        }
+        
+        Collections.shuffle(tmpBleues);
+        for (CarteBleue c : tmpBleues){
+            piocheBleues.push(c);
+        }
         
         //pioche des cartes innondations nécessaires au commencement du jeu
-        gererCarteBleue(niveauEau);
+        //gererCarteBleue(niveauEau);
         
         //boucle du jeu
         
