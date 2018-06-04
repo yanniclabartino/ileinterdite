@@ -40,7 +40,7 @@ public class Controleur implements Observateur {
         ArrayList<Tuile> tuilesDispo = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         String choix;
-        Integer X,Y;
+        Integer X, Y;
         //Pouvoir pilote :
         if (joueur.getCouleur() == Utils.Pion.JAUNE && pouvoirPiloteDispo) {
             System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (utilisable une fois par tour) :");
@@ -56,11 +56,11 @@ public class Controleur implements Observateur {
             tuilesDispo = joueur.calculTuileDispo(g);
             g.afficheGrilleTexte(joueur);
             System.out.println("Voici la liste des tuiles disponible :");
-            for (Tuile t : tuilesDispo){
+            for (Tuile t : tuilesDispo) {
                 t.affiche();
             }
             boolean choixValide = false;
-            while (!choixValide){
+            while (!choixValide) {
                 System.out.println("\n\tChoix de la tuile :");
                 System.out.print("X = ");
                 choix = sc.nextLine();
@@ -69,7 +69,7 @@ public class Controleur implements Observateur {
                 choix = sc.nextLine();
                 Y = new Integer(choix);
                 Tuile tuileChoisie = g.getTuile(X, Y);
-                if (tuilesDispo.contains(tuileChoisie)){
+                if (tuilesDispo.contains(tuileChoisie)) {
                     choixValide = true;
                     joueur.seDeplace(tuileChoisie);
                     //Voir VP pour savoir s'il est plus judicieux
@@ -89,25 +89,25 @@ public class Controleur implements Observateur {
         Utils.EtatTuile sec = Utils.EtatTuile.ASSECHEE;
         Scanner sc = new Scanner(System.in);
         String choix;
-        Integer X,Y;
+        Integer X, Y;
         int nbAssechement = 1;
-        if (joueur.getCouleur() == Utils.Pion.ROUGE && tuilesDispo.size() >= 2){
+        if (joueur.getCouleur() == Utils.Pion.ROUGE && tuilesDispo.size() >= 2) {
             System.out.println("Voulez-vous assecher 2 tuiles pour cette action ?");
             System.out.print("\t(oui/non)=> ");
             choix = sc.nextLine();
-            choix = choix.toUpperCase().substring(0,1);
+            choix = choix.toUpperCase().substring(0, 1);
             if (choix.equals("O")) {
                 nbAssechement = 2;
             }
         }
         System.out.println("Voici la liste des tuiles disponible :");
-        for (Tuile t : tuilesDispo){
+        for (Tuile t : tuilesDispo) {
             t.affiche();
         }
         g.afficheGrilleTexte(joueur);
-        for (int i = 0 ; i < nbAssechement ; i++){
+        for (int i = 0; i < nbAssechement; i++) {
             boolean choixValide = false;
-            while (!choixValide){
+            while (!choixValide) {
                 System.out.println("\n\tChoix de la tuile :");
                 System.out.print("X = ");
                 choix = sc.nextLine();
@@ -116,8 +116,8 @@ public class Controleur implements Observateur {
                 choix = sc.nextLine();
                 Y = new Integer(choix);
                 Tuile tuileChoisie = g.getTuile(X, Y);
-                if (tuilesDispo.contains(tuileChoisie)){
-                    choixValide=true;
+                if (tuilesDispo.contains(tuileChoisie)) {
+                    choixValide = true;
                     tuileChoisie.setEtat(sec);
                 } else {
                     System.out.println("CHOIX NON-VALIDE.");
@@ -126,20 +126,36 @@ public class Controleur implements Observateur {
         }
     }
 
-    public void gererDonnation() {/*Pour plus tard*/}
-    public void gererGainTresor() {/*Pour plus tard*/}
-    public void gererCarteOrange() {}
-    public void gererCarteBleue() {}
+    public void gererDonnation() {/*Pour plus tard*/
+    }
+
+    public void gererGainTresor() {/*Pour plus tard*/
+    }
+
+    public void gererCarteOrange() {
+    }
+
+    public void gererCarteBleue() {
+    }
 
     public Grille getGrille() {
         return grille;
     }
-    
+
     public void bouger(int ligne, int colonne) {
     }
 
     public ArrayList calculTouteTuileDispo(Grille g) {
-        return null; // a faire
+        ArrayList<Tuile> touteTuileDispo = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (g.getTuile(i, j).getEtat() != Utils.EtatTuile.COULEE) {
+                    touteTuileDispo.add(g.getTuile(i, j));
+                }
+            }
+        }
+
+        return touteTuileDispo;
     }
 
     public Controleur() {
@@ -167,7 +183,7 @@ public class Controleur implements Observateur {
         boolean choixConforme = false;
         int nbJoueurs = 2;
         String[] nomJoueurs;
-        
+
         //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 6)
         do {
             System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 6) : ");
@@ -183,7 +199,7 @@ public class Controleur implements Observateur {
         //sélection des noms de joueurs.
         nomJoueurs = new String[nbJoueurs];
         for (int i = 0; i < nbJoueurs; i++) {
-            System.out.println("Nom joueur n°" + (i+1) + " : ");
+            System.out.println("Nom joueur n°" + (i + 1) + " : ");
             choix = sc.nextLine();
             nomJoueurs[i] = choix;
         }
@@ -208,10 +224,9 @@ public class Controleur implements Observateur {
 
         //boucle du jeu
         //A FAIRE
-        
         //test graphique
         grille.afficheGrilleTexte(joueurs.get(1));
-        
+
     }
 
     public static void main(String[] args) {
