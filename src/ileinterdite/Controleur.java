@@ -126,7 +126,7 @@ public class Controleur implements Observateur {
         }
     }
 
-    public void gererDonnation() {/*Pour plus tard*/
+    public void gererDonation() {/*Pour plus tard*/
     }
 
     public void gererGainTresor() {/*Pour plus tard*/
@@ -140,6 +140,10 @@ public class Controleur implements Observateur {
 
     public Grille getGrille() {
         return grille;
+    }
+
+    public int getNiveau() {
+        return niveauEau;
     }
 
     public void bouger(int ligne, int colonne) {
