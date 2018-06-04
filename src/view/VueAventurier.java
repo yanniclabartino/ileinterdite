@@ -17,7 +17,7 @@ import static javax.swing.SwingConstants.CENTER;
 import javax.swing.border.MatteBorder;
 import util.Utils.Pion;
 
-public class VueAventurier implements Observe {
+public class VueAventurier extends Observe {
 
     private final JPanel panelBoutons;
     private final JPanel panelCentre;
@@ -31,7 +31,7 @@ public class VueAventurier implements Observe {
     private JTextField position;
 
     public VueAventurier(String nomJoueur, String nomAventurier, Color couleur) {
-
+        
         this.window = new JFrame();
         window.setSize(350, 200);
         //le titre = nom du joueur 
