@@ -28,11 +28,11 @@ public abstract class Aventurier {
         return couleur;
     }
 
-    public void setTuile(Tuile tArrivee) {
+    public final void setTuile(Tuile tArrivee) {
         appartient = tArrivee;
     }
 
-    public void setCouleur(Pion couleur) {
+    public final void setCouleur(Pion couleur) {
         this.couleur = couleur;
     }
     

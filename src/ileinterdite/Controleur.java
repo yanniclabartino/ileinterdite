@@ -16,6 +16,8 @@ import util.*;
 import util.Utils.Pion;
 import view.VueAventurier;
 import java.util.*;
+import model.CarteHelicoptere;
+import model.CarteMonteeDesEaux;
 
 public class Controleur implements Observateur {
 
@@ -239,7 +241,15 @@ public class Controleur implements Observateur {
         */
         
         //Création des cartes oranges (trésors)
-        // A FAIRE
+        ArrayList<CarteOrange> temp = new ArrayList<>();
+        for (int i = 0 ; i < 3 ; i++){
+            temp.add(new CarteMonteeDesEaux());
+            temp.add(new CarteHelicoptere());
+        }
+        for (){
+            
+        }
+        
         //Création des cartes bleues (innondations)
         // A FAIRE
         

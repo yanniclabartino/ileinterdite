@@ -5,10 +5,12 @@
  */
 package view;
 
+import ileinterdite.Observe;
+
 /**
  *
  * @author malodv
  */
-public class VueAccueil {
+public class VueAccueil extends Observe{
     
 }
