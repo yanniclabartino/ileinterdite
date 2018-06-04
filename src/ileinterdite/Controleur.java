@@ -131,11 +131,12 @@ public class Controleur implements Observateur {
 
     public void gererGainTresor() {/*Pour plus tard*/}
 
-    public void gererCarteOrange() {
+    public void gererCarteOrange(Aventurier a) {
         
     }
 
-    public void gererCarteBleue() {
+    public void gererCarteBleue(int n) {
+        
     }
 
     public Grille getGrille() {
@@ -184,11 +185,10 @@ public class Controleur implements Observateur {
         boolean choixConforme = false;
         int nbJoueurs = 2;
         String[] nomJoueurs;
-
         //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 6)
         do {
             System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 6) : ");
-            System.out.print("    => ");
+            System.out.print("\t=> ");
             choix = sc.nextLine();
             choixInt = new Integer(choix);
             if (choixInt >= 2 || choixInt <= 6) {
@@ -197,7 +197,7 @@ public class Controleur implements Observateur {
             }
         } while (!choixConforme);
 
-        //sélection des noms de joueurs.
+        //sélection des noms de joueurs
         nomJoueurs = new String[nbJoueurs];
         for (int i = 0; i < nbJoueurs; i++) {
             System.out.println("Nom joueur n°" + (i + 1) + " : ");
@@ -205,6 +205,19 @@ public class Controleur implements Observateur {
             nomJoueurs[i] = choix;
         }
 
+        //sélection de la difficulté
+        choixConforme = false;
+        do {
+            System.out.println("Quel niveau de difficulté ? (1/2/3/4)");
+            System.out.println("\t =>");
+            choix = sc.nextLine();
+            choixInt = new Integer(choix);
+            if (choixInt >= 1 || choixInt <= 4) {
+                this.niveauEau=choixInt;
+                choixConforme = true;
+            }
+        } while (!choixConforme);
+        
         //Création des Aventuriers.       
         joueurs = new ArrayList<>();
         joueurs.add(new Pilote(grille.getTuile(3, 2), Pion.BLEU));
@@ -218,13 +231,25 @@ public class Controleur implements Observateur {
         //joueurs = Utils.melangerAventuriers(joueurs);
 
         //Création d'une vue pour chaque aventurier...
+        /*
         ihm = new VueAventurier[nbJoueurs];
         for (int i = 1; i < nbJoueurs; i++) {
             ihm[i] = new VueAventurier(nomJoueurs[i], joueurs.get(i - 1).getNomAventurier(), joueurs.get(i - 1).getCouleur().getCouleur());
         }
-
+        */
+        
+        //Création des cartes oranges (trésors)
+        // A FAIRE
+        //Création des cartes bleues (innondations)
+        // A FAIRE
+        
+        //pioche des cartes innondations nécessaires au commencement du jeu
+        gererCarteBleue(niveauEau);
+        
         //boucle du jeu
-        //A FAIRE
+        
+        
+        
         //test graphique
         grille.afficheGrilleTexte(joueurs.get(1));
 
