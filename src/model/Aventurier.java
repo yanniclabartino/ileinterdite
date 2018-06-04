@@ -11,8 +11,9 @@ public abstract class Aventurier {
     private Pion couleur;
 
     Aventurier(Tuile t, Pion p) {
-        this.appartient=t;
-        this.couleur = p;
+        this.setTuile(t);
+        t.addAventurier(this);
+        this.setCouleur(p);
     }
 
     public Tuile getTuile() {
@@ -29,6 +30,10 @@ public abstract class Aventurier {
 
     public void setTuile(Tuile tArrivee) {
         appartient = tArrivee;
+    }
+
+    public void setCouleur(Pion couleur) {
+        this.couleur = couleur;
     }
     
     public void seDeplace(Tuile tArrivee) {

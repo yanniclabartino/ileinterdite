@@ -46,7 +46,8 @@ public class Controleur implements Observateur {
             System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (utilisable une fois par tour) :");
             System.out.print("(oui/non) => ");
             choix = sc.nextLine();
-            if (choix == "oui" || choix == "Oui" || choix == "O" || choix == "o") {
+            choix = choix.toUpperCase().substring(0, 1);
+            if (choix.equals("O")) {
                 pouvoirPiloteDispo = false;
                 tuilesDispo = calculTouteTuileDispo(g);
             } else {
@@ -126,13 +127,12 @@ public class Controleur implements Observateur {
         }
     }
 
-    public void gererDonation() {/*Pour plus tard*/
-    }
+    public void gererDonation() {/*Pour plus tard*/}
 
-    public void gererGainTresor() {/*Pour plus tard*/
-    }
+    public void gererGainTresor() {/*Pour plus tard*/}
 
     public void gererCarteOrange() {
+        
     }
 
     public void gererCarteBleue() {
@@ -141,12 +141,9 @@ public class Controleur implements Observateur {
     public Grille getGrille() {
         return grille;
     }
-
+    
     public int getNiveau() {
         return niveauEau;
-    }
-
-    public void bouger(int ligne, int colonne) {
     }
 
     public ArrayList calculTouteTuileDispo(Grille g) {
@@ -170,8 +167,8 @@ public class Controleur implements Observateur {
         }
 
         //Initialisation de la Grille
-        Collections.shuffle(Tuiles);
-        grille = new Grille(Tuiles);
+        //Collections.shuffle(Tuiles);
+        this.grille = new Grille(Tuiles);
 
         //Création des Trésors
         trésors = new Trésor[4];
@@ -210,15 +207,15 @@ public class Controleur implements Observateur {
 
         //Création des Aventuriers.       
         joueurs = new ArrayList<>();
-        joueurs.add(new Pilote(grille.getTuile(4, 3), Pion.BLEU));
-        joueurs.add(new Navigateur(grille.getTuile(4, 2), Pion.JAUNE));
-        joueurs.add(new Ingénieur(grille.getTuile(4, 1), Pion.ROUGE));
-        joueurs.add(new Explorateur(grille.getTuile(5, 3), Pion.VERT));
-        joueurs.add(new Messager(grille.getTuile(2, 3), Pion.BLANC));
-        joueurs.add(new Plongeur(grille.getTuile(3, 2), Pion.NOIR));
+        joueurs.add(new Pilote(grille.getTuile(3, 2), Pion.BLEU));
+        joueurs.add(new Navigateur(grille.getTuile(3, 1), Pion.JAUNE));
+        joueurs.add(new Ingénieur(grille.getTuile(3, 0), Pion.ROUGE));
+        joueurs.add(new Explorateur(grille.getTuile(4, 2), Pion.VERT));
+        joueurs.add(new Messager(grille.getTuile(1, 2), Pion.BLANC));
+        joueurs.add(new Plongeur(grille.getTuile(2, 1), Pion.NOIR));
 
         //Mélange de ceux-ci dans joueurs.
-        joueurs = Utils.melangerAventuriers(joueurs);
+        //joueurs = Utils.melangerAventuriers(joueurs);
 
         //Création d'une vue pour chaque aventurier...
         ihm = new VueAventurier[nbJoueurs];
