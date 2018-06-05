@@ -22,7 +22,9 @@ public class Controleur implements Observateur {
     @Override
     public void traiterMessage(Message m) {
     }
-
+    
+    //METHODES DE GESTION
+    
     public void gererDeplacement(Aventurier joueur) {
         //Gère les déplacements d'un aventurier
         Grille g = getGrille();
@@ -124,19 +126,48 @@ public class Controleur implements Observateur {
         
     }
 
-    public void gererCarteBleue(int n) {
-        
+    public void gererCarteBleue(int nivEau) {
+        int nbPioche;
+        System.out.print("Le niveau d'eau s'élève à : "+nivEau+".\nVous piochez donc : ");
+        if (nivEau>=8){
+            System.out.println("5 cartes.");
+            nbPioche = 5;
+        } else if (nivEau>=6){
+            System.out.println("4 cartes.");
+            nbPioche = 4;
+        } else if (nivEau>=3) {
+            System.out.println("3 cartes.");
+            nbPioche = 3;
+        } else {
+            System.out.println("2 cartes.");
+            nbPioche = 2;
+        }
+        Stack<CarteBleue> piocheBleu = this.getPiocheBleues();
+        CarteBleue c;
+        for (int i = 0; i < nbPioche ; i++){
+            c = piocheBleu.pop();
+            System.out.println("la carte innondation "+c.getInnonde().getNom().toString()+" à été piochée...");
+            if (c.getInnonde().getEtat()==Utils.EtatTuile.ASSECHEE){
+                c.getInnonde().setEtat(Utils.EtatTuile.INONDEE);
+                // A FINIR
+            } else if (c.getInnonde().getEtat()==Utils.EtatTuile.INONDEE) {
+                c.getInnonde().setEtat(Utils.EtatTuile.COULEE);
+            }
+            // A FINIR
+        }
     }
+    
+    //METHODES UTILES
 
     public final Grille getGrille() {
         return grille;
     }
     
-    public int getNiveau() {
+    public final int getNiveau() {
         return niveauEau;
     }
 
-    public ArrayList calculTouteTuileDispo(Grille g) {
+    public final ArrayList<Tuile> calculTouteTuileDispo(Grille g) {
         ArrayList<Tuile> touteTuileDispo = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -148,8 +179,34 @@ public class Controleur implements Observateur {
 
         return touteTuileDispo;
     }
-
-    public Controleur() {
+    
+    public final Stack<CarteBleue> getPiocheBleues() {
+        return this.piocheBleues;
+    }
+    
+    public final ArrayList<CarteBleue> getDefausseBleues(){
+        return this.defausseBleues;
+    }
+    
+    public final Stack<CarteOrange> getPiocheOranges(){
+        return this.piocheOranges;
+    }
+    
+    public final ArrayList<CarteOrange> getDefausseOranges(){
+        return this.defausseOranges;
+    }
+    
+    //CONSTUCTEUR
+    
+    public Controleur() {    
+        //initialisations des tableaux/array
+        joueurs = new ArrayList<>();
+        trésors = new Trésor[4];
+        piocheOranges = new Stack<>();
+        defausseOranges = new ArrayList<>();
+        piocheBleues = new Stack<>();
+        defausseBleues = new ArrayList<>();
+        
         //Génération des 24 tuiles
         ArrayList<Tuile> Tuiles = new ArrayList();
         for (int i = 1; i < 25; i++) {
@@ -158,10 +215,48 @@ public class Controleur implements Observateur {
 
         //Initialisation de la Grille
         //Collections.shuffle(Tuiles);
-        this.grille = new Grille(Tuiles);
-
+        grille = new Grille(Tuiles);
+        
+        //Création des Aventuriers.   
+        joueurs.add(new Pilote(grille.getTuile(3, 2), Pion.BLEU));
+        joueurs.add(new Navigateur(grille.getTuile(3, 1), Pion.JAUNE));
+        joueurs.add(new Ingénieur(grille.getTuile(3, 0), Pion.ROUGE));
+        joueurs.add(new Explorateur(grille.getTuile(4, 2), Pion.VERT));
+        joueurs.add(new Messager(grille.getTuile(1, 2), Pion.BLANC));
+        joueurs.add(new Plongeur(grille.getTuile(2, 1), Pion.NOIR));
+        //Mélange de ceux-ci dans joueurs.
+        //joueurs = Utils.melangerAventuriers(joueurs);
+        
+        //Création des cartes oranges (trésor)        
+        ArrayList<CarteOrange> tmpOranges = new ArrayList<>();
+        for (int i = 0 ; i < 3 ; i++){
+            tmpOranges.add(new CarteMonteeDesEaux());
+            tmpOranges.add(new CarteHelicoptere());
+        }
+        for (int i = 0;i<5;i++){
+            tmpOranges.add(new CarteTrésor(NomTresor.LE_CRISTAL_ARDENT));
+            tmpOranges.add(new CarteTrésor(NomTresor.LA_STATUE_DU_ZEPHYR));
+            tmpOranges.add(new CarteTrésor(NomTresor.LE_CALICE_DE_L_ONDE));
+            tmpOranges.add(new CarteTrésor(NomTresor.LA_PIERRE_SACREE));
+        }
+        tmpOranges.add(new CarteSacDeSable());
+        tmpOranges.add(new CarteSacDeSable());
+        Collections.shuffle(tmpOranges);
+        for (CarteOrange c : tmpOranges) {
+            piocheOranges.push(c);
+        }
+        
+        //Création des cartes bleues (innondation)        
+        ArrayList<CarteBleue> tmpBleues = new ArrayList<>();
+        for (Tuile t : Tuiles){
+            tmpBleues.add(new CarteBleue(t));
+        }
+        Collections.shuffle(tmpBleues);
+        for (CarteBleue c : tmpBleues){
+            piocheBleues.push(c);
+        }
+        
         //Création des Trésors
-        trésors = new Trésor[4];
         trésors[0] = new Trésor(NomTresor.LE_CRISTAL_ARDENT);
         trésors[1] = new Trésor(NomTresor.LA_PIERRE_SACREE);
         trésors[2] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
@@ -206,18 +301,6 @@ public class Controleur implements Observateur {
                 choixConforme = true;
             }
         } while (!choixConforme);
-        
-        //Création des Aventuriers.       
-        joueurs = new ArrayList<>();
-        joueurs.add(new Pilote(grille.getTuile(3, 2), Pion.BLEU));
-        joueurs.add(new Navigateur(grille.getTuile(3, 1), Pion.JAUNE));
-        joueurs.add(new Ingénieur(grille.getTuile(3, 0), Pion.ROUGE));
-        joueurs.add(new Explorateur(grille.getTuile(4, 2), Pion.VERT));
-        joueurs.add(new Messager(grille.getTuile(1, 2), Pion.BLANC));
-        joueurs.add(new Plongeur(grille.getTuile(2, 1), Pion.NOIR));
-
-        //Mélange de ceux-ci dans joueurs.
-        //joueurs = Utils.melangerAventuriers(joueurs);
 
         //Création d'une vue pour chaque aventurier...
         /*
@@ -227,55 +310,19 @@ public class Controleur implements Observateur {
         }
         */
         
-        //Création des cartes oranges (trésor)
-        piocheOranges = new Stack<>();
-        defausseOranges = new ArrayList<>();
-        
-        ArrayList<CarteOrange> tmpOranges = new ArrayList<>();
-        for (int i = 0 ; i < 3 ; i++){
-            tmpOranges.add(new CarteMonteeDesEaux());
-            tmpOranges.add(new CarteHelicoptere());
-        }
-        for (int i = 0;i<5;i++){
-            tmpOranges.add(new CarteTrésor(NomTresor.LE_CRISTAL_ARDENT));
-            tmpOranges.add(new CarteTrésor(NomTresor.LA_STATUE_DU_ZEPHYR));
-            tmpOranges.add(new CarteTrésor(NomTresor.LE_CALICE_DE_L_ONDE));
-            tmpOranges.add(new CarteTrésor(NomTresor.LA_PIERRE_SACREE));
-        }
-        tmpOranges.add(new CarteSacDeSable());
-        tmpOranges.add(new CarteSacDeSable());
-        
-        Collections.shuffle(tmpOranges);
-        for (CarteOrange c : tmpOranges) {
-            piocheOranges.push(c);
-        }
-        
-        //Création des cartes bleues (innondation)
-        piocheBleues = new Stack<>();
-        defausseBleues = new ArrayList<>();
-        
-        ArrayList<CarteBleue> tmpBleues = new ArrayList<>();
-        for (Tuile t : grille.getGrille()){
-            tmpBleues.add(new CarteBleue(t));
-        }
-        
-        Collections.shuffle(tmpBleues);
-        for (CarteBleue c : tmpBleues){
-            piocheBleues.push(c);
-        }
-        
         //pioche des cartes innondations nécessaires au commencement du jeu
         //gererCarteBleue(niveauEau);
         
         //boucle du jeu
-        
-        
+        //A FAIRE
         
         //test graphique
         grille.afficheGrilleTexte(joueurs.get(1));
 
     }
 
+    //MAIN
+    
     public static void main(String[] args) {
         new Controleur();
     }

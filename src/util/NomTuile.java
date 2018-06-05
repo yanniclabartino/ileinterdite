@@ -1,34 +1,41 @@
 package util;
 public enum NomTuile {
-	LE_PONT_DES_ABIMES(1),
-	LA_PORTE_DE_BRONZE(2),
-	LA_CAVERNE_DES_OMBRES(3),
-	LA_PORTE_DE_FER(4),
-	LA_PORTE_D_OR(5),
-	LES_FALAISES_DE_L_OUBLI(6),
-	LE_PALAIS_DE_CORAIL(7),
-	LA_PORTE_D_ARGENT(8),
-	LES_DUNES_DE_L_ILLUSION(9),
-	HELIPORT(10),
-	LA_PORTE_DE_CUIVRE(11),
-	LE_JARDIN_DES_HURLEMENTS(12),
-	LA_FORET_POURPRE(13),
-	LE_LAGON_PERDU(14),
-	LE_MARAIS_BRUMEUX(15),
-	OBSERVATOIRE(16),
-	LE_ROCHER_FANTOME(17),
-	LA_CAVERNE_DU_BRASIER(18),
-	LE_TEMPLE_DU_SOLEIL(19),
-	LE_TEMPLE_DE_LA_LUNE(20),
-	LE_PALAIS_DES_MAREES(21),
-	LE_VAL_DU_CREPUSCULE(22),
-	LA_TOUR_DU_GUET(23),
-	LE_JARDIN_DES_MURMURES(24);
+	LE_PONT_DES_ABIMES(1,"le pont des abîmes"),
+	LA_PORTE_DE_BRONZE(2,"la porte de bronze"),
+	LA_CAVERNE_DES_OMBRES(3,"la caverne des ombres"),
+	LA_PORTE_DE_FER(4,"la porte de fer"),
+	LA_PORTE_D_OR(5,"la porte d'or"),
+	LES_FALAISES_DE_L_OUBLI(6,"les falaises de l'oubli"),
+	LE_PALAIS_DE_CORAIL(7,"le palais de corail"),
+	LA_PORTE_D_ARGENT(8,"la porte d'argent"),
+	LES_DUNES_DE_L_ILLUSION(9,"les dunes de l'illusion"),
+	HELIPORT(10,"héliport"),
+	LA_PORTE_DE_CUIVRE(11,"la porte de cuivre"),
+	LE_JARDIN_DES_HURLEMENTS(12,"le jardin des hurlements"),
+	LA_FORET_POURPRE(13,"la forêt pourpre"),
+	LE_LAGON_PERDU(14,"le lagon perdu"),
+	LE_MARAIS_BRUMEUX(15,"les marais brumeux"),
+	OBSERVATOIRE(16,"observatoire"),
+	LE_ROCHER_FANTOME(17,"le rocher fantome"),
+	LA_CAVERNE_DU_BRASIER(18,"la caverne du brasier"),
+	LE_TEMPLE_DU_SOLEIL(19,"le temple du soleil"),
+	LE_TEMPLE_DE_LA_LUNE(20,"le temple de la lune"),
+	LE_PALAIS_DES_MAREES(21,"le palais des marées"),
+	LE_VAL_DU_CREPUSCULE(22,"le val du crepuscule"),
+	LA_TOUR_DU_GUET(23,"la tour du guet"),
+	LE_JARDIN_DES_MURMURES(24,"le jardin des murmures");
         
         private int nbTuile;
+        private String nomTuile;
         
-        NomTuile(int nb){
+        NomTuile(int nb, String nom){
             this.nbTuile = nb;
+            this.nomTuile = nom;
+        }
+        
+        @Override
+        public String toString() {
+            return this.nomTuile;
         }
         
         public static NomTuile getFromNb(int nb){
