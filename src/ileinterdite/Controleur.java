@@ -4,7 +4,10 @@ import model.*;
 import util.*;
 import util.Utils.Pion;
 import view.VueAventurier;
-import java.util.*;
+import java.util.Stack;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
 
 public class Controleur implements Observateur {
 
@@ -25,7 +28,7 @@ public class Controleur implements Observateur {
     
     //METHODES DE GESTION
     
-    public void gererDeplacement(Aventurier joueur) {
+    private void gererDeplacement(Aventurier joueur) {
         //Gère les déplacements d'un aventurier
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = new ArrayList<>();
@@ -75,7 +78,7 @@ public class Controleur implements Observateur {
 
     }
 
-    public void gererAssechement(Aventurier joueur) {
+    private void gererAssechement(Aventurier joueur) {
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = joueur.calculTuileAss(g);
         Utils.EtatTuile sec = Utils.EtatTuile.ASSECHEE;
@@ -118,15 +121,15 @@ public class Controleur implements Observateur {
         }
     }
 
-    public void gererDonation() {/*Pour plus tard*/}
+    private void gererDonation() {/*Pour plus tard*/}
 
-    public void gererGainTresor() {/*Pour plus tard*/}
+    private void gererGainTresor() {/*Pour plus tard*/}
 
-    public void gererCarteOrange(Aventurier a) {
+    private void gererCarteOrange(Aventurier a) {
         
     }
 
-    public void gererCarteBleue(int nivEau) {
+    private void gererCarteBleue(int nivEau) {
         int nbPioche;
         System.out.print("Le niveau d'eau s'élève à : "+nivEau+".\nVous piochez donc : ");
         if (nivEau>=8){
@@ -142,32 +145,40 @@ public class Controleur implements Observateur {
             System.out.println("2 cartes.");
             nbPioche = 2;
         }
-        Stack<CarteBleue> piocheBleu = this.getPiocheBleues();
+        Stack<CarteBleue> pioche = this.getPiocheBleues();
+        ArrayList<CarteBleue> defausse = this.getDefausseBleues();
         CarteBleue c;
         for (int i = 0; i < nbPioche ; i++){
-            c = piocheBleu.pop();
+            c = pioche.pop();
             System.out.println("la carte innondation "+c.getInnonde().getNom().toString()+" à été piochée...");
             if (c.getInnonde().getEtat()==Utils.EtatTuile.ASSECHEE){
                 c.getInnonde().setEtat(Utils.EtatTuile.INONDEE);
-                // A FINIR
+                System.out.println("La tuile correspondante est désormais innondée.");
+                defausse.add(c);
             } else if (c.getInnonde().getEtat()==Utils.EtatTuile.INONDEE) {
                 c.getInnonde().setEtat(Utils.EtatTuile.COULEE);
+                System.out.println("La tuile correspondante est désormais coulée.");
             }
-            // A FINIR
+            if (pioche.empty()){
+                Collections.shuffle(defausse);
+                for (CarteBleue b : defausse){
+                    pioche.push(b);
+                }
+            }
         }
     }
     
     //METHODES UTILES
 
-    public final Grille getGrille() {
+    private Grille getGrille() {
         return grille;
     }
     
-    public final int getNiveau() {
+    private int getNiveau() {
         return niveauEau;
     }
 
-    public final ArrayList<Tuile> calculTouteTuileDispo(Grille g) {
+    private ArrayList<Tuile> calculTouteTuileDispo(Grille g) {
         ArrayList<Tuile> touteTuileDispo = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -180,19 +191,19 @@ public class Controleur implements Observateur {
         return touteTuileDispo;
     }
     
-    public final Stack<CarteBleue> getPiocheBleues() {
+    private Stack<CarteBleue> getPiocheBleues() {
         return this.piocheBleues;
     }
     
-    public final ArrayList<CarteBleue> getDefausseBleues(){
+    private ArrayList<CarteBleue> getDefausseBleues(){
         return this.defausseBleues;
     }
     
-    public final Stack<CarteOrange> getPiocheOranges(){
+    private Stack<CarteOrange> getPiocheOranges(){
         return this.piocheOranges;
     }
     
-    public final ArrayList<CarteOrange> getDefausseOranges(){
+    private ArrayList<CarteOrange> getDefausseOranges(){
         return this.defausseOranges;
     }
     
@@ -293,7 +304,7 @@ public class Controleur implements Observateur {
         choixConforme = false;
         do {
             System.out.println("Quel niveau de difficulté ? (1/2/3/4)");
-            System.out.println("\t =>");
+            System.out.print("\t =>");
             choix = sc.nextLine();
             choixInt = new Integer(choix);
             if (choixInt >= 1 || choixInt <= 4) {
@@ -311,7 +322,10 @@ public class Controleur implements Observateur {
         */
         
         //pioche des cartes innondations nécessaires au commencement du jeu
-        //gererCarteBleue(niveauEau);
+        
+        grille.afficheGrilleTexte(joueurs.get(1));
+        
+        gererCarteBleue(getNiveau());
         
         //boucle du jeu
         //A FAIRE
