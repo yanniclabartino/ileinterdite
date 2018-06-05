@@ -14,6 +14,7 @@ public class Tuile {
     public Tuile(NomTuile nom) {
         possede = new ArrayList<>();
         this.nom = nom;
+        this.etat = EtatTuile.ASSECHEE;
     }
         
     public int getColonne() {

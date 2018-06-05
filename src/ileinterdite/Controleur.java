@@ -26,7 +26,7 @@ public class Controleur implements Observateur {
     public void traiterMessage(Message m) {
     }
     
-    //METHODES DE GESTION
+    //METHODES DE GESTION DU JEU
     
     private void gererDeplacement(Aventurier joueur) {
         //Gère les déplacements d'un aventurier
@@ -145,25 +145,26 @@ public class Controleur implements Observateur {
             System.out.println("2 cartes.");
             nbPioche = 2;
         }
-        Stack<CarteBleue> pioche = this.getPiocheBleues();
-        ArrayList<CarteBleue> defausse = this.getDefausseBleues();
         CarteBleue c;
         for (int i = 0; i < nbPioche ; i++){
-            c = pioche.pop();
+            c = piocheCarteBleue();
+            //nullPointerException c.getInnonde().getNom().toString() à résoudre
             System.out.println("la carte innondation "+c.getInnonde().getNom().toString()+" à été piochée...");
             if (c.getInnonde().getEtat()==Utils.EtatTuile.ASSECHEE){
                 c.getInnonde().setEtat(Utils.EtatTuile.INONDEE);
                 System.out.println("La tuile correspondante est désormais innondée.");
-                defausse.add(c);
+                addDefausseBleues(c);
             } else if (c.getInnonde().getEtat()==Utils.EtatTuile.INONDEE) {
                 c.getInnonde().setEtat(Utils.EtatTuile.COULEE);
                 System.out.println("La tuile correspondante est désormais coulée.");
             }
-            if (pioche.empty()){
+            if (getPiocheBleues().empty()){
+                ArrayList<CarteBleue> defausse = getDefausseBleues();
                 Collections.shuffle(defausse);
                 for (CarteBleue b : defausse){
-                    pioche.push(b);
+                    addPiocheBleue(b);
                 }
+                viderDefausseBleues();
             }
         }
     }
@@ -190,21 +191,49 @@ public class Controleur implements Observateur {
 
         return touteTuileDispo;
     }
-    
+
+    //méthodes pour les cartes bleues
+    //pioche
     private Stack<CarteBleue> getPiocheBleues() {
-        return this.piocheBleues;
+        return piocheBleues;
     }
-    
+    private CarteBleue piocheCarteBleue(){
+        return this.piocheBleues.pop();
+    }
+    private void addPiocheBleue(CarteBleue c){
+        this.piocheBleues.push(c);
+    }
+    //défausse
     private ArrayList<CarteBleue> getDefausseBleues(){
         return this.defausseBleues;
     }
-    
-    private Stack<CarteOrange> getPiocheOranges(){
-        return this.piocheOranges;
+    private void addDefausseBleues(CarteBleue carte){
+        this.defausseBleues.add(carte);
     }
-    
+    private void viderDefausseBleues(){
+        this.defausseOranges.removeAll(this.defausseOranges);
+    }
+
+    //méthodes pour les cartes oranges
+    //pioche
+    private Stack<CarteOrange> getPiocheOranges() {
+        return piocheOranges;
+    }
+    private CarteOrange piocheCarteOrange(){
+        return this.piocheOranges.pop();
+    }
+    private void addPiocheOrange(CarteOrange c){
+        this.piocheOranges.push(c);
+    }
+    //défausse
     private ArrayList<CarteOrange> getDefausseOranges(){
         return this.defausseOranges;
+    }
+    private void addDefausseOranges(CarteOrange carte){
+        this.defausseOranges.add(carte);
+    }
+    private void viderDefausseOranges(){
+        this.defausseOranges.removeAll(this.defausseOranges);
     }
     
     //CONSTUCTEUR
@@ -225,7 +254,7 @@ public class Controleur implements Observateur {
         }
 
         //Initialisation de la Grille
-        //Collections.shuffle(Tuiles);
+        Collections.shuffle(Tuiles);
         grille = new Grille(Tuiles);
         
         //Création des Aventuriers.   
@@ -236,7 +265,7 @@ public class Controleur implements Observateur {
         joueurs.add(new Messager(grille.getTuile(1, 2), Pion.BLANC));
         joueurs.add(new Plongeur(grille.getTuile(2, 1), Pion.NOIR));
         //Mélange de ceux-ci dans joueurs.
-        //joueurs = Utils.melangerAventuriers(joueurs);
+        joueurs = Utils.melangerAventuriers(joueurs);
         
         //Création des cartes oranges (trésor)        
         ArrayList<CarteOrange> tmpOranges = new ArrayList<>();
@@ -259,7 +288,7 @@ public class Controleur implements Observateur {
         
         //Création des cartes bleues (innondation)        
         ArrayList<CarteBleue> tmpBleues = new ArrayList<>();
-        for (Tuile t : Tuiles){
+        for (Tuile t : grille.getGrille()){
             tmpBleues.add(new CarteBleue(t));
         }
         Collections.shuffle(tmpBleues);
@@ -325,7 +354,7 @@ public class Controleur implements Observateur {
         
         grille.afficheGrilleTexte(joueurs.get(1));
         
-        gererCarteBleue(getNiveau());
+        gererCarteBleue(9/*getNiveau()*/);
         
         //boucle du jeu
         //A FAIRE
