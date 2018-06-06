@@ -152,11 +152,13 @@ public class Controleur implements Observateur {
             System.out.println("la carte innondation "+t.getNom().toString()+" à été piochée...");
             if (t.getEtat()==Utils.EtatTuile.ASSECHEE){
                 t.setEtat(Utils.EtatTuile.INONDEE);
-                System.out.println("La tuile correspondante est désormais innondée.");
+                System.out.println("La tuile correspondante est désormais innondée :");
+                t.affiche();
                 addDefausseBleues(c);
             } else if (t.getEtat()==Utils.EtatTuile.INONDEE) {
                 t.setEtat(Utils.EtatTuile.COULEE);
-                System.out.println("La tuile correspondante est désormais coulée.");
+                System.out.println("La tuile correspondante est désormais coulée :");
+                t.affiche();
             }
             if (getPiocheBleues().empty()){
                 ArrayList<CarteBleue> defausse = getDefausseBleues();
@@ -254,7 +256,7 @@ public class Controleur implements Observateur {
         }
 
         //Initialisation de la Grille
-        Collections.shuffle(Tuiles);
+        //Collections.shuffle(Tuiles);
         grille = new Grille(Tuiles);
         
         //Création des Aventuriers.   
@@ -352,9 +354,7 @@ public class Controleur implements Observateur {
         
         //pioche des cartes innondations nécessaires au commencement du jeu
         
-        grille.afficheGrilleTexte(joueurs.get(1));
-        
-        gererCarteBleue(9/*getNiveau()*/);
+        gererCarteBleue(getNiveau());
         
         //boucle du jeu
         //A FAIRE

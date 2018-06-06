@@ -15,6 +15,7 @@ public class Grille {
                 case 0 : case 5 ://ligne 1, 6 //colonnes 3 à 4
                     for(int j = 2; j<4; j++){
                         this.tuile[j][i]=tuiles.get(index);
+                        this.tuile[j][i].setLigEtCol(j, i);
                         index++;
                     }
                     break;
@@ -22,6 +23,7 @@ public class Grille {
                 case 1 :case 4 : //ligne 2, 5 //colonnes 2 à 5
                     for(int j = 1; j<5; j++){
                         this.tuile[j][i]=tuiles.get(index);
+                        this.tuile[j][i].setLigEtCol(j, i);
                         index++;
                     }
                     break;
@@ -29,6 +31,7 @@ public class Grille {
                 case 2 :case 3 : //ligne 3, 4 //colonnes 1 à 6
                     for(int j = 0; j<6; j++){
                         this.tuile[j][i]=tuiles.get(index);
+                        this.tuile[j][i].setLigEtCol(j, i);
                         index++;
                     }
                     break;
@@ -45,8 +48,12 @@ public class Grille {
         Tuile tmp = null;
         for (int j = 0; j < 6 ; j++){
             for (int i = 0; i < 6 ; i++) {
-                if (this.getTuile(i, j).getNom()==nom) {
-                    tmp = getTuile(i, j);
+                try {
+                    if (this.getTuile(i, j).getNom()==nom) {
+                        tmp = getTuile(i, j);
+                    }
+                } catch (NullPointerException n) {
+                    //Si la tuile n'existe pas en (1,1) par exemple (ce qui est logique) on ne traite pas le cas
                 }
             }
         }
@@ -54,11 +61,27 @@ public class Grille {
     }
 
     public ArrayList<Tuile> getGrille() {
-            ArrayList<Tuile> tuilesGrille = new ArrayList<>();
-            for (int j = 0; j < 6 ; j++){
-                for (int i = 0; i < 6 ; i++) {
-                    tuilesGrille.add(this.getTuile(i, j));
-                }
+        ArrayList<Tuile> tuilesGrille = new ArrayList<>();
+        for (int i = 0; i<6; i++){//chaques lignes
+            switch(i){
+                case 0 : case 5 ://ligne 1, 6 //colonnes 3 à 4
+                    for(int j = 2; j<4; j++){
+                        tuilesGrille.add(this.getTuile(j, i));
+                    }
+                    break;
+                    
+                case 1 :case 4 : //ligne 2, 5 //colonnes 2 à 5
+                    for(int j = 1; j<5; j++){
+                        tuilesGrille.add(this.getTuile(j, i));
+                    }
+                    break;
+                
+                case 2 :case 3 : //ligne 3, 4 //colonnes 1 à 6
+                    for(int j = 0; j<6; j++){
+                        tuilesGrille.add(this.getTuile(j, i));
+                    }
+                    break;
+                } 
             }
             return tuilesGrille;
     }

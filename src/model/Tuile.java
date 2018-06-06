@@ -17,8 +17,17 @@ public class Tuile {
         this.etat = EtatTuile.ASSECHEE;
     }
         
+    public int getLigne() {
+        return ligne;
+    }
+    
     public int getColonne() {
         return colonne;
+    }
+
+    public void setLigEtCol(int ligne, int colonne) {
+        this.ligne = ligne;
+        this.colonne = colonne;
     }
 
     public EtatTuile getEtat() {
@@ -31,10 +40,6 @@ public class Tuile {
 
     public ArrayList<Aventurier> getPossede() {
         return possede;
-    }
-    
-    public int getLigne() {
-        return ligne;
     }
 
     public void suppAventurier(Aventurier a) {
@@ -52,6 +57,6 @@ public class Tuile {
 
     //interface texte
     public void affiche() {
-        System.out.println(getNom().toString()+"["+this.getEtat().toString()+"]"+" : ("+getLigne()+","+getColonne()+")");
+        System.out.println(getNom().toString()+" ["+this.getEtat().toString()+"]"+" : ("+getLigne()+1+","+getColonne()+1+")");
     }
 }
