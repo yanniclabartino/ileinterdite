@@ -148,14 +148,14 @@ public class Controleur implements Observateur {
         CarteBleue c;
         for (int i = 0; i < nbPioche ; i++){
             c = piocheCarteBleue();
-            //nullPointerException c.getInnonde().getNom().toString() à résoudre
-            System.out.println("la carte innondation "+c.getInnonde().getNom().toString()+" à été piochée...");
-            if (c.getInnonde().getEtat()==Utils.EtatTuile.ASSECHEE){
-                c.getInnonde().setEtat(Utils.EtatTuile.INONDEE);
+            Tuile t = getGrille().getTuile(c.getInnonde().getNom());
+            System.out.println("la carte innondation "+t.getNom().toString()+" à été piochée...");
+            if (t.getEtat()==Utils.EtatTuile.ASSECHEE){
+                t.setEtat(Utils.EtatTuile.INONDEE);
                 System.out.println("La tuile correspondante est désormais innondée.");
                 addDefausseBleues(c);
-            } else if (c.getInnonde().getEtat()==Utils.EtatTuile.INONDEE) {
-                c.getInnonde().setEtat(Utils.EtatTuile.COULEE);
+            } else if (t.getEtat()==Utils.EtatTuile.INONDEE) {
+                t.setEtat(Utils.EtatTuile.COULEE);
                 System.out.println("La tuile correspondante est désormais coulée.");
             }
             if (getPiocheBleues().empty()){

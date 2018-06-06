@@ -42,21 +42,15 @@ public class Grille {
     
     public Tuile getTuile(NomTuile nom){
     //une méthode qui trouve la tuile de NomTuile nom dans la grille et qui la renvoi
-        int x = 0;
-        int y = 0;
-        while (this.getTuile(x, y).getNom()!=nom && y <= 5) {
-            x++;
-            if (x > 5){
-                x = 0;
-                y++;
+        Tuile tmp = null;
+        for (int j = 0; j < 6 ; j++){
+            for (int i = 0; i < 6 ; i++) {
+                if (this.getTuile(i, j).getNom()==nom) {
+                    tmp = getTuile(i, j);
+                }
             }
         }
-        if (this.getTuile(x, y).getNom()==nom) { 
-            return this.getTuile(x, y);
-        } else {
-            System.err.println("TUILE "+nom.toString()+" NON-TROUVEE !");
-            return null;
-        }
+        return tmp;
     }
 
     public ArrayList<Tuile> getGrille() {
@@ -68,6 +62,7 @@ public class Grille {
             }
             return tuilesGrille;
     }
+
     public void afficheGrilleTexte(Aventurier joueur) {
         /*
                         +-------+-------+
