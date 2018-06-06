@@ -311,24 +311,18 @@ public class Controleur implements Observateur {
             aventuriers.add(new Plongeur(grille.getTuile(2, 1), Pion.NOIR));
             aventuriers = Utils.melangerAventuriers(aventuriers);
         } else {
-            ArrayList<Aventurier> avChoisis = new ArrayList<>();
+            ArrayList<String> avDispo = new ArrayList<>();
+            avDispo.add("Pilote");
+            avDispo.add("Navigateur");
+            avDispo.add("Ingénieur");
+            avDispo.add("Explorateur");
+            avDispo.add("Messager");
+            avDispo.add("Plongeur");
             for (int i = 0 ; i < nbJoueurs ; i++) {
                 System.out.println(nomJoueurs[i]+", veuillez sélectionner votre aventurier parmi :");
-                for (Aventurier a : aventuriers){
+                for (String s : avDispo){
                     System.out.print("\t- ");
-                    if (a.getCouleur()==Pion.BLEU){
-                        System.out.println("Pilote");
-                    } else if (a.getCouleur()==Pion.JAUNE) {
-                        System.out.println("Navigateur");
-                    } else if (a.getCouleur()==Pion.ROUGE) {
-                        System.out.println("Ingénieur");
-                    } else if (a.getCouleur()==Pion.VERT) {
-                        System.out.println("Explorateur");
-                    } else if (a.getCouleur()==Pion.BLANC) {
-                        System.out.println("Messager");
-                    } else if (a.getCouleur()==Pion.NOIR) {
-                        System.out.println("Plongeur");
-                    }
+                    System.out.println(s);
                 }
                 do {
                     System.out.println("Choix");
