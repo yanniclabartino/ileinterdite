@@ -78,6 +78,11 @@ public class IHM extends javax.swing.JPanel {
         layer3eastCenter.add(layer4eastCenterCenter, BorderLayout.CENTER);
         
         // PLACEMENT DES BOUTONS
+        layer4eastCenterCenter.add(bDepl);
+        layer4eastCenterCenter.add(bAss);
+        layer4eastCenterCenter.add(bPioch);
+        layer4eastCenterCenter.add(bGagner);
+        
         
         initComponents();
     }
