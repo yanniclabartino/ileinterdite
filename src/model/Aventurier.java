@@ -5,30 +5,30 @@ import util.Utils.Pion;
 
 public abstract class Aventurier {
 
-    private String nomAventurier;
     private Tuile appartient;
     private ArrayList<CarteOrange> possède;
     private Pion couleur;
 
     Aventurier(Tuile t, Pion p) {
-        this.appartient=t;
-        this.couleur = p;
+        this.setTuile(t);
+        t.addAventurier(this);
+        this.setCouleur(p);
     }
 
     public Tuile getTuile() {
         return this.appartient;
     }
 
-    public String getNomAventurier() {
-        return nomAventurier;
-    }
-
     public Pion getCouleur() {
         return couleur;
     }
 
-    public void setTuile(Tuile tArrivee) {
+    public final void setTuile(Tuile tArrivee) {
         appartient = tArrivee;
+    }
+
+    public final void setCouleur(Pion couleur) {
+        this.couleur = couleur;
     }
     
     public void seDeplace(Tuile tArrivee) {

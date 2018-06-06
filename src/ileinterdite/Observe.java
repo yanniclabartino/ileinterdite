@@ -1,17 +1,15 @@
 package ileinterdite;
 
-public interface Observe {
-    
-	/**
-	 * 
-	 * @param o
-	 */
-	void addObservateur(Observateur o);
-
-	/**
-	 * 
-	 * @param m
-	 */
-	void notifierObservateur(Message m);
+public class Observe extends javax.swing.JFrame{
+        private Observateur obs;
+        
+	public void addObservateur(Observateur o) {
+            this.obs = o;
+        };
+	public void notifierObservateur(Message m){
+            if (obs != null) {
+                obs.traiterMessage(m);
+            }
+        };
 
 }

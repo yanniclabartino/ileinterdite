@@ -14,21 +14,24 @@ public class Grille {
             switch(i){
                 case 0 : case 5 ://ligne 1, 6 //colonnes 3 à 4
                     for(int j = 2; j<4; j++){
-                        this.tuile[i][j]=tuiles.get(index);
+                        this.tuile[j][i]=tuiles.get(index);
+                        this.tuile[j][i].setLigEtCol(j, i);
                         index++;
                     }
                     break;
                 
                 case 1 :case 4 : //ligne 2, 5 //colonnes 2 à 5
                     for(int j = 1; j<5; j++){
-                        this.tuile[i][j]=tuiles.get(index);
+                        this.tuile[j][i]=tuiles.get(index);
+                        this.tuile[j][i].setLigEtCol(j, i);
                         index++;
                     }
                     break;
                 
                 case 2 :case 3 : //ligne 3, 4 //colonnes 1 à 6
                     for(int j = 0; j<6; j++){
-                        this.tuile[i][j]=tuiles.get(index);
+                        this.tuile[j][i]=tuiles.get(index);
+                        this.tuile[j][i].setLigEtCol(j, i);
                         index++;
                     }
                     break;
@@ -42,26 +45,47 @@ public class Grille {
     
     public Tuile getTuile(NomTuile nom){
     //une méthode qui trouve la tuile de NomTuile nom dans la grille et qui la renvoi
-        int x = 0;
-        int y = 0;
-        while (this.getTuile(x, y).getNom()!=nom && y <= 5) {
-            x++;
-            if (x > 5){
-                x = 0;
-                y++;
+        Tuile tmp = null;
+        for (int j = 0; j < 6 ; j++){
+            for (int i = 0; i < 6 ; i++) {
+                try {
+                    if (this.getTuile(i, j).getNom()==nom) {
+                        tmp = getTuile(i, j);
+                    }
+                } catch (NullPointerException n) {
+                    //Si la tuile n'existe pas en (1,1) par exemple (ce qui est logique) on ne traite pas le cas
+                }
             }
         }
-        if (this.getTuile(x, y).getNom()==nom) { 
-            return this.getTuile(x, y);
-        } else {
-            System.err.println("TUILE "+nom.toString()+" NON-TROUVEE !");
-            return null;
-        }
+        return tmp;
     }
 
-    public Tuile[][] getGrille() {
-            return this.tuile;
+    public ArrayList<Tuile> getGrille() {
+        ArrayList<Tuile> tuilesGrille = new ArrayList<>();
+        for (int i = 0; i<6; i++){//chaques lignes
+            switch(i){
+                case 0 : case 5 ://ligne 1, 6 //colonnes 3 à 4
+                    for(int j = 2; j<4; j++){
+                        tuilesGrille.add(this.getTuile(j, i));
+                    }
+                    break;
+                    
+                case 1 :case 4 : //ligne 2, 5 //colonnes 2 à 5
+                    for(int j = 1; j<5; j++){
+                        tuilesGrille.add(this.getTuile(j, i));
+                    }
+                    break;
+                
+                case 2 :case 3 : //ligne 3, 4 //colonnes 1 à 6
+                    for(int j = 0; j<6; j++){
+                        tuilesGrille.add(this.getTuile(j, i));
+                    }
+                    break;
+                } 
+            }
+            return tuilesGrille;
     }
+
     public void afficheGrilleTexte(Aventurier joueur) {
         /*
                         +-------+-------+

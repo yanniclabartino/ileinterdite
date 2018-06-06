@@ -1,19 +1,15 @@
 package model;
 
-import util.NomTuile;
-
 public class CarteBleue{
 
 	private Tuile innonde;
-	private NomTuile nomTuile;
 
-    public Tuile getInnonde() {
-        return innonde;
-    }
+        public CarteBleue(Tuile innonde) {
+            this.innonde = innonde;
+        }
 
-    public NomTuile getNomTuile() {
-        return nomTuile;
-    }
-        
+        public Tuile getInnonde() {
+            return innonde;
+        }
 
 }
