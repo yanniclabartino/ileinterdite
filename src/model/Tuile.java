@@ -57,6 +57,6 @@ public class Tuile {
 
     //interface texte
     public void affiche() {
-        System.out.println(getNom().toString()+" ["+this.getEtat().toString()+"]"+" : ("+getLigne()+1+","+getColonne()+1+")");
+        System.out.println(getNom().toString()+" ["+this.getEtat().toString()+"]"+" : ("+(getLigne()+1)+","+(getColonne()+1)+")");
     }
 }

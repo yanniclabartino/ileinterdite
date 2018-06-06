@@ -5,7 +5,6 @@ import util.Utils.Pion;
 
 public abstract class Aventurier {
 
-    private String nomAventurier;
     private Tuile appartient;
     private ArrayList<CarteOrange> possède;
     private Pion couleur;
@@ -18,10 +17,6 @@ public abstract class Aventurier {
 
     public Tuile getTuile() {
         return this.appartient;
-    }
-
-    public String getNomAventurier() {
-        return nomAventurier;
     }
 
     public Pion getCouleur() {

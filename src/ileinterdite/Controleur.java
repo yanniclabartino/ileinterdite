@@ -7,6 +7,7 @@ import view.VueAventurier;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Controleur implements Observateur {
@@ -15,7 +16,7 @@ public class Controleur implements Observateur {
     private int niveauEau;
     private VueAventurier[] ihm;
     private Trésor[] trésors;
-    private ArrayList<Aventurier> joueurs;
+    private HashMap<String, Aventurier> joueurs;
     private Stack<CarteBleue> piocheBleues;
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
@@ -40,13 +41,14 @@ public class Controleur implements Observateur {
             System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (utilisable une fois par tour) :");
             System.out.print("(oui/non) => ");
             choix = sc.nextLine();
-            choix = choix.toUpperCase().substring(0, 1);
+            choix = choix.toUpperCase().substring(0, 0);
             if (choix.equals("O")) {
                 pouvoirPiloteDispo = false;
                 tuilesDispo = calculTouteTuileDispo(g);
             } else {
                 tuilesDispo = joueur.calculTuileDispo(g);
             }
+        //Sinon si non-pilote (ou sans pouvoir) :
         } else {
             tuilesDispo = joueur.calculTuileDispo(g);
             g.afficheGrilleTexte(joueur);
@@ -67,9 +69,6 @@ public class Controleur implements Observateur {
                 if (tuilesDispo.contains(tuileChoisie)) {
                     choixValide = true;
                     joueur.seDeplace(tuileChoisie);
-                    //Voir VP pour savoir s'il est plus judicieux
-                    //de passer par une unique méthode (qu'on
-                    //détail par la suite niveau MVC)
                 } else {
                     System.out.println("\tCHOIX NON-VALIDE.");
                 }
@@ -110,7 +109,7 @@ public class Controleur implements Observateur {
                 System.out.print("Y = ");
                 choix = sc.nextLine();
                 Y = new Integer(choix);
-                Tuile tuileChoisie = g.getTuile(X, Y);
+                Tuile tuileChoisie = g.getTuile(X-1, Y-1);
                 if (tuilesDispo.contains(tuileChoisie)) {
                     choixValide = true;
                     tuileChoisie.setEtat(sec);
@@ -152,12 +151,12 @@ public class Controleur implements Observateur {
             System.out.println("la carte innondation "+t.getNom().toString()+" à été piochée...");
             if (t.getEtat()==Utils.EtatTuile.ASSECHEE){
                 t.setEtat(Utils.EtatTuile.INONDEE);
-                System.out.println("La tuile correspondante est désormais innondée :");
+                System.out.print("La tuile correspondante est désormais innondée : ");
                 t.affiche();
                 addDefausseBleues(c);
             } else if (t.getEtat()==Utils.EtatTuile.INONDEE) {
                 t.setEtat(Utils.EtatTuile.COULEE);
-                System.out.println("La tuile correspondante est désormais coulée :");
+                System.out.print("La tuile correspondante est désormais coulée : ");
                 t.affiche();
             }
             if (getPiocheBleues().empty()){
@@ -241,13 +240,54 @@ public class Controleur implements Observateur {
     //CONSTUCTEUR
     
     public Controleur() {    
-        //initialisations des tableaux/array
-        joueurs = new ArrayList<>();
+        //initialisations des tableaux/vecteurs
+        joueurs = new HashMap<>();
         trésors = new Trésor[4];
         piocheOranges = new Stack<>();
         defausseOranges = new ArrayList<>();
         piocheBleues = new Stack<>();
         defausseBleues = new ArrayList<>();
+        
+        //Declaration de variable utiles pour l'interface texte
+        Scanner sc = new Scanner(System.in);
+        String choix;
+        Integer choixInt;
+        boolean choixConforme = false;
+        int nbJoueurs = 2;
+        String[] nomJoueurs;
+        
+        //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 6)
+        do {
+            System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 6) : ");
+            System.out.print("\t=> ");
+            choix = sc.nextLine();
+            choixInt = new Integer(choix);
+            if (choixInt >= 2 || choixInt <= 6) {
+                nbJoueurs = choixInt;
+                choixConforme = true;
+            }
+        } while (!choixConforme);
+
+        //sélection des noms de joueurs
+        nomJoueurs = new String[nbJoueurs];
+        for (int i = 0; i < nbJoueurs; i++) {
+            System.out.println("Nom joueur n°" + (i + 1) + " : ");
+            choix = sc.nextLine();
+            nomJoueurs[i] = choix;
+        }
+
+        //sélection de la difficulté
+        choixConforme = false;
+        do {
+            System.out.println("Quel niveau de difficulté ? (1/2/3/4)");
+            System.out.print("\t =>");
+            choix = sc.nextLine();
+            choixInt = new Integer(choix);
+            if (choixInt >= 1 || choixInt <= 4) {
+                this.niveauEau=choixInt;
+                choixConforme = true;
+            }
+        } while (!choixConforme);
         
         //Génération des 24 tuiles
         ArrayList<Tuile> Tuiles = new ArrayList();
@@ -260,14 +300,68 @@ public class Controleur implements Observateur {
         grille = new Grille(Tuiles);
         
         //Création des Aventuriers.   
-        joueurs.add(new Pilote(grille.getTuile(3, 2), Pion.BLEU));
-        joueurs.add(new Navigateur(grille.getTuile(3, 1), Pion.JAUNE));
-        joueurs.add(new Ingénieur(grille.getTuile(3, 0), Pion.ROUGE));
-        joueurs.add(new Explorateur(grille.getTuile(4, 2), Pion.VERT));
-        joueurs.add(new Messager(grille.getTuile(1, 2), Pion.BLANC));
-        joueurs.add(new Plongeur(grille.getTuile(2, 1), Pion.NOIR));
-        //Mélange de ceux-ci dans joueurs.
-        joueurs = Utils.melangerAventuriers(joueurs);
+        // A FINIR
+        ArrayList<Aventurier> aventuriers = new ArrayList<>();
+        if (Parameters.ALEAS) {
+            aventuriers.add(new Pilote(grille.getTuile(3, 2), Pion.BLEU));
+            aventuriers.add(new Navigateur(grille.getTuile(3, 1), Pion.JAUNE));
+            aventuriers.add(new Ingénieur(grille.getTuile(3, 0), Pion.ROUGE));
+            aventuriers.add(new Explorateur(grille.getTuile(4, 2), Pion.VERT));
+            aventuriers.add(new Messager(grille.getTuile(1, 2), Pion.BLANC));
+            aventuriers.add(new Plongeur(grille.getTuile(2, 1), Pion.NOIR));
+            aventuriers = Utils.melangerAventuriers(aventuriers);
+        } else {
+            ArrayList<Aventurier> avChoisis = new ArrayList<>();
+            for (int i = 0 ; i < nbJoueurs ; i++) {
+                System.out.println(nomJoueurs[i]+", veuillez sélectionner votre aventurier parmi :");
+                for (Aventurier a : aventuriers){
+                    System.out.print("\t- ");
+                    if (a.getCouleur()==Pion.BLEU){
+                        System.out.println("Pilote");
+                    } else if (a.getCouleur()==Pion.JAUNE) {
+                        System.out.println("Navigateur");
+                    } else if (a.getCouleur()==Pion.ROUGE) {
+                        System.out.println("Ingénieur");
+                    } else if (a.getCouleur()==Pion.VERT) {
+                        System.out.println("Explorateur");
+                    } else if (a.getCouleur()==Pion.BLANC) {
+                        System.out.println("Messager");
+                    } else if (a.getCouleur()==Pion.NOIR) {
+                        System.out.println("Plongeur");
+                    }
+                }
+                do {
+                    System.out.println("Choix");
+                    System.out.print("\t =>");
+                    choix = sc.nextLine();
+                    choix = choix.toLowerCase().substring(0, 1);
+                    if (choix.equals("pi")) {
+                        avChoisis.add(aventuriers.get(0));
+                        choixConforme = true;
+                    } else if (choix.equals("na")) {
+                        avChoisis.add(aventuriers.get(1));
+                        choixConforme = true;
+                    } else if (choix.equals("in")) {
+                        avChoisis.add(aventuriers.get(2));
+                        choixConforme = true;
+                    } else if (choix.equals("ex")) {
+                        avChoisis.add(aventuriers.get(3));
+                        choixConforme = true;
+                    } else if (choix.equals("me")) {
+                        avChoisis.add(aventuriers.get(4));
+                        choixConforme = true;
+                    } else if (choix.equals("pl")) {
+                        avChoisis.add(aventuriers.get(5));
+                        choixConforme = true;
+                    }
+                } while (!choixConforme);
+            }
+            aventuriers = avChoisis;
+        }
+        //ajout de ceux-ci dans le HashMap
+        for (int i = 0 ; i < nbJoueurs ; i++) {
+            joueurs.put(nomJoueurs[i],aventuriers.get(i));
+        }
         
         //Création des cartes oranges (trésor)        
         ArrayList<CarteOrange> tmpOranges = new ArrayList<>();
@@ -303,46 +397,6 @@ public class Controleur implements Observateur {
         trésors[1] = new Trésor(NomTresor.LA_PIERRE_SACREE);
         trésors[2] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
         trésors[3] = new Trésor(NomTresor.LE_CALICE_DE_L_ONDE);
-
-        //Declaration de variable utiles
-        Scanner sc = new Scanner(System.in);
-        String choix;
-        Integer choixInt;
-        boolean choixConforme = false;
-        int nbJoueurs = 2;
-        String[] nomJoueurs;
-        //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 6)
-        do {
-            System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 6) : ");
-            System.out.print("\t=> ");
-            choix = sc.nextLine();
-            choixInt = new Integer(choix);
-            if (choixInt >= 2 || choixInt <= 6) {
-                nbJoueurs = choixInt;
-                choixConforme = true;
-            }
-        } while (!choixConforme);
-
-        //sélection des noms de joueurs
-        nomJoueurs = new String[nbJoueurs];
-        for (int i = 0; i < nbJoueurs; i++) {
-            System.out.println("Nom joueur n°" + (i + 1) + " : ");
-            choix = sc.nextLine();
-            nomJoueurs[i] = choix;
-        }
-
-        //sélection de la difficulté
-        choixConforme = false;
-        do {
-            System.out.println("Quel niveau de difficulté ? (1/2/3/4)");
-            System.out.print("\t =>");
-            choix = sc.nextLine();
-            choixInt = new Integer(choix);
-            if (choixInt >= 1 || choixInt <= 4) {
-                this.niveauEau=choixInt;
-                choixConforme = true;
-            }
-        } while (!choixConforme);
 
         //Création d'une vue pour chaque aventurier...
         /*
