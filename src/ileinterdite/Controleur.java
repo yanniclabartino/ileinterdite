@@ -17,6 +17,7 @@ public class Controleur implements Observateur {
     private VueAventurier[] ihm;
     private Trésor[] trésors;
     private HashMap<String, Aventurier> joueurs;
+    private String joueurCourant;
     private Stack<CarteBleue> piocheBleues;
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
@@ -37,7 +38,7 @@ public class Controleur implements Observateur {
         String choix;
         Integer X, Y;
         //Pouvoir pilote :
-        if (joueur.getCouleur() == Utils.Pion.JAUNE && pouvoirPiloteDispo) {
+        if (joueur.getCouleur() == Utils.Pion.BLEU && pouvoirPiloteDispo) {
             System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (utilisable une fois par tour) :");
             System.out.print("(oui/non) => ");
             choix = sc.nextLine();
@@ -489,8 +490,32 @@ public class Controleur implements Observateur {
         //A FAIRE
         
         //Un tour de jeu.
-        
-        
+        debutJeu();
+        for (int i = 0 ; i < nbJoueurs ; i++) {
+            joueurCourant = nomJoueurs[i];
+            int nbActions = 3;
+            choixConforme = false;
+            do {
+                System.out.println(joueurCourant+", quelle action voulez-vous réaliser ?");
+                System.out.println("\t1 - Se déplacer");
+                System.out.println("\t2 - Assécher");
+                System.out.println("\t3 - Finir mon tour");
+                System.out.print("choix (1/2/3) : ");
+                choix = sc.nextLine();
+                if (choix.equals("1")){
+                    choixConforme = true;
+                    nbActions--;
+                    gererDeplacement(joueurs.get(joueurCourant));
+                } else if (choix.equals("2")) {
+                    choixConforme = true;
+                    nbActions--;
+                    gererAssechement(joueurs.get(joueurCourant));
+                } else if (choix.equals("3")) {
+                    choixConforme = true;
+                    nbActions = 0;
+                }
+            } while (!choixConforme && nbActions > 0);
+        }
         //test graphique
         grille.afficheGrilleTexte(joueurs.get(1));
 
