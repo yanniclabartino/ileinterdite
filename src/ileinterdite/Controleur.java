@@ -125,11 +125,43 @@ public class Controleur implements Observateur {
     private void gererGainTresor() {/*Pour plus tard*/}
 
     private void gererCarteOrange(Aventurier a) {
-        
+        boolean carteMDEpiochée = false;
+        ArrayList<CarteOrange> cartesPiochées = new ArrayList<>();
+        for (int i = 0 ; i < 2 ; i++) {
+            cartesPiochées.add(piocheCarteOrange());
+            if (getPiocheOranges().empty()){
+                Collections.shuffle(getDefausseOranges());
+                for (CarteOrange c : getDefausseOranges()) {
+                    addPiocheOrange(c);
+                }
+                viderDefausseOranges();
+            }
+        }
+        for (CarteOrange c : cartesPiochées) {
+            if (c.getRole().equals("Montée des eaux")) {
+                this.niveauEau++;
+                carteMDEpiochée = true;
+                addDefausseOranges(c);
+            } else {
+                a.piocheCarte(c);
+            }
+        }            
+        if (!getPiocheBleues().empty() && carteMDEpiochée){
+            Collections.shuffle(getDefausseBleues());
+            for (CarteBleue b : getDefausseBleues()){
+                addPiocheBleue(b);
+            }
+            viderDefausseBleues();
+        }
+        if (a.getMain().size() > 5){
+            System.out.println("Vous avez plus de 5 cartes dans votre main...");
+            
+        }
     }
 
-    private void gererCarteBleue(int nivEau) {
+    private void gererCarteBleue() {
         int nbPioche;
+        int nivEau = this.getNiveau();
         System.out.print("Le niveau d'eau s'élève à : "+nivEau+".\nVous piochez donc : ");
         if (nivEau>=8){
             System.out.println("5 cartes.");
@@ -160,14 +192,24 @@ public class Controleur implements Observateur {
                 t.affiche();
             }
             if (getPiocheBleues().empty()){
-                ArrayList<CarteBleue> defausse = getDefausseBleues();
-                Collections.shuffle(defausse);
-                for (CarteBleue b : defausse){
+                Collections.shuffle(getDefausseBleues());
+                for (CarteBleue b : getDefausseBleues()){
                     addPiocheBleue(b);
                 }
                 viderDefausseBleues();
             }
         }
+    }
+    
+    private void debutJeu(){
+        //méthode qui :
+        /*
+            - tire les premieres cartes innondations
+            - place les aventuriers
+            - distribue les cartes Trésor
+        */
+        //tout ceci dépendant du parametres.ALEAS
+        
     }
     
     //METHODES UTILES
