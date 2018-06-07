@@ -11,7 +11,7 @@ public class Ingénieur extends Aventurier {
     }
 
     @Override
-    public ArrayList calculTuileDispo( Grille g) {
+    public ArrayList calculTuileDispo(Grille g) {
         ArrayList<Tuile> tuileDispo = new ArrayList<Tuile>();
         int y = this.getTuile().getLigne();
         int x = this.getTuile().getColonne();
