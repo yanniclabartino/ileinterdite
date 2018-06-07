@@ -127,6 +127,7 @@ public class Controleur implements Observateur {
     private void gererCarteOrange(Aventurier a) {
         boolean carteMDEpiochée = false;
         ArrayList<CarteOrange> cartesPiochées = new ArrayList<>();
+        //On picohe deux cartes et on vérifie a chaque fois si la pioche est vide
         for (int i = 0 ; i < 2 ; i++) {
             cartesPiochées.add(piocheCarteOrange());
             if (getPiocheOranges().empty()){
@@ -137,6 +138,7 @@ public class Controleur implements Observateur {
                 viderDefausseOranges();
             }
         }
+        //Pour les cartes les piochées, on vérifie si celle-ci sont des cartes "montée des eaux"
         for (CarteOrange c : cartesPiochées) {
             if (c.getRole().equals("Montée des eaux")) {
                 this.niveauEau++;
@@ -145,7 +147,9 @@ public class Controleur implements Observateur {
             } else {
                 a.piocheCarte(c);
             }
-        }            
+        }
+        //Si la pioche de carte bleue n'est pas vide et qu'on a pioché au moins
+        //une carte MDE alors on mélange puis remet la defausse de carte bleue sur le tas de pioche
         if (!getPiocheBleues().empty() && carteMDEpiochée){
             Collections.shuffle(getDefausseBleues());
             for (CarteBleue b : getDefausseBleues()){
@@ -153,9 +157,40 @@ public class Controleur implements Observateur {
             }
             viderDefausseBleues();
         }
+        //Si la main contient plus de 5 cartes
         if (a.getMain().size() > 5){
+            Scanner sc = new Scanner(System.in);
+            String choix;
+            Integer numChoix;
             System.out.println("Vous avez plus de 5 cartes dans votre main...");
-            
+            for (int i = 0 ; i < (a.getMain().size()-5) ; i++) {
+                System.out.println("Voici votre main ("+a.getMain().size()+" cartes) : ");
+                int numCarte = 1; 
+                for (CarteOrange c : a.getMain()) {
+                    System.out.println("\t ["+numCarte+"] - "+c.getRole());
+                }
+                System.out.println("Quelle carte voulez-vous défaussez de votre main ?\nNB: s'il s'agit d'une carte spéciale, vous pourrez l'utiliser.");
+                System.out.print("\t choix (numéro de la carte ) : ");
+                choix = sc.nextLine();
+                numChoix = new Integer(choix);
+                if (a.getMain().get(numChoix-1).getRole().equals("Helicoptere") || a.getMain().get(numChoix-1).getRole().equals("Sac de sable")) {
+                    boolean choixConforme = false;
+                    do {
+                        System.out.println("Il s'agit d'une carte à pouvoir spécial,\nvoulez-vous vous en débarrasser(1) ou jouer cette carte(2) ?");
+                        System.out.print("\tchoix (1/2) : ");
+                        choix = sc.nextLine();
+                        if (choix.equals("1")) {
+                            a.defausseCarte(a.getMain().get(numChoix-1));
+                            choixConforme = true;
+                        } else if (choix.equals("2")) {
+                            //
+                            choixConforme = true;
+                        }
+                    } while (!choixConforme);
+                } else {
+                    a.defausseCarte(a.getMain().get(numChoix-1));
+                }
+            }
         }
     }
 
