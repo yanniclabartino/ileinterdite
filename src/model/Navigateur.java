@@ -6,8 +6,8 @@ import util.Utils;
 
 public class Navigateur extends Aventurier {
 
-    public Navigateur(Tuile t, Utils.Pion p) {
-        super(t, p);
+    public Navigateur() {
+        setCouleur(Utils.Pion.JAUNE);
     }
 
     @Override

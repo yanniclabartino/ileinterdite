@@ -6,8 +6,8 @@ import util.Utils;
 
 public class Ingénieur extends Aventurier {
 
-    public Ingénieur(Tuile t, Utils.Pion p) {
-        super(t, p);
+    public Ingénieur() {
+        setCouleur(Utils.Pion.ROUGE);
     }
 
     @Override

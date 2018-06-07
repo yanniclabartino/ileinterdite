@@ -6,8 +6,8 @@ import util.Utils;
 
 public class Explorateur extends Aventurier {
 
-    public Explorateur(Tuile t, Utils.Pion p) {
-        super(t, p);
+    public Explorateur() {
+        setCouleur(Utils.Pion.VERT);
     }
 
     @Override

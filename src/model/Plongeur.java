@@ -6,8 +6,8 @@ import util.Utils;
 
 public class Plongeur extends Aventurier {
 
-    public Plongeur(Tuile t, Utils.Pion p) {
-        super(t, p);
+    public Plongeur() {
+        setCouleur(Utils.Pion.NOIR);
     }
 
     @Override

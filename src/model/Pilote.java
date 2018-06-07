@@ -6,8 +6,8 @@ import util.Utils;
 
 public class Pilote extends Aventurier {
 
-    public Pilote(Tuile t, Utils.Pion p) {
-        super(t, p);
+    public Pilote() {
+        setCouleur(Utils.Pion.BLEU);
     }
 
     @Override

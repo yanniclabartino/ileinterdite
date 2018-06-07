@@ -41,7 +41,7 @@ public class Controleur implements Observateur {
             System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (utilisable une fois par tour) :");
             System.out.print("(oui/non) => ");
             choix = sc.nextLine();
-            choix = choix.toUpperCase().substring(0, 0);
+            choix = choix.toUpperCase().substring(0, 1);
             if (choix.equals("O")) {
                 pouvoirPiloteDispo = false;
                 tuilesDispo = calculTouteTuileDispo(g);
@@ -299,25 +299,20 @@ public class Controleur implements Observateur {
         //Collections.shuffle(Tuiles);
         grille = new Grille(Tuiles);
         
-        //Création des Aventuriers.   
-        // A FINIR
+        //Création des Aventuriers.
         ArrayList<Aventurier> aventuriers = new ArrayList<>();
         if (Parameters.ALEAS) {
-            aventuriers.add(new Pilote(grille.getTuile(3, 2), Pion.BLEU));
-            aventuriers.add(new Navigateur(grille.getTuile(3, 1), Pion.JAUNE));
-            aventuriers.add(new Ingénieur(grille.getTuile(3, 0), Pion.ROUGE));
-            aventuriers.add(new Explorateur(grille.getTuile(4, 2), Pion.VERT));
-            aventuriers.add(new Messager(grille.getTuile(1, 2), Pion.BLANC));
-            aventuriers.add(new Plongeur(grille.getTuile(2, 1), Pion.NOIR));
+            aventuriers.add(new Pilote());
+            aventuriers.add(new Navigateur());
+            aventuriers.add(new Ingénieur());
+            aventuriers.add(new Explorateur());
+            aventuriers.add(new Messager());
+            aventuriers.add(new Plongeur());
             aventuriers = Utils.melangerAventuriers(aventuriers);
         } else {
             ArrayList<String> avDispo = new ArrayList<>();
-            avDispo.add("Pilote");
-            avDispo.add("Navigateur");
-            avDispo.add("Ingénieur");
-            avDispo.add("Explorateur");
-            avDispo.add("Messager");
-            avDispo.add("Plongeur");
+            String[] listeAv = {"Pilote","Navigateur","Ingénieur","Explorateur","Messager","Plongeur"};
+            for (String s : listeAv){ avDispo.add(s); }
             for (int i = 0 ; i < nbJoueurs ; i++) {
                 System.out.println(nomJoueurs[i]+", veuillez sélectionner votre aventurier parmi :");
                 for (String s : avDispo){
@@ -328,32 +323,50 @@ public class Controleur implements Observateur {
                     System.out.println("Choix");
                     System.out.print("\t =>");
                     choix = sc.nextLine();
-                    choix = choix.toLowerCase().substring(0, 1);
-                    if (choix.equals("pi")) {
-                        avChoisis.add(aventuriers.get(0));
+                    choix = choix.toLowerCase().substring(0, 2);
+                    if (choix.equals("pi") && avDispo.contains("Pilote")) {
+                        avDispo.remove("Pilote");
+                        aventuriers.add(new Pilote());
                         choixConforme = true;
-                    } else if (choix.equals("na")) {
-                        avChoisis.add(aventuriers.get(1));
+                    } else if (choix.equals("na") && avDispo.contains("Navigateur")) {
+                        avDispo.remove("Navigateur");
+                        aventuriers.add(new Navigateur());
                         choixConforme = true;
-                    } else if (choix.equals("in")) {
-                        avChoisis.add(aventuriers.get(2));
+                    } else if (choix.equals("in") && avDispo.contains("Ingénieur")) {
+                        avDispo.remove("Ingénieur");
+                        aventuriers.add(new Ingénieur());
                         choixConforme = true;
-                    } else if (choix.equals("ex")) {
-                        avChoisis.add(aventuriers.get(3));
+                    } else if (choix.equals("ex") && avDispo.contains("Explorateur")) {
+                        avDispo.remove("Explorateur");
+                        aventuriers.add(new Explorateur());
                         choixConforme = true;
-                    } else if (choix.equals("me")) {
-                        avChoisis.add(aventuriers.get(4));
+                    } else if (choix.equals("me") && avDispo.contains("Messager")) {
+                        avDispo.remove("Messager");
+                        aventuriers.add(new Messager());
                         choixConforme = true;
-                    } else if (choix.equals("pl")) {
-                        avChoisis.add(aventuriers.get(5));
+                    } else if (choix.equals("pl") && avDispo.contains("Plongeur")) {
+                        avDispo.remove("Plongeur");
+                        aventuriers.add(new Plongeur());
                         choixConforme = true;
                     }
                 } while (!choixConforme);
             }
-            aventuriers = avChoisis;
         }
-        //ajout de ceux-ci dans le HashMap
+        //ajout de ceux-ci dans la grille et dans le HashMap des joueurs
         for (int i = 0 ; i < nbJoueurs ; i++) {
+            if (aventuriers.get(i).getCouleur()==Pion.BLANC){
+                grille.getTuile(1, 2).addAventurier(aventuriers.get(i));
+            } else if (aventuriers.get(i).getCouleur()==Pion.BLEU) {
+                grille.getTuile(3, 2).addAventurier(aventuriers.get(i));
+            } else if (aventuriers.get(i).getCouleur()==Pion.JAUNE) {
+                grille.getTuile(3, 1).addAventurier(aventuriers.get(i));
+            } else if (aventuriers.get(i).getCouleur()==Pion.NOIR) {
+                grille.getTuile(2, 1).addAventurier(aventuriers.get(i));
+            } else if (aventuriers.get(i).getCouleur()==Pion.ROUGE) {
+                grille.getTuile(3, 0).addAventurier(aventuriers.get(i));
+            } else if (aventuriers.get(i).getCouleur()==Pion.VERT) {
+                grille.getTuile(4, 2).addAventurier(aventuriers.get(i));
+            }
             joueurs.put(nomJoueurs[i],aventuriers.get(i));
         }
         

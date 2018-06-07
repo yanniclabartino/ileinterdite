@@ -9,12 +9,6 @@ public abstract class Aventurier {
     private ArrayList<CarteOrange> possède;
     private Pion couleur;
 
-    Aventurier(Tuile t, Pion p) {
-        this.setTuile(t);
-        t.addAventurier(this);
-        this.setCouleur(p);
-    }
-
     public Tuile getTuile() {
         return this.appartient;
     }

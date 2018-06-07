@@ -6,8 +6,8 @@ import util.Utils;
 
 public class Messager extends Aventurier {
 
-    public Messager(Tuile t, Utils.Pion p) {
-        super(t, p);
+    public Messager() {
+        setCouleur(Utils.Pion.BLANC);
     }
 
     public ArrayList calculTuileDispo(Grille g) {
