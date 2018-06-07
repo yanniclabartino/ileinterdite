@@ -258,11 +258,11 @@ public class Controleur implements Observateur {
         
         //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 6)
         do {
-            System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 6) : ");
+            System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 4) : ");
             System.out.print("\t=> ");
             choix = sc.nextLine();
             choixInt = new Integer(choix);
-            if (choixInt >= 2 || choixInt <= 6) {
+            if (choixInt >= 2 || choixInt <= 4) {
                 nbJoueurs = choixInt;
                 choixConforme = true;
             }
@@ -403,22 +403,16 @@ public class Controleur implements Observateur {
         trésors[0] = new Trésor(NomTresor.LE_CRISTAL_ARDENT);
         trésors[1] = new Trésor(NomTresor.LA_PIERRE_SACREE);
         trésors[2] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
-        trésors[3] = new Trésor(NomTresor.LE_CALICE_DE_L_ONDE);
-
-        //Création d'une vue pour chaque aventurier...
-        /*
-        ihm = new VueAventurier[nbJoueurs];
-        for (int i = 1; i < nbJoueurs; i++) {
-            ihm[i] = new VueAventurier(nomJoueurs[i], joueurs.get(i - 1).getNomAventurier(), joueurs.get(i - 1).getCouleur().getCouleur());
-        }
-        */
+        trésors[3] = new Trésor(NomTresor.LE_CALICE_DE_L_ONDE);        
         
         //pioche des cartes innondations nécessaires au commencement du jeu
-        
-        gererCarteBleue(getNiveau());
+        //gererCarteBleue(getNiveau());
         
         //boucle du jeu
         //A FAIRE
+        
+        //Un tour de jeu.
+        
         
         //test graphique
         grille.afficheGrilleTexte(joueurs.get(1));
