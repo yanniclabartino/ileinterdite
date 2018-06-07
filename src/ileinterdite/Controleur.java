@@ -375,7 +375,11 @@ public class Controleur implements Observateur {
             System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 4) : ");
             System.out.print("\t=> ");
             choix = sc.nextLine();
-            choixInt = new Integer(choix);
+            try {
+                choixInt = new Integer(choix);
+            } catch (NumberFormatException e) {
+                choixInt = 0;
+            }
             if (choixInt >= 2 && choixInt <= 4) {
                 nbJoueurs = choixInt;
                 choixConforme = true;
@@ -387,10 +391,10 @@ public class Controleur implements Observateur {
         for (int i = 0; i < nbJoueurs; i++) {
             System.out.println("Nom joueur n°" + (i + 1) + " : ");
             choix = sc.nextLine();
-            if (i==0) {
+            if (i == 0) {
                 nomJoueurs[i] = choix;
-            } else if (nomJoueurs[i-1].equals(choix)) {
-                nomJoueurs[i] = choix+(i-1);
+            } else if (nomJoueurs[i - 1].equals(choix)) {
+                nomJoueurs[i] = choix + i;
             } else {
                 nomJoueurs[i] = choix;
             }
@@ -402,7 +406,11 @@ public class Controleur implements Observateur {
             System.out.println("Quel niveau de difficulté ? (1/2/3/4)");
             System.out.print("\t =>");
             choix = sc.nextLine();
-            choixInt = new Integer(choix);
+            try {
+                choixInt = new Integer(choix);
+            } catch (NumberFormatException e) {
+                choixInt = 0;
+            }
             if (choixInt >= 1 && choixInt <= 4) {
                 this.niveauEau = choixInt;
                 choixConforme = true;
@@ -442,10 +450,15 @@ public class Controleur implements Observateur {
                     System.out.println(s);
                 }
                 do {
+                    choixConforme = false;
                     System.out.println("Choix");
                     System.out.print("\t =>");
                     choix = sc.nextLine();
-                    choix = choix.toLowerCase().substring(0, 2);
+                    try {
+                        choix = choix.toLowerCase().substring(0, 2);
+                    } catch (StringIndexOutOfBoundsException | NullPointerException e) {
+                        choix = "AUCUNE SELECTION";
+                    }
                     if (choix.equals("pi") && avDispo.contains("Pilote")) {
                         avDispo.remove("Pilote");
                         aventuriers.add(new Pilote());
@@ -518,7 +531,6 @@ public class Controleur implements Observateur {
         //gererCarteBleue(getNiveau());
         //boucle du jeu
         //A FAIRE
-        
         //Un tour de jeu.
         debutJeu();
         for (int i = 0; i < nbJoueurs; i++) {
