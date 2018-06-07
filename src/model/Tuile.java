@@ -25,9 +25,9 @@ public class Tuile {
         return colonne;
     }
 
-    public void setLigEtCol(int ligne, int colonne) {
-        this.ligne = ligne;
-        this.colonne = colonne;
+    public void setLigEtCol(int x, int y) {
+        this.ligne = y;
+        this.colonne = x;
     }
 
     public EtatTuile getEtat() {
@@ -57,6 +57,6 @@ public class Tuile {
 
     //interface texte
     public void affiche() {
-        System.out.println(getNom().toString()+" ["+this.getEtat().toString()+"]"+" : ("+(getLigne()+1)+","+(getColonne()+1)+")");
+        System.out.println(getNom().toString()+" ["+this.getEtat().toString()+"]"+" : ("+(getColonne()+1)+","+(getLigne()+1)+")");
     }
 }
