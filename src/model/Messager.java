@@ -11,6 +11,7 @@ public class Messager extends Aventurier {
         setCouleur(Utils.Pion.BLANC);
     }
 
+    @Override
     public ArrayList calculTuileDispo(Grille g) {
         ArrayList<Tuile> tuileDispo = new ArrayList<Tuile>();
         int y = this.getTuile().getLigne();
@@ -37,10 +38,10 @@ public class Messager extends Aventurier {
         }
         return tuileDispo;
     }
-
-
-public ArrayList calculTuileAss(Grille g) {
- ArrayList<Tuile> tuileDispoAss = new ArrayList<Tuile>();
+    
+    @Override
+    public ArrayList calculTuileAss(Grille g) {
+        ArrayList<Tuile> tuileDispoAss = new ArrayList<Tuile>();
         int y = this.getTuile().getLigne();
         int x = this.getTuile().getColonne();
 
@@ -64,5 +65,5 @@ public ArrayList calculTuileAss(Grille g) {
             tuileDispoAss.add(g.getTuile(x, y + 1));
         }
         return tuileDispoAss;
-	}
+    }
 }

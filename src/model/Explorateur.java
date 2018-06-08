@@ -56,6 +56,7 @@ public class Explorateur extends Aventurier {
         return tuileDispo;
     }
     
+    @Override
     public ArrayList calculTuileAss(Grille g) {
         ArrayList<Tuile> tuileDispoAss = new ArrayList<Tuile>();
         int y = this.getTuile().getLigne();
