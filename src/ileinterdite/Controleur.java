@@ -17,12 +17,12 @@ public class Controleur implements Observateur {
     private VueAventurier[] ihm;
     private Trésor[] trésors;
     private HashMap<String, Aventurier> joueurs;
-    private String joueurCourant;
     private Stack<CarteBleue> piocheBleues;
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
     private ArrayList<CarteOrange> defausseOranges;
     private boolean pouvoirPiloteDispo;
+    private int nbJoueurs;
 
     @Override
     public void traiterMessage(Message m) {
@@ -315,93 +315,74 @@ public class Controleur implements Observateur {
             }
         }
     }
-
-    //METHODES UTILES
-    private Grille getGrille() {
-        return grille;
-    }
-    private int getNiveau() {
-        return niveauEau;
-    }
-    private ArrayList<Tuile> calculTouteTuileDispo(Grille g) {
-        ArrayList<Tuile> touteTuileDispo = new ArrayList<Tuile>();
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 6; j++) {
-                if (g.getTuile(i, j) != null) {
-                    if (g.getTuile(i, j).getEtat() != Utils.EtatTuile.COULEE) {
-                        touteTuileDispo.add(g.getTuile(i, j));
-                    }
-                }
-            }
+    
+    private void iniCartes(){
+        //Création des cartes oranges (trésor)        
+        ArrayList<CarteOrange> tmpOranges = new ArrayList<CarteOrange>();
+        for (int i = 0; i < 3; i++) {
+            tmpOranges.add(new CarteMonteeDesEaux());
+            tmpOranges.add(new CarteHelicoptere());
         }
-        return touteTuileDispo;
-    }
+        for (int i = 0; i < 5; i++) {
+            tmpOranges.add(new CarteTrésor(NomTresor.LE_CRISTAL_ARDENT));
+            tmpOranges.add(new CarteTrésor(NomTresor.LA_STATUE_DU_ZEPHYR));
+            tmpOranges.add(new CarteTrésor(NomTresor.LE_CALICE_DE_L_ONDE));
+            tmpOranges.add(new CarteTrésor(NomTresor.LA_PIERRE_SACREE));
+        }
+        tmpOranges.add(new CarteSacDeSable());
+        tmpOranges.add(new CarteSacDeSable());
+        Collections.shuffle(tmpOranges);
+        //Ajout de celles-ci dans la pioche orange.
+        for (CarteOrange c : tmpOranges) {
+            piocheOranges.push(c);
+        }
 
-    //méthodes pour les cartes bleues
-    //pioche
-    private Stack<CarteBleue> getPiocheBleues() {
-        return piocheBleues;
+        //Création des cartes bleues (innondation)        
+        ArrayList<CarteBleue> tmpBleues = new ArrayList<CarteBleue>();
+        for (Tuile t : grille.getGrille()) {
+            tmpBleues.add(new CarteBleue(t));
+        }
+        Collections.shuffle(tmpBleues);
+        //Ajout de celles-ci dans la pioche bleue.
+        for (CarteBleue c : tmpBleues) {
+            piocheBleues.push(c);
+        }
     }
-    private CarteBleue piocheCarteBleue() {
-        return this.piocheBleues.pop();
-    }
-    private void addPiocheBleue(CarteBleue c) {
-        this.piocheBleues.push(c);
-    }
+    
+    private void iniGrille(){
+        //Génération des 24 tuiles
+        ArrayList<Tuile> Tuiles = new ArrayList<Tuile>();
+        for (int i = 1; i < 25; i++) {
+            Tuiles.add(new Tuile(NomTuile.getFromNb(i)));
+        }
 
-    //défausse
-    private ArrayList<CarteBleue> getDefausseBleues() {
-        return this.defausseBleues;
-    }
-    private void addDefausseBleues(CarteBleue carte) {
-        this.defausseBleues.add(carte);
-    }
-    private void viderDefausseBleues() {
-        this.defausseOranges.removeAll(this.defausseOranges);
-    }
+        //Initialisation de la Grille
+        if (Parameters.ALEAS){
+            Collections.shuffle(Tuiles);
+        }
+        grille = new Grille(Tuiles);
 
-    //méthodes pour les cartes oranges
-    //pioche
-    private Stack<CarteOrange> getPiocheOranges() {
-        return piocheOranges;
     }
-    private CarteOrange piocheCarteOrange() {
-        return this.piocheOranges.pop();
+    
+    private void iniTrésor(){
+        //Création des Trésors
+        trésors[0] = new Trésor(NomTresor.LE_CRISTAL_ARDENT);
+        trésors[1] = new Trésor(NomTresor.LA_PIERRE_SACREE);
+        trésors[2] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
+        trésors[3] = new Trésor(NomTresor.LE_CALICE_DE_L_ONDE);
     }
-    private void addPiocheOrange(CarteOrange c) {
-        this.piocheOranges.push(c);
-    }
+    
+    //METHODES INTERFACE TEXTE
 
-    //défausse
-    private ArrayList<CarteOrange> getDefausseOranges() {
-        return this.defausseOranges;
-    }
-    private void addDefausseOranges(CarteOrange carte) {
-        this.defausseOranges.add(carte);
-    }
-    private void viderDefausseOranges() {
-        this.defausseOranges.removeAll(this.defausseOranges);
-    }
-
-    //CONSTUCTEUR
-    public Controleur() {
-        //initialisations des tableaux/vecteurs
-        joueurs = new HashMap<String,Aventurier>();
-        trésors = new Trésor[4];
-        piocheOranges = new Stack<CarteOrange>();
-        defausseOranges = new ArrayList<CarteOrange>();
-        piocheBleues = new Stack<CarteBleue>();
-        defausseBleues = new ArrayList<CarteBleue>();
-
-        //Declaration de variable utiles pour l'interface texte
+    private void choixJoueurs (){
+        
+            /*A COMPLETER*/
+        
+        //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 4)
         Scanner sc = new Scanner(System.in);
+        boolean choixConforme = false;
         String choix;
         Integer choixInt;
-        boolean choixConforme = false;
-        int nbJoueurs = 2;
-        String[] nomJoueurs;
-
-        //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 6)
         do {
             System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 4) : ");
             System.out.print("\t=> ");
@@ -416,23 +397,26 @@ public class Controleur implements Observateur {
                 choixConforme = true;
             }
         } while (!choixConforme);
-
+        
         //sélection des noms de joueurs
-        nomJoueurs = new String[nbJoueurs];
         for (int i = 0; i < nbJoueurs; i++) {
             System.out.println("Nom joueur n°" + (i + 1) + " : ");
             choix = sc.nextLine();
-            if (i == 0) {
-                nomJoueurs[i] = choix;
-            } else if (nomJoueurs[i - 1].equals(choix)) {
-                nomJoueurs[i] = choix + i;
-            } else {
-                nomJoueurs[i] = choix;
+            for (String nom : joueurs.keySet()) {
+                if (nom.equals(choix)) {
+                    choix=choix+i;
+                }
             }
+            joueurs.put(choix, null);
         }
-
+    }
+    
+    private void choixDifficulté(){
         //sélection de la difficulté
-        choixConforme = false;
+        Scanner sc = new Scanner(System.in);
+        boolean choixConforme = false;
+        String choix;
+        Integer choixInt;
         do {
             System.out.println("Quel niveau de difficulté ? (1/2/3/4)");
             System.out.print("\t =>");
@@ -448,17 +432,14 @@ public class Controleur implements Observateur {
             }
         } while (!choixConforme);
 
-        //Génération des 24 tuiles
-        ArrayList<Tuile> Tuiles = new ArrayList<Tuile>();
-        for (int i = 1; i < 25; i++) {
-            Tuiles.add(new Tuile(NomTuile.getFromNb(i)));
-        }
-
-        //Initialisation de la Grille
-        //Collections.shuffle(Tuiles);
-        grille = new Grille(Tuiles);
-
+    }
+    
+    private void créerAventuriers(){
         //Création des Aventuriers.
+        Scanner sc = new Scanner(System.in);
+        boolean choixConforme = false;
+        String choix;
+        Integer choixInt;
         ArrayList<Aventurier> aventuriers = new ArrayList<Aventurier>();
         if (Parameters.ALEAS) {
             aventuriers.add(new Pilote());
@@ -474,8 +455,8 @@ public class Controleur implements Observateur {
             for (String s : listeAv) {
                 avDispo.add(s);
             }
-            for (int i = 0; i < nbJoueurs; i++) {
-                System.out.println(nomJoueurs[i] + ", veuillez sélectionner votre aventurier parmi :");
+            for (String joueurCourant : joueurs.keySet()) {
+                System.out.println(joueurCourant + ", veuillez sélectionner votre aventurier parmi :");
                 for (String s : avDispo) {
                     System.out.print("\t- ");
                     System.out.println(s);
@@ -519,56 +500,115 @@ public class Controleur implements Observateur {
             }
         }
         //ajout de ceux-ci dans le HashMap des joueurs
-        for (int i = 0; i < nbJoueurs; i++) {
-            joueurs.put(nomJoueurs[i], aventuriers.get(i));
+        int i = 0;
+        for (String joueurCourant : joueurs.keySet()) {
+            joueurs.put(joueurCourant, aventuriers.get(i));
+            i++;
         }
 
-        //Création des cartes oranges (trésor)        
-        ArrayList<CarteOrange> tmpOranges = new ArrayList<CarteOrange>();
-        for (int i = 0; i < 3; i++) {
-            tmpOranges.add(new CarteMonteeDesEaux());
-            tmpOranges.add(new CarteHelicoptere());
+    }
+    
+    //METHODES UTILES
+    private Grille getGrille() {
+        return grille;
+    }
+    private int getNiveau() {
+        return niveauEau;
+    }
+    private ArrayList<Tuile> calculTouteTuileDispo(Grille g) {
+        ArrayList<Tuile> touteTuileDispo = new ArrayList<Tuile>();
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (g.getTuile(i, j) != null) {
+                    if (g.getTuile(i, j).getEtat() != Utils.EtatTuile.COULEE) {
+                        touteTuileDispo.add(g.getTuile(i, j));
+                    }
+                }
+            }
         }
-        for (int i = 0; i < 5; i++) {
-            tmpOranges.add(new CarteTrésor(NomTresor.LE_CRISTAL_ARDENT));
-            tmpOranges.add(new CarteTrésor(NomTresor.LA_STATUE_DU_ZEPHYR));
-            tmpOranges.add(new CarteTrésor(NomTresor.LE_CALICE_DE_L_ONDE));
-            tmpOranges.add(new CarteTrésor(NomTresor.LA_PIERRE_SACREE));
-        }
-        tmpOranges.add(new CarteSacDeSable());
-        tmpOranges.add(new CarteSacDeSable());
-        Collections.shuffle(tmpOranges);
-        //Ajout de celles-ci dans la pioche orange.
-        for (CarteOrange c : tmpOranges) {
-            piocheOranges.push(c);
-        }
+        return touteTuileDispo;
+    }
 
-        //Création des cartes bleues (innondation)        
-        ArrayList<CarteBleue> tmpBleues = new ArrayList<CarteBleue>();
-        for (Tuile t : grille.getGrille()) {
-            tmpBleues.add(new CarteBleue(t));
-        }
-        Collections.shuffle(tmpBleues);
-        //Ajout de celles-ci dans la pioche bleue.
-        for (CarteBleue c : tmpBleues) {
-            piocheBleues.push(c);
-        }
+    //méthodes pour les cartes bleues
+    //pioche
+    private Stack<CarteBleue> getPiocheBleues() {
+        return piocheBleues;
+    }
+    private CarteBleue piocheCarteBleue() {
+        return this.piocheBleues.pop();
+    }
+    private void addPiocheBleue(CarteBleue c) {
+        this.piocheBleues.push(c);
+    }
+    //défausse
+    private ArrayList<CarteBleue> getDefausseBleues() {
+        return this.defausseBleues;
+    }
+    private void addDefausseBleues(CarteBleue carte) {
+        this.defausseBleues.add(carte);
+    }
+    private void viderDefausseBleues() {
+        this.defausseOranges.removeAll(this.defausseOranges);
+    }
 
-        //Création des Trésors
-        trésors[0] = new Trésor(NomTresor.LE_CRISTAL_ARDENT);
-        trésors[1] = new Trésor(NomTresor.LA_PIERRE_SACREE);
-        trésors[2] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
-        trésors[3] = new Trésor(NomTresor.LE_CALICE_DE_L_ONDE);
+    //méthodes pour les cartes oranges
+    //pioche
+    private Stack<CarteOrange> getPiocheOranges() {
+        return piocheOranges;
+    }
+    private CarteOrange piocheCarteOrange() {
+        return this.piocheOranges.pop();
+    }
+    private void addPiocheOrange(CarteOrange c) {
+        this.piocheOranges.push(c);
+    }
+    //défausse
+    private ArrayList<CarteOrange> getDefausseOranges() {
+        return this.defausseOranges;
+    }
+    private void addDefausseOranges(CarteOrange carte) {
+        this.defausseOranges.add(carte);
+    }
+    private void viderDefausseOranges() {
+        this.defausseOranges.removeAll(this.defausseOranges);
+    }
+
+    //CONSTUCTEUR
+    public Controleur() {
+        //initialisations des tableaux/vecteurs
+        joueurs = new HashMap<String,Aventurier>();
+        trésors = new Trésor[4];
+        piocheOranges = new Stack<CarteOrange>();
+        defausseOranges = new ArrayList<CarteOrange>();
+        piocheBleues = new Stack<CarteBleue>();
+        defausseBleues = new ArrayList<CarteBleue>();
+        nbJoueurs = 2;
+
+        //initialisations
+        iniTrésor();
+        iniGrille();
+        iniCartes();
+        
+        //Paramètres joueurs
+        choixDifficulté();
+        choixJoueurs();
+        créerAventuriers();
+        
 
         //pioche des cartes innondations nécessaires au commencement du jeu
         //gererCarteBleue(getNiveau());
         //boucle du jeu
         //A FAIRE
-        //Un tour de jeu.
+        
+        //Declaration de variable utiles pour l'interface texte
+        Scanner sc = new Scanner(System.in);
+        String choix;
+        boolean choixConforme = false;
+        
+        //Un tour de jeu
         debutJeu();
         pouvoirPiloteDispo = true;
-        for (int i = 0; i < nbJoueurs; i++) {
-            joueurCourant = nomJoueurs[i];
+        for (String joueurCourant : joueurs.keySet()) {
             int nbActions = 3;
             do {
                 choixConforme = false;
