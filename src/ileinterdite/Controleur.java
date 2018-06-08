@@ -434,7 +434,7 @@ public class Controleur implements Observateur {
 
     }
     
-    private void créerAventuriers(){
+    private void choixAventuriers(){
         //Création des Aventuriers.
         Scanner sc = new Scanner(System.in);
         boolean choixConforme = false;
@@ -592,7 +592,7 @@ public class Controleur implements Observateur {
         //Paramètres joueurs
         choixDifficulté();
         choixJoueurs();
-        créerAventuriers();
+        choixAventuriers();
         
 
         //pioche des cartes innondations nécessaires au commencement du jeu
