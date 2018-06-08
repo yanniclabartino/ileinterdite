@@ -9,6 +9,10 @@ public abstract class Aventurier {
     private ArrayList<CarteOrange> possède;
     private Pion couleur;
 
+    public Aventurier() {
+        possède = new ArrayList<CarteOrange>();
+    }
+    
     public ArrayList<CarteOrange> getMain() {
         return possède;
     }

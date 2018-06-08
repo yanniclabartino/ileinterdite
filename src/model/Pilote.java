@@ -7,6 +7,7 @@ import util.Utils;
 public class Pilote extends Aventurier {
 
     public Pilote() {
+        super();
         setCouleur(Utils.Pion.BLEU);
     }
 

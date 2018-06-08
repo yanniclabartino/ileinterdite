@@ -69,7 +69,7 @@ public class Grille {
     }
 
     public ArrayList<Tuile> getGrille() {
-        ArrayList<Tuile> tuilesGrille = new ArrayList<>();
+        ArrayList<Tuile> tuilesGrille = new ArrayList<Tuile>();
         for (int i = 0; i < 6; i++) {//chaques lignes
             switch (i) {
                 case 0:

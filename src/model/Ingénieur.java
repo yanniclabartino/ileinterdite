@@ -7,6 +7,7 @@ import util.Utils;
 public class Ingénieur extends Aventurier {
 
     public Ingénieur() {
+        super();
         setCouleur(Utils.Pion.ROUGE);
     }
 

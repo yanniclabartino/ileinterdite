@@ -12,7 +12,7 @@ public class Tuile {
     private NomTuile nom;
 
     public Tuile(NomTuile nom) {
-        possede = new ArrayList<>();
+        possede = new ArrayList<Aventurier>();
         this.nom = nom;
         this.etat = EtatTuile.ASSECHEE;
     }

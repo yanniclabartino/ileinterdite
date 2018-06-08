@@ -7,6 +7,7 @@ import util.Utils;
 public class Messager extends Aventurier {
 
     public Messager() {
+        super();
         setCouleur(Utils.Pion.BLANC);
     }
 

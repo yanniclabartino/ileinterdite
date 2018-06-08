@@ -7,6 +7,7 @@ import util.Utils;
 public class Plongeur extends Aventurier {
 
     public Plongeur() {
+        super();
         setCouleur(Utils.Pion.NOIR);
     }
 

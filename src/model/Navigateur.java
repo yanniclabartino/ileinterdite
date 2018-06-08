@@ -7,6 +7,7 @@ import util.Utils;
 public class Navigateur extends Aventurier {
 
     public Navigateur() {
+        super();
         setCouleur(Utils.Pion.JAUNE);
     }
 

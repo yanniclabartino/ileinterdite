@@ -22,7 +22,7 @@ public class Controleur implements Observateur {
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
     private ArrayList<CarteOrange> defausseOranges;
-    private boolean pouvoirPiloteDispo = true;
+    private boolean pouvoirPiloteDispo;
 
     @Override
     public void traiterMessage(Message m) {
@@ -31,44 +31,61 @@ public class Controleur implements Observateur {
     //METHODES DE GESTION DU JEU
     private void gererDeplacement(Aventurier joueur) {
         //Gère les déplacements d'un aventurier
+        
         Grille g = getGrille();
-        ArrayList<Tuile> tuilesDispo = new ArrayList<>();
+        ArrayList<Tuile> tuilesDispo = new ArrayList<Tuile>();
+        //variables pour les saisis utilisateur :
         Scanner sc = new Scanner(System.in);
         String choix;
         Integer X, Y;
-        //Pouvoir pilote :
+        //Pouvoir pilote (interface texte) :
         if (joueur.getCouleur() == Utils.Pion.BLEU && pouvoirPiloteDispo) {
             System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (utilisable une fois par tour) :");
             System.out.print("(oui/non) => ");
             choix = sc.nextLine();
-            choix = choix.toUpperCase().substring(0, 1);
+            try {
+                choix = choix.toUpperCase().substring(0, 1);
+            } catch (StringIndexOutOfBoundsException e) {
+                choix = "non";
+            }
             if (choix.equals("O")) {
                 pouvoirPiloteDispo = false;
                 tuilesDispo = calculTouteTuileDispo(g);
             } else {
                 tuilesDispo = joueur.calculTuileDispo(g);
             }
-            //Sinon si non-pilote (ou sans pouvoir) :
+        //Sinon si non-pilote (ou sans pouvoir) :
         } else {
             tuilesDispo = joueur.calculTuileDispo(g);
         }
+        //affichage tuiles dispo
         g.afficheGrilleTexte(joueur);
         System.out.println("Voici la liste des tuiles disponible :");
         for (Tuile t : tuilesDispo) {
             t.affiche();
         }
+        //choix utilisateur
         boolean choixValide = false;
         while (!choixValide) {
             System.out.println("\n\tChoix de la tuile :");
             System.out.print("X = ");
             choix = sc.nextLine();
-            X = new Integer(choix);
+            try {
+                X = new Integer(choix);
+            } catch (NumberFormatException e) {
+                X = 0;
+            }
             System.out.print("Y = ");
             choix = sc.nextLine();
-            Y = new Integer(choix);
+            try {
+                Y = new Integer(choix);
+            } catch (NumberFormatException e) {
+                Y = 0;
+            }
             Tuile tuileChoisie = g.getTuile(X - 1, Y - 1);
             if (tuilesDispo.contains(tuileChoisie)) {
                 choixValide = true;
+                //le joueur se déplace.
                 joueur.seDeplace(tuileChoisie);
             } else {
                 System.out.println("\tCHOIX NON-VALIDE.");
@@ -77,40 +94,59 @@ public class Controleur implements Observateur {
     }
 
     private void gererAssechement(Aventurier joueur) {
+        //méthode qui permet a un aventurier d'assécher une tuile
+        
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = joueur.calculTuileAss(g);
         Utils.EtatTuile sec = Utils.EtatTuile.ASSECHEE;
+        int nbAssechement = 1;
+        //variables pour la saisie utilisateur 
         Scanner sc = new Scanner(System.in);
         String choix;
         Integer X, Y;
-        int nbAssechement = 1;
+        //Si le joueur est un ingénieur : 
         if ((joueur.getCouleur() == Utils.Pion.ROUGE) && (tuilesDispo.size() >= 2)) {
             System.out.println("Voulez-vous assecher 2 tuiles pour cette action ?");
             System.out.print("\t(oui/non)=> ");
             choix = sc.nextLine();
-            choix = choix.toUpperCase().substring(0, 1);
+            try {
+                choix = choix.toUpperCase().substring(0, 1);
+            } catch (StringIndexOutOfBoundsException e) {
+                choix = "non";
+            }
             if (choix.equals("O")) {
                 nbAssechement = 2;
             }
         }
+        //affichage des tuiles disponibles 
         System.out.println("Voici la liste des tuiles disponible :");
         for (Tuile t : tuilesDispo) {
             t.affiche();
         }
         g.afficheGrilleTexte(joueur);
+        //choix de l'utilisateur
         for (int i = 0; i < nbAssechement; i++) {
             boolean choixValide = false;
             while (!choixValide) {
                 System.out.println("\n\tChoix de la tuile :");
                 System.out.print("X = ");
                 choix = sc.nextLine();
-                X = new Integer(choix);
+                try {
+                    X = new Integer(choix);
+                } catch (NumberFormatException e) {
+                    X = 0;
+                }
                 System.out.print("Y = ");
                 choix = sc.nextLine();
-                Y = new Integer(choix);
+                try {
+                    Y = new Integer(choix);
+                } catch (NumberFormatException e) {
+                    Y = 0;
+                }
                 Tuile tuileChoisie = g.getTuile(X - 1, Y - 1);
                 if (tuilesDispo.contains(tuileChoisie)) {
                     choixValide = true;
+                    //asséchement de la tuile
                     tuileChoisie.setEtat(sec);
                 } else {
                     System.out.println("\tCHOIX NON-VALIDE.");
@@ -126,8 +162,9 @@ public class Controleur implements Observateur {
     }
 
     private void gererCarteOrange(Aventurier a) {
+        /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
         boolean carteMDEpiochée = false;
-        ArrayList<CarteOrange> cartesPiochées = new ArrayList<>();
+        ArrayList<CarteOrange> cartesPiochées = new ArrayList<CarteOrange>();
         //On picohe deux cartes et on vérifie a chaque fois si la pioche est vide
         for (int i = 0; i < 2; i++) {
             cartesPiochées.add(piocheCarteOrange());
@@ -184,7 +221,7 @@ public class Controleur implements Observateur {
                             a.defausseCarte(a.getMain().get(numChoix - 1));
                             choixConforme = true;
                         } else if (choix.equals("2")) {
-                            //
+                            // à  compléter pour que le joueur puisse utiliser sa carte spéciale ou non
                             choixConforme = true;
                         }
                     } while (!choixConforme);
@@ -196,6 +233,8 @@ public class Controleur implements Observateur {
     }
 
     private void gererCarteBleue() {
+        /*Méthode qui permet au joueur de piocher des cartes innondation a la fin de son tour*/
+        //On pioche un certain nombre de cartes en fonction du niveau d'eau
         int nbPioche;
         int nivEau = this.getNiveau();
         System.out.print("Le niveau d'eau s'élève à : " + nivEau + ".\nVous piochez donc : ");
@@ -213,6 +252,7 @@ public class Controleur implements Observateur {
             nbPioche = 2;
         }
         CarteBleue c;
+        //On influence donc l'état de la tuile concernée par cette carte
         for (int i = 0; i < nbPioche; i++) {
             c = piocheCarteBleue();
             Tuile t = getGrille().getTuile(c.getInnonde().getNom());
@@ -271,6 +311,7 @@ public class Controleur implements Observateur {
                 } else if (aventuriers.getCouleur() == Pion.VERT) {
                     g.getTuile(4, 2).addAventurier(aventuriers);
                 }
+                gererCarteOrange(aventuriers);
             }
         }
     }
@@ -279,13 +320,11 @@ public class Controleur implements Observateur {
     private Grille getGrille() {
         return grille;
     }
-
     private int getNiveau() {
         return niveauEau;
     }
-
     private ArrayList<Tuile> calculTouteTuileDispo(Grille g) {
-        ArrayList<Tuile> touteTuileDispo = new ArrayList<>();
+        ArrayList<Tuile> touteTuileDispo = new ArrayList<Tuile>();
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 if (g.getTuile(i, j) != null) {
@@ -303,11 +342,9 @@ public class Controleur implements Observateur {
     private Stack<CarteBleue> getPiocheBleues() {
         return piocheBleues;
     }
-
     private CarteBleue piocheCarteBleue() {
         return this.piocheBleues.pop();
     }
-
     private void addPiocheBleue(CarteBleue c) {
         this.piocheBleues.push(c);
     }
@@ -316,11 +353,9 @@ public class Controleur implements Observateur {
     private ArrayList<CarteBleue> getDefausseBleues() {
         return this.defausseBleues;
     }
-
     private void addDefausseBleues(CarteBleue carte) {
         this.defausseBleues.add(carte);
     }
-
     private void viderDefausseBleues() {
         this.defausseOranges.removeAll(this.defausseOranges);
     }
@@ -330,11 +365,9 @@ public class Controleur implements Observateur {
     private Stack<CarteOrange> getPiocheOranges() {
         return piocheOranges;
     }
-
     private CarteOrange piocheCarteOrange() {
         return this.piocheOranges.pop();
     }
-
     private void addPiocheOrange(CarteOrange c) {
         this.piocheOranges.push(c);
     }
@@ -343,11 +376,9 @@ public class Controleur implements Observateur {
     private ArrayList<CarteOrange> getDefausseOranges() {
         return this.defausseOranges;
     }
-
     private void addDefausseOranges(CarteOrange carte) {
         this.defausseOranges.add(carte);
     }
-
     private void viderDefausseOranges() {
         this.defausseOranges.removeAll(this.defausseOranges);
     }
@@ -355,12 +386,12 @@ public class Controleur implements Observateur {
     //CONSTUCTEUR
     public Controleur() {
         //initialisations des tableaux/vecteurs
-        joueurs = new HashMap<>();
+        joueurs = new HashMap<String,Aventurier>();
         trésors = new Trésor[4];
-        piocheOranges = new Stack<>();
-        defausseOranges = new ArrayList<>();
-        piocheBleues = new Stack<>();
-        defausseBleues = new ArrayList<>();
+        piocheOranges = new Stack<CarteOrange>();
+        defausseOranges = new ArrayList<CarteOrange>();
+        piocheBleues = new Stack<CarteBleue>();
+        defausseBleues = new ArrayList<CarteBleue>();
 
         //Declaration de variable utiles pour l'interface texte
         Scanner sc = new Scanner(System.in);
@@ -418,7 +449,7 @@ public class Controleur implements Observateur {
         } while (!choixConforme);
 
         //Génération des 24 tuiles
-        ArrayList<Tuile> Tuiles = new ArrayList();
+        ArrayList<Tuile> Tuiles = new ArrayList<Tuile>();
         for (int i = 1; i < 25; i++) {
             Tuiles.add(new Tuile(NomTuile.getFromNb(i)));
         }
@@ -428,7 +459,7 @@ public class Controleur implements Observateur {
         grille = new Grille(Tuiles);
 
         //Création des Aventuriers.
-        ArrayList<Aventurier> aventuriers = new ArrayList<>();
+        ArrayList<Aventurier> aventuriers = new ArrayList<Aventurier>();
         if (Parameters.ALEAS) {
             aventuriers.add(new Pilote());
             aventuriers.add(new Navigateur());
@@ -438,7 +469,7 @@ public class Controleur implements Observateur {
             aventuriers.add(new Plongeur());
             aventuriers = Utils.melangerAventuriers(aventuriers);
         } else {
-            ArrayList<String> avDispo = new ArrayList<>();
+            ArrayList<String> avDispo = new ArrayList<String>();
             String[] listeAv = {"Pilote", "Navigateur", "Ingénieur", "Explorateur", "Messager", "Plongeur"};
             for (String s : listeAv) {
                 avDispo.add(s);
@@ -493,7 +524,7 @@ public class Controleur implements Observateur {
         }
 
         //Création des cartes oranges (trésor)        
-        ArrayList<CarteOrange> tmpOranges = new ArrayList<>();
+        ArrayList<CarteOrange> tmpOranges = new ArrayList<CarteOrange>();
         for (int i = 0; i < 3; i++) {
             tmpOranges.add(new CarteMonteeDesEaux());
             tmpOranges.add(new CarteHelicoptere());
@@ -507,16 +538,18 @@ public class Controleur implements Observateur {
         tmpOranges.add(new CarteSacDeSable());
         tmpOranges.add(new CarteSacDeSable());
         Collections.shuffle(tmpOranges);
+        //Ajout de celles-ci dans la pioche orange.
         for (CarteOrange c : tmpOranges) {
             piocheOranges.push(c);
         }
 
         //Création des cartes bleues (innondation)        
-        ArrayList<CarteBleue> tmpBleues = new ArrayList<>();
+        ArrayList<CarteBleue> tmpBleues = new ArrayList<CarteBleue>();
         for (Tuile t : grille.getGrille()) {
             tmpBleues.add(new CarteBleue(t));
         }
         Collections.shuffle(tmpBleues);
+        //Ajout de celles-ci dans la pioche bleue.
         for (CarteBleue c : tmpBleues) {
             piocheBleues.push(c);
         }
@@ -533,11 +566,13 @@ public class Controleur implements Observateur {
         //A FAIRE
         //Un tour de jeu.
         debutJeu();
+        pouvoirPiloteDispo = true;
         for (int i = 0; i < nbJoueurs; i++) {
             joueurCourant = nomJoueurs[i];
             int nbActions = 3;
             do {
                 choixConforme = false;
+                grille.afficheGrilleTexte(joueurs.get(joueurCourant));
                 System.out.println(joueurCourant + ", quelle action voulez-vous réaliser ?");
                 System.out.println("\t1 - Se déplacer");
                 System.out.println("\t2 - Assécher");
@@ -557,10 +592,9 @@ public class Controleur implements Observateur {
                     nbActions = 0;
                 }
             } while (!choixConforme || nbActions > 0);
+            gererCarteOrange(joueurs.get(joueurCourant));
+            gererCarteBleue();
         }
-        //test graphique
-        grille.afficheGrilleTexte(joueurs.get(1));
-
     }
 
     //MAIN
