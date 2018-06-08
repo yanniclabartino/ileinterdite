@@ -155,17 +155,16 @@ public class Controleur implements Observateur {
         }
     }
 
-    private void gererDonation() {/*Pour plus tard*/
-    }
+    private void gererDonation() {/*Pour plus tard*/}
 
-    private void gererGainTresor() {/*Pour plus tard*/
-    }
+    private void gererGainTresor() {/*Pour plus tard*/}
 
     private void gererCarteOrange(Aventurier a) {
         /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
         boolean carteMDEpiochée = false;
         ArrayList<CarteOrange> cartesPiochées = new ArrayList<CarteOrange>();
         //On picohe deux cartes et on vérifie a chaque fois si la pioche est vide
+        System.out.println("\n"+a.getClass().toString().substring(12)+", vous piochez deux carte oranges.");
         for (int i = 0; i < 2; i++) {
             cartesPiochées.add(piocheCarteOrange());
             if (getPiocheOranges().empty()) {
@@ -179,6 +178,7 @@ public class Controleur implements Observateur {
         //Pour les cartes les piochées, on vérifie si celle-ci sont des cartes "montée des eaux"
         for (CarteOrange c : cartesPiochées) {
             if (c.getRole().equals("Montée des eaux")) {
+                System.out.println("Vous avez pioché une carte Montée des eaux, le niveau d'eau monte...");
                 this.niveauEau++;
                 carteMDEpiochée = true;
                 addDefausseOranges(c);
@@ -190,6 +190,7 @@ public class Controleur implements Observateur {
         //une carte MDE alors on mélange puis remet la defausse de carte bleue sur le tas de pioche
         if (!getPiocheBleues().empty() && carteMDEpiochée) {
             Collections.shuffle(getDefausseBleues());
+            System.out.println("Mélange de la défausse de carte innondations sur la pioche");
             for (CarteBleue b : getDefausseBleues()) {
                 addPiocheBleue(b);
             }
@@ -239,16 +240,16 @@ public class Controleur implements Observateur {
         int nivEau = this.getNiveau();
         System.out.print("Le niveau d'eau s'élève à : " + nivEau + ".\nVous piochez donc : ");
         if (nivEau >= 8) {
-            System.out.println("5 cartes.");
+            System.out.println("5 cartes.\n");
             nbPioche = 5;
         } else if (nivEau >= 6) {
-            System.out.println("4 cartes.");
+            System.out.println("4 cartes.\n");
             nbPioche = 4;
         } else if (nivEau >= 3) {
-            System.out.println("3 cartes.");
+            System.out.println("3 cartes.\n");
             nbPioche = 3;
         } else {
-            System.out.println("2 cartes.");
+            System.out.println("2 cartes.\n");
             nbPioche = 2;
         }
         CarteBleue c;
@@ -256,7 +257,7 @@ public class Controleur implements Observateur {
         for (int i = 0; i < nbPioche; i++) {
             c = piocheCarteBleue();
             Tuile t = getGrille().getTuile(c.getInnonde().getNom());
-            System.out.println("la carte innondation " + t.getNom().toString() + " à été piochée...");
+            System.out.println("\nla carte innondation " + t.getNom().toString() + " à été piochée...");
             if (t.getEtat() == Utils.EtatTuile.ASSECHEE) {
                 t.setEtat(Utils.EtatTuile.INONDEE);
                 System.out.print("La tuile correspondante est désormais innondée : ");
@@ -590,15 +591,9 @@ public class Controleur implements Observateur {
         iniCartes();
         
         //Paramètres joueurs
-        choixDifficulté();
         choixJoueurs();
         choixAventuriers();
-        
-
-        //pioche des cartes innondations nécessaires au commencement du jeu
-        //gererCarteBleue(getNiveau());
-        //boucle du jeu
-        //A FAIRE
+        choixDifficulté();
         
         //Declaration de variable utiles pour l'interface texte
         Scanner sc = new Scanner(System.in);
