@@ -9,9 +9,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
-
+/*
+    Groupe C2 :  Prapant.B, Labartino.Y, Giroud.T, Malod.V
+*/
 public class Controleur implements Observateur {
 
+    /*
+    Note :  pour une lecture agréable du code, nous vous invitons à
+            réduire depuis netbeans chaque méthode pour n'en apercevoir
+            que le titre et les paramètres de celles-ci.
+    */
+    
     private Grille grille;
     private int niveauEau;
     private VueAventurier[] ihm;
