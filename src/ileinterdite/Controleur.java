@@ -24,7 +24,7 @@ public class Controleur implements Observateur {
     private int niveauEau;
     private VueAventurier[] ihm;
     private Trésor[] trésors;
-    private HashMap<String, Aventurier> joueurs;
+    private HashMap<Aventurier, String> joueurs; // à adapter dans choixJoueurs/choixAventuriers
     private Stack<CarteBleue> piocheBleues;
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
@@ -163,7 +163,36 @@ public class Controleur implements Observateur {
         }
     }
 
-    private void gererDonation() {/*Pour plus tard*/}
+    private boolean gererDonation(Aventurier joueur) {
+        boolean donnationEffectué = false;
+        Grille g = getGrille();
+        ArrayList<Tuile> tuiles = g.getGrille();
+        ArrayList<Aventurier> jDispo = new ArrayList<Aventurier>();
+        if (joueur.getCouleur()==Pion.BLANC) {
+            for (Tuile t : tuiles){
+                if (t.getPossede().size() > 0){
+                    for (Aventurier a : t.getPossede()){
+                        jDispo.add(a);
+                    }
+                }
+            }
+        } else {
+            if (joueur.getTuile().getPossede().size() > 0) {
+                for(Aventurier a : joueur.getTuile().getPossede()){
+                    jDispo.add(a);
+                }
+            }
+        }
+        if (jDispo.size() > 0) {
+            System.out.println("Voici la liste des aventuriers à qui vous pouvez donner une carte :");
+            for (Aventurier a : jDispo) {
+                //a compléter.
+            }
+        } else {
+            return donnationEffectué;
+        }
+        return donnationEffectué;
+    }
 
     private void gererGainTresor() {/*Pour plus tard*/}
 
