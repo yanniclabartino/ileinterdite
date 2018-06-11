@@ -24,7 +24,7 @@ public class Controleur implements Observateur {
     private int niveauEau;
     private VueAventurier[] ihm;
     private Trésor[] trésors;
-    private HashMap<Aventurier, String> joueurs; // à adapter dans choixJoueurs/choixAventuriers
+    private HashMap<Aventurier, String> joueurs;
     private Stack<CarteBleue> piocheBleues;
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
@@ -335,7 +335,7 @@ public class Controleur implements Observateur {
             g.getTuile(2, 4).setEtat(Utils.EtatTuile.COULEE);
             g.getTuile(4, 3).setEtat(Utils.EtatTuile.COULEE);
 
-            for (Aventurier aventuriers : joueurs.values()) {
+            for (Aventurier aventuriers : joueurs.keySet()) {
                 if (aventuriers.getCouleur() == Pion.BLANC) {
                     g.getTuile(1, 2).addAventurier(aventuriers);
                 } else if (aventuriers.getCouleur() == Pion.BLEU) {
@@ -411,43 +411,6 @@ public class Controleur implements Observateur {
     }
     
     //METHODES INTERFACE TEXTE
-
-    private void choixJoueurs (){
-        
-            /*A COMPLETER*/
-        
-        //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 4)
-        Scanner sc = new Scanner(System.in);
-        boolean choixConforme = false;
-        String choix;
-        Integer choixInt;
-        do {
-            System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 4) : ");
-            System.out.print("\t=> ");
-            choix = sc.nextLine();
-            try {
-                choixInt = new Integer(choix);
-            } catch (NumberFormatException e) {
-                choixInt = 0;
-            }
-            if (choixInt >= 2 && choixInt <= 4) {
-                nbJoueurs = choixInt;
-                choixConforme = true;
-            }
-        } while (!choixConforme);
-        
-        //sélection des noms de joueurs
-        for (int i = 0; i < nbJoueurs; i++) {
-            System.out.println("Nom joueur n°" + (i + 1) + " : ");
-            choix = sc.nextLine();
-            for (String nom : joueurs.keySet()) {
-                if (nom.equals(choix)) {
-                    choix=choix+i;
-                }
-            }
-            joueurs.put(choix, null);
-        }
-    }
     
     private void choixDifficulté(){
         //sélection de la difficulté
@@ -469,7 +432,6 @@ public class Controleur implements Observateur {
                 choixConforme = true;
             }
         } while (!choixConforme);
-
     }
     
     private void choixAventuriers(){
@@ -477,8 +439,8 @@ public class Controleur implements Observateur {
         Scanner sc = new Scanner(System.in);
         boolean choixConforme = false;
         String choix;
-        Integer choixInt;
         ArrayList<Aventurier> aventuriers = new ArrayList<Aventurier>();
+        int nombreJ = getNbJoueur();
         if (Parameters.ALEAS) {
             aventuriers.add(new Pilote());
             aventuriers.add(new Navigateur());
@@ -493,8 +455,8 @@ public class Controleur implements Observateur {
             for (String s : listeAv) {
                 avDispo.add(s);
             }
-            for (String joueurCourant : joueurs.keySet()) {
-                System.out.println(joueurCourant + ", veuillez sélectionner votre aventurier parmi :");
+            for (int i = 0 ; i < nombreJ ; i++) {
+                System.out.println("Veuillez sélectionner vos aventuriers parmi :");
                 for (String s : avDispo) {
                     System.out.print("\t- ");
                     System.out.println(s);
@@ -538,15 +500,50 @@ public class Controleur implements Observateur {
             }
         }
         //ajout de ceux-ci dans le HashMap des joueurs
-        int i = 0;
-        for (String joueurCourant : joueurs.keySet()) {
-            joueurs.put(joueurCourant, aventuriers.get(i));
-            i++;
+        for (int i = 0 ; i < nombreJ ; i++) {
+            joueurs.put(aventuriers.get(i), null);
         }
 
     }
     
+    private void choixNbJoueurs (){
+        //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 4)
+        Scanner sc = new Scanner(System.in);
+        boolean choixConforme = false;
+        String choix;
+        Integer choixInt;
+        do {
+            System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 4) : ");
+            System.out.print("\t=> ");
+            choix = sc.nextLine();
+            try {
+                choixInt = new Integer(choix);
+            } catch (NumberFormatException e) {
+                choixInt = 0;
+            }
+            if (choixInt >= 2 && choixInt <= 4) {
+                nbJoueurs = choixInt;
+                choixConforme = true;
+            }
+        } while (!choixConforme);
+    }
+    
+    private void choixNomJoueurs () {
+        HashMap<Aventurier, String> players = getJoueurs();
+        //sélection des noms de joueurs
+        String choix;
+        Scanner sc = new Scanner(System.in);
+        for (Aventurier a : players.keySet()) {
+            System.out.println("Nom du joueur du role "+a.getClass().toString().substring(12)+" : ");
+            choix = sc.nextLine();
+            players.put(a, choix);
+        }
+    }
+    
     //METHODES UTILES
+    private int getNbJoueur(){
+        return this.nbJoueurs;
+    }
     private Grille getGrille() {
         return grille;
     }
@@ -565,6 +562,9 @@ public class Controleur implements Observateur {
             }
         }
         return touteTuileDispo;
+    }
+    public HashMap<Aventurier, String> getJoueurs() {
+        return joueurs;
     }
 
     //méthodes pour les cartes bleues
@@ -614,7 +614,7 @@ public class Controleur implements Observateur {
     //CONSTUCTEUR
     public Controleur() {
         //initialisations des tableaux/vecteurs
-        joueurs = new HashMap<String,Aventurier>();
+        joueurs = new HashMap<Aventurier, String>();
         trésors = new Trésor[4];
         piocheOranges = new Stack<CarteOrange>();
         defausseOranges = new ArrayList<CarteOrange>();
@@ -628,8 +628,9 @@ public class Controleur implements Observateur {
         iniCartes();
         
         //Paramètres joueurs
-        choixJoueurs();
+        choixNbJoueurs();
         choixAventuriers();
+        choixNomJoueurs();
         choixDifficulté();
         
         //Declaration de variable utiles pour l'interface texte
@@ -640,12 +641,13 @@ public class Controleur implements Observateur {
         //Un tour de jeu
         debutJeu();
         pouvoirPiloteDispo = true;
-        for (String joueurCourant : joueurs.keySet()) {
+        for (Aventurier a : joueurs.keySet()) {
             int nbActions = 3;
+            String nomRole = a.getClass().toString().substring(12);
             do {
                 choixConforme = false;
-                grille.afficheGrilleTexte(joueurs.get(joueurCourant));
-                System.out.println(joueurCourant + ", quelle action voulez-vous réaliser ?");
+                grille.afficheGrilleTexte(a);
+                System.out.println(joueurs.get(a) + ", quelle action voulez-vous réaliser ?");
                 System.out.println("\t1 - Se déplacer");
                 System.out.println("\t2 - Assécher");
                 System.out.println("\t3 - Finir mon tour");
@@ -654,17 +656,17 @@ public class Controleur implements Observateur {
                 if (choix.equals("1")) {
                     choixConforme = true;
                     nbActions--;
-                    gererDeplacement(joueurs.get(joueurCourant));
+                    gererDeplacement(a);
                 } else if (choix.equals("2")) {
                     choixConforme = true;
                     nbActions--;
-                    gererAssechement(joueurs.get(joueurCourant));
+                    gererAssechement(a);
                 } else if (choix.equals("3")) {
                     choixConforme = true;
                     nbActions = 0;
                 }
             } while (!choixConforme || nbActions > 0);
-            gererCarteOrange(joueurs.get(joueurCourant));
+            gererCarteOrange(a);
             gererCarteBleue();
         }
     }
