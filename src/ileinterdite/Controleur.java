@@ -37,9 +37,9 @@ public class Controleur implements Observateur {
     }
 
     //METHODES DE GESTION DU JEU
-    private void gererDeplacement(Aventurier joueur) {
-        //Gère les déplacements d'un aventurier
-        
+    private boolean gererDeplacement(Aventurier joueur) {
+        //Gère les déplacements d'un joueur
+        boolean deplEffectué = true;
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = new ArrayList<Tuile>();
         //variables pour les saisis utilisateur :
@@ -66,44 +66,59 @@ public class Controleur implements Observateur {
         } else {
             tuilesDispo = joueur.calculTuileDispo(g);
         }
-        //affichage tuiles dispo
-        g.afficheGrilleTexte(joueur);
-        System.out.println("Voici la liste des tuiles disponible :");
-        for (Tuile t : tuilesDispo) {
-            t.affiche();
-        }
-        //choix utilisateur
-        boolean choixValide = false;
-        while (!choixValide) {
-            System.out.println("\n\tChoix de la tuile :");
-            System.out.print("X = ");
-            choix = sc.nextLine();
-            try {
-                X = new Integer(choix);
-            } catch (NumberFormatException e) {
-                X = 0;
+        //vérification tuileDispo
+        if (tuilesDispo.size() > 0) {
+            //affichage tuiles dispo
+            g.afficheGrilleTexte(joueur);
+            System.out.println("Voici la liste des tuiles disponible :");
+            for (Tuile t : tuilesDispo) {
+                t.affiche();
             }
-            System.out.print("Y = ");
-            choix = sc.nextLine();
-            try {
-                Y = new Integer(choix);
-            } catch (NumberFormatException e) {
-                Y = 0;
-            }
-            Tuile tuileChoisie = g.getTuile(X - 1, Y - 1);
-            if (tuilesDispo.contains(tuileChoisie)) {
-                choixValide = true;
-                //le joueur se déplace.
-                joueur.seDeplace(tuileChoisie);
+            //choix utilisateur
+            boolean choixValide = false;
+            do {
+                System.out.println("\n\tChoix de la tuile :");
+                System.out.println("Rentrez : X = null\npour annuler tout déplacement.");
+                System.out.print("X = ");
+                choix = sc.nextLine();
+                if (choix.equals("null")) {
+                    choixValide = true;
+                } else {    
+                    try {
+                        X = new Integer(choix);
+                    } catch (NumberFormatException e) {
+                        X = 0;
+                    }
+                    System.out.print("Y = ");
+                    choix = sc.nextLine();
+                    try {
+                        Y = new Integer(choix);
+                    } catch (NumberFormatException e) {
+                        Y = 0;
+                    }
+                    Tuile tuileChoisie = g.getTuile(X - 1, Y - 1);
+                    if (tuilesDispo.contains(tuileChoisie)) {
+                        choixValide = true;
+                        //le joueur se déplace.
+                        joueur.seDeplace(tuileChoisie);
+                    } else {
+                        System.out.println("\tCHOIX NON-VALIDE.");
+                    }
+                }
+            } while (!choixValide);
+            if (choix.equals("null")) {
+                return !deplEffectué;
             } else {
-                System.out.println("\tCHOIX NON-VALIDE.");
+                return deplEffectué;
             }
+        } else {
+            return !deplEffectué;
         }
     }
 
-    private void gererAssechement(Aventurier joueur) {
+    private boolean gererAssechement(Aventurier joueur) {
         //méthode qui permet a un aventurier d'assécher une tuile
-        
+        boolean assEffectué = true;
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = joueur.calculTuileAss(g);
         Utils.EtatTuile sec = Utils.EtatTuile.ASSECHEE;
@@ -126,48 +141,80 @@ public class Controleur implements Observateur {
                 nbAssechement = 2;
             }
         }
-        //affichage des tuiles disponibles 
-        System.out.println("Voici la liste des tuiles disponible :");
-        for (Tuile t : tuilesDispo) {
-            t.affiche();
-        }
-        g.afficheGrilleTexte(joueur);
-        //choix de l'utilisateur
-        for (int i = 0; i < nbAssechement; i++) {
-            boolean choixValide = false;
-            while (!choixValide) {
-                System.out.println("\n\tChoix de la tuile :");
-                System.out.print("X = ");
-                choix = sc.nextLine();
-                try {
-                    X = new Integer(choix);
-                } catch (NumberFormatException e) {
-                    X = 0;
-                }
-                System.out.print("Y = ");
-                choix = sc.nextLine();
-                try {
-                    Y = new Integer(choix);
-                } catch (NumberFormatException e) {
-                    Y = 0;
-                }
-                Tuile tuileChoisie = g.getTuile(X - 1, Y - 1);
-                if (tuilesDispo.contains(tuileChoisie)) {
-                    choixValide = true;
-                    //asséchement de la tuile
-                    tuileChoisie.setEtat(sec);
-                } else {
-                    System.out.println("\tCHOIX NON-VALIDE.");
-                }
+        //vérification tuileDispo
+        if (tuilesDispo.size() > 0) {
+            //affichage des tuiles disponibles 
+            System.out.println("Voici la liste des tuiles disponible :");
+            for (Tuile t : tuilesDispo) {
+                t.affiche();
             }
+            g.afficheGrilleTexte(joueur);
+            //choix de l'utilisateur
+            int i = 0;
+            do {
+                boolean choixValide = false;
+                do {
+                    System.out.println("\n\tChoix de la tuile :");
+                    System.out.println("Rentrez : X = null\npour annuler tout déplacement.");
+                    System.out.print("X = ");
+                    choix = sc.nextLine();
+                    if (choix.equals("null")) {
+                        choixValide = true;
+                    } else {  
+                        try {
+                            X = new Integer(choix);
+                        } catch (NumberFormatException e) {
+                            X = 0;
+                        }
+                        System.out.print("Y = ");
+                        choix = sc.nextLine();
+                        try {
+                            Y = new Integer(choix);
+                        } catch (NumberFormatException e) {
+                            Y = 0;
+                        }
+                        Tuile tuileChoisie = g.getTuile(X - 1, Y - 1);
+                        if (tuilesDispo.contains(tuileChoisie)) {
+                            choixValide = true;
+                            //asséchement de la tuile
+                            tuileChoisie.setEtat(sec);
+                        } else {
+                            System.out.println("\tCHOIX NON-VALIDE.");
+                        }
+                    }
+                } while (!choixValide);
+                i++;
+            } while (i < nbAssechement && !choix.equals("null"));
+            if (choix.equals("null")) {
+                return !assEffectué;
+            } else {
+                return assEffectué;
+            }
+        } else {
+            return !assEffectué;
         }
     }
 
     private boolean gererDonation(Aventurier joueur) {
-        boolean donnationEffectué = false;
+        boolean donnationEffectuée = true;
+        //vérification de la main du joueur
+        if (joueur.getMain().isEmpty()){
+            return !donnationEffectuée;
+        }
+        int cartesDispo = 0;
+        for (CarteOrange c : joueur.getMain()) {
+            if (!c.getRole().equals("Helicoptere") && !c.getRole().equals("Sac de sable")) {
+                cartesDispo++;
+            }
+        }
+        if (cartesDispo == 0) {
+            return !donnationEffectuée;
+        }
+        //début méthode
         Grille g = getGrille();
         ArrayList<Tuile> tuiles = g.getGrille();
         ArrayList<Aventurier> jDispo = new ArrayList<Aventurier>();
+        //vérification s'il s'agit du messager pour son pouvoir
         if (joueur.getCouleur()==Pion.BLANC) {
             for (Tuile t : tuiles){
                 if (t.getPossede().size() > 0){
@@ -183,15 +230,41 @@ public class Controleur implements Observateur {
                 }
             }
         }
+        //variables pour la saisie utilisateur 
+        Scanner sc = new Scanner(System.in);
+        String choix;
+        boolean choixConforme = false;
         if (jDispo.size() > 0) {
-            System.out.println("Voici la liste des aventuriers à qui vous pouvez donner une carte :");
-            for (Aventurier a : jDispo) {
-                //a compléter.
+            do {
+                System.out.println("Voici la liste des aventuriers à qui vous pouvez donner une carte :");
+                for (Aventurier a : jDispo) {
+                    System.out.println("\t- ["+a.getClass().toString().substring(12)+"] "+getJoueurs().get(a));
+                }
+                System.out.println("\t- Annuler\n");
+                System.out.println("choix (pseudo ou annuler) => ");
+                choix = sc.nextLine();
+                for (Aventurier a : jDispo) {
+                    try {
+                        if (choix.toLowerCase().substring(0, 2).equals(getJoueurs().get(a).toLowerCase().substring(0, 2))) {
+                            choixConforme = true;
+                        }
+                    } catch (StringIndexOutOfBoundsException e){
+                        choix = "#AUCUNE ENTREE#";
+                        System.out.println("CHOIX NON-VALIDE");
+                    }
+                }
+                if (choix.toLowerCase().substring(0, 2).equals("an")) {
+                    choixConforme = true;
+                }
+            } while (!choixConforme);
+            if (choix.toLowerCase().substring(0, 2).equals("an")) {
+                return !donnationEffectuée;
+            } else {
+                return donnationEffectuée;
             }
         } else {
-            return donnationEffectué;
+            return !donnationEffectuée;
         }
-        return donnationEffectué;
     }
 
     private void gererGainTresor() {/*Pour plus tard*/}
@@ -620,7 +693,6 @@ public class Controleur implements Observateur {
         defausseOranges = new ArrayList<CarteOrange>();
         piocheBleues = new Stack<CarteBleue>();
         defausseBleues = new ArrayList<CarteBleue>();
-        nbJoueurs = 2;
 
         //initialisations
         iniTrésor();
@@ -641,6 +713,7 @@ public class Controleur implements Observateur {
         //Un tour de jeu
         debutJeu();
         pouvoirPiloteDispo = true;
+        boolean actionEffectuée;
         for (Aventurier a : joueurs.keySet()) {
             int nbActions = 3;
             String nomRole = a.getClass().toString().substring(12);
@@ -655,12 +728,16 @@ public class Controleur implements Observateur {
                 choix = sc.nextLine();
                 if (choix.equals("1")) {
                     choixConforme = true;
-                    nbActions--;
-                    gererDeplacement(a);
+                    actionEffectuée = gererDeplacement(a);
+                    if (actionEffectuée) {
+                        nbActions--;
+                    }
                 } else if (choix.equals("2")) {
                     choixConforme = true;
-                    nbActions--;
-                    gererAssechement(a);
+                    actionEffectuée = gererAssechement(a);
+                    if (actionEffectuée) {
+                        nbActions--;
+                    }
                 } else if (choix.equals("3")) {
                     choixConforme = true;
                     nbActions = 0;
