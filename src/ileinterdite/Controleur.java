@@ -209,6 +209,7 @@ public class Controleur implements Observateur {
         //variables pour la saisie utilisateur 
         Scanner sc = new Scanner(System.in);
         String choix;
+        Integer choixInt;
         boolean choixConforme = false;
         if (jDispo.size() > 0) {
             do {
@@ -238,7 +239,15 @@ public class Controleur implements Observateur {
                     System.out.print("\t ("+(i+1)+") - ");
                     cartesDispo.get(i).affiche();
                 }
-                //a compléter
+                choixConforme = false;
+                do {
+                    System.out.println("\n\tChoix => ");
+                    choix = sc.nextLine();
+                    choixInt = new Integer(choix);
+                    if (choixInt < ) {
+                        
+                    }
+                } while (!choixConforme);
                 return donnationEffectuée;
             }
         } else {
@@ -769,6 +778,7 @@ public class Controleur implements Observateur {
         
         //Un tour de jeu
         debutJeu();
+        System.out.println("\033[1;31mBienvenue\033[0m");
         pouvoirPiloteDispo = true;
         boolean actionEffectuée;
         for (Aventurier a : joueurs.keySet()) {
