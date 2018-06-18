@@ -297,8 +297,9 @@ public class Controleur implements Observateur {
                 if (joueur.getTuile().getNom()==NomTuile.LE_TEMPLE_DU_SOLEIL || joueur.getTuile().getNom()==NomTuile.LE_TEMPLE_DE_LA_LUNE) {
                     if (nbCarteTresorPS >= 4) {
                         for (CarteOrange cO : joueur.getMain()) {
-                            for (CarteTrésor cT : cartesTresors) {
-                                if (cT.getNomTresor()==NomTresor.LA_PIERRE_SACREE && cO==cT) {
+                            for (int i = 0 ; i < 4 ; i++) {
+                                CarteTrésor cTresor = cartesTresors.get(i); 
+                                if (cTresor.getNomTresor()==NomTresor.LA_PIERRE_SACREE && cO==cTresor) {
                                     joueur.getMain().remove(cO);
                                 }
                             }
@@ -309,8 +310,9 @@ public class Controleur implements Observateur {
                 } else if (joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_HURLEMENTS || joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_MURMURES) {
                     if (nbCarteTresorSZ >= 4) {
                         for (CarteOrange cO : joueur.getMain()) {
-                            for (CarteTrésor cT : cartesTresors) {
-                                if (cT.getNomTresor()==NomTresor.LA_STATUE_DU_ZEPHYR && cO==cT) {
+                            for (int i = 0 ; i < 4 ; i++) {
+                                CarteTrésor cTresor = cartesTresors.get(i); 
+                                if (cTresor.getNomTresor()==NomTresor.LA_STATUE_DU_ZEPHYR && cO==cTresor) {
                                     joueur.getMain().remove(cO);
                                 }
                             }
@@ -321,8 +323,9 @@ public class Controleur implements Observateur {
                 } else if (joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES || joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES) {
                     if (nbCarteTresorCA >= 4) {
                         for (CarteOrange cO : joueur.getMain()) {
-                            for (CarteTrésor cT : cartesTresors) {
-                                if (cT.getNomTresor()==NomTresor.LE_CRISTAL_ARDENT && cO==cT) {
+                            for (int i = 0 ; i < 4 ; i++) {
+                                CarteTrésor cTresor = cartesTresors.get(i); 
+                                if (cTresor.getNomTresor()==NomTresor.LE_CRISTAL_ARDENT && cO==cTresor) {
                                     joueur.getMain().remove(cO);
                                 }
                             }
@@ -333,8 +336,9 @@ public class Controleur implements Observateur {
                 } else if (joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DE_CORAIL || joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DES_MAREES) {
                     if (nbCarteTresorCO >= 4) {
                         for (CarteOrange cO : joueur.getMain()) {
-                            for (CarteTrésor cT : cartesTresors) {
-                                if (cT.getNomTresor()==NomTresor.LE_CALICE_DE_L_ONDE && cO==cT) {
+                            for (int i = 0 ; i < 4 ; i++) {
+                                CarteTrésor cTresor = cartesTresors.get(i); 
+                                if (cTresor.getNomTresor()==NomTresor.LE_CALICE_DE_L_ONDE && cO==cTresor) {
                                     joueur.getMain().remove(cO);
                                 }
                             }
