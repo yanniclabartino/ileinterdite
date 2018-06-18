@@ -22,7 +22,6 @@ public class Controleur implements Observateur {
     
     private Grille grille;
     private int niveauEau;
-    //private VueAventurier[] ihm;
     private Trésor[] trésors;
     private HashMap<Aventurier, String> joueurs;
     private Stack<CarteBleue> piocheBleues;
@@ -399,7 +398,8 @@ public class Controleur implements Observateur {
             String choix;
             Integer numChoix;
             System.out.println("Vous avez plus de 5 cartes dans votre main...");
-            for (int i = 0; i < (a.getMain().size() - 5); i++) {
+            int nbCarteDeTrop = a.getMain().size() - 5;
+            for (int i = 0; i < nbCarteDeTrop; i++) {
                 System.out.println("Voici votre main (" + a.getMain().size() + " cartes) : ");
                 int numCarte = 1;
                 for (CarteOrange c : a.getMain()) {
@@ -467,9 +467,21 @@ public class Controleur implements Observateur {
                 t.setEtat(Utils.EtatTuile.COULEE);
                 System.out.print("La tuile correspondante est désormais coulée : ");
                 t.affiche();
+                if (t.getPossede().size() > 0) {
+                    System.out.println("La tuile contenait un ou plusieurs aventuriers ! Il faut qu'il(s) nage(nt) :");
+                    boolean deplAventurier = false;
+                    for (Aventurier a : t.getPossede()) {
+                        deplAventurier = gererDeplacement(a);
+                        if (!deplAventurier) {
+                            a.setTuile(null);
+                        }
+                    }
+                }
             }
             if (getPiocheBleues().empty()) {
-                Collections.shuffle(getDefausseBleues());
+                if (Parameters.ALEAS) {
+                    Collections.shuffle(getDefausseBleues());
+                }
                 for (CarteBleue b : getDefausseBleues()) {
                     addPiocheBleue(b);
                 }
@@ -516,8 +528,8 @@ public class Controleur implements Observateur {
             }
         } else { // ALEAS == true
             gererCarteBleue();
-            boolean randomCorrect = false;
             for (Aventurier a : getJoueurs().keySet()) {
+                boolean randomCorrect = false;
                 do {
                     int x = (int) (Math.random()*5);
                     int y = (int) (Math.random()*5);
@@ -573,7 +585,7 @@ public class Controleur implements Observateur {
         }
 
         //Initialisation de la Grille
-        if (!Parameters.ALEAS){
+        if (Parameters.ALEAS){ //ALEAS == true
             Collections.shuffle(Tuiles);
         }
         grille = new Grille(Tuiles);
@@ -637,14 +649,14 @@ public class Controleur implements Observateur {
         String choix;
         ArrayList<Aventurier> aventuriers = new ArrayList<Aventurier>();
         int nombreJ = getNbJoueur();
-        if (!Parameters.ALEAS) {
+        if (Parameters.ALEAS) { //ALEAS == true
             aventuriers.add(new Pilote());
             aventuriers.add(new Navigateur());
             aventuriers.add(new Ingénieur());
             aventuriers.add(new Explorateur());
             aventuriers.add(new Messager());
             aventuriers.add(new Plongeur());
-            aventuriers = Utils.melangerAventuriers(aventuriers);
+            Collections.shuffle(aventuriers);
         } else {
             ArrayList<String> avDispo = new ArrayList<String>();
             String[] listeAv = {"Pilote", "Navigateur", "Ingénieur", "Explorateur", "Messager", "Plongeur"};
@@ -654,8 +666,7 @@ public class Controleur implements Observateur {
             for (int i = 0 ; i < nombreJ ; i++) {
                 System.out.println("Veuillez sélectionner vos aventuriers parmi :");
                 for (String s : avDispo) {
-                    System.out.print("\t- ");
-                    System.out.println(s);
+                    System.out.println("\t- "+s);
                 }
                 do {
                     choixConforme = false;
@@ -717,14 +728,13 @@ public class Controleur implements Observateur {
     }
     
     private void choixNomJoueurs () {
-        HashMap<Aventurier, String> players = getJoueurs();
         //sélection des noms de joueurs
         String choix;
         Scanner sc = new Scanner(System.in);
-        for (Aventurier a : players.keySet()) {
+        for (Aventurier a : getJoueurs().keySet()) {
             System.out.println("Nom du joueur du role "+a.getClass().toString().substring(12)+" : ");
             choix = sc.nextLine();
-            players.put(a, choix);
+            getJoueurs().put(a, choix);
         }
     }
     
@@ -829,58 +839,65 @@ public class Controleur implements Observateur {
         String choix;
         boolean choixConforme = false;
         
-        //Un tour de jeu
+        //Tours de jeu
         debutJeu();
         pouvoirPiloteDispo = true;
         jeuEnCours = true;
         boolean actionEffectuée;
         while (!this.estTerminé()) {
             for (Aventurier a : joueurs.keySet()) {
-                int nbActions = 3;
-                String nomRole = a.getClass().toString().substring(12);
-                do {
-                    choixConforme = false;
-                    grille.afficheGrilleTexte(a);
-                    System.out.println(joueurs.get(a) + "(" + nomRole + ") , quelle action voulez-vous réaliser ?");
-                    System.out.println("\t1 - Se déplacer");
-                    System.out.println("\t2 - Assécher");
-                    System.out.println("\t3 - Donner une carte");
-                    System.out.println("\t4 - Gagner un trésor");
-                    System.out.println("\t5 - Finir mon tour");
-                    System.out.print("choix (1 à 5) : ");
-                    choix = sc.nextLine();
-                    if (choix.equals("1")) {
-                        choixConforme = true;
-                        actionEffectuée = gererDeplacement(a);
-                        if (actionEffectuée) {
-                            nbActions--;
+                if (!estPerdu()) {
+                    /*Lignes de test :*/
+                    //grille.getTuile(NomTuile.HELIPORT).setEtat(Utils.EtatTuile.COULEE);
+                    /*FIN des lignes de tests*/
+                    int nbActions = 3;
+                    String nomRole = a.getClass().toString().substring(12);
+                    while (!choixConforme || nbActions > 0) {
+                        choixConforme = false;
+                        grille.afficheGrilleTexte(a);
+                        System.out.println(joueurs.get(a) + "(" + nomRole + ") , quelle action voulez-vous réaliser ?");
+                        System.out.println("\t1 - Se déplacer");
+                        System.out.println("\t2 - Assécher");
+                        System.out.println("\t3 - Donner une carte");
+                        System.out.println("\t4 - Gagner un trésor");
+                        System.out.println("\t5 - Finir mon tour");
+                        System.out.print("choix (1 à 5) : ");
+                        choix = sc.nextLine();
+                        if (choix.equals("1")) {
+                            choixConforme = true;
+                            actionEffectuée = gererDeplacement(a);
+                            if (actionEffectuée) {
+                                nbActions--;
+                            }
+                        } else if (choix.equals("2")) {
+                            choixConforme = true;
+                            actionEffectuée = gererAssechement(a);
+                            if (actionEffectuée) {
+                                nbActions--;
+                            }
+                        } else if (choix.equals("3")) {
+                            choixConforme = true;
+                            actionEffectuée = gererDonation(a);
+                            if (actionEffectuée) {
+                                nbActions--;
+                                a.afficheMain();
+                            }
+                        } else if (choix.equals("4")) {
+                            choixConforme = true;
+                            actionEffectuée = gererGainTresor(a);
+                            if (actionEffectuée) {
+                                nbActions--;
+                            }
+                        } else if (choix.equals("5")) {
+                            choixConforme = true;
+                            nbActions = 0;
                         }
-                    } else if (choix.equals("2")) {
-                        choixConforme = true;
-                        actionEffectuée = gererAssechement(a);
-                        if (actionEffectuée) {
-                            nbActions--;
-                        }
-                    } else if (choix.equals("3")) {
-                        choixConforme = true;
-                        actionEffectuée = gererDonation(a);
-                        if (actionEffectuée) {
-                            nbActions--;
-                            a.afficheMain();
-                        }
-                    } else if (choix.equals("4")) {
-                        choixConforme = true;
-                        actionEffectuée = gererGainTresor(a);
-                        if (actionEffectuée) {
-                            nbActions--;
-                        }
-                    } else if (choix.equals("5")) {
-                        choixConforme = true;
-                        nbActions = 0;
                     }
-                } while (!choixConforme || nbActions > 0);
-                gererCarteOrange(a);
-                gererCarteBleue();
+                    gererCarteOrange(a);
+                    gererCarteBleue();
+                } else {
+                    System.out.println("\033[31mPartie Perdue.\033[0m");
+                }
             }
         }
     }
