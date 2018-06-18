@@ -51,11 +51,6 @@ public class Controleur implements Observateur {
             System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (utilisable une fois par tour) :");
             System.out.print("(oui/non) => ");
             choix = sc.nextLine();
-            try {
-                choix = choix.toUpperCase().substring(0, 1);
-            } catch (StringIndexOutOfBoundsException e) {
-                choix = "non";
-            }
             if (choix.equals("O")) {
                 pouvoirPiloteDispo = false;
                 tuilesDispo = calculTouteTuileDispo(g);
@@ -83,19 +78,11 @@ public class Controleur implements Observateur {
                 choix = sc.nextLine();
                 if (choix.equals("null")) {
                     choixValide = true;
-                } else {    
-                    try {
-                        X = new Integer(choix);
-                    } catch (NumberFormatException e) {
-                        X = 0;
-                    }
+                } else {
+                    X = new Integer(choix);
                     System.out.print("Y = ");
                     choix = sc.nextLine();
-                    try {
-                        Y = new Integer(choix);
-                    } catch (NumberFormatException e) {
-                        Y = 0;
-                    }
+                    Y = new Integer(choix);
                     Tuile tuileChoisie = g.getTuile(X - 1, Y - 1);
                     if (tuilesDispo.contains(tuileChoisie)) {
                         choixValide = true;
@@ -132,11 +119,6 @@ public class Controleur implements Observateur {
             System.out.println("Voulez-vous assecher 2 tuiles pour cette action ?");
             System.out.print("\t(oui/non)=> ");
             choix = sc.nextLine();
-            try {
-                choix = choix.toUpperCase().substring(0, 1);
-            } catch (StringIndexOutOfBoundsException e) {
-                choix = "non";
-            }
             if (choix.equals("O")) {
                 nbAssechement = 2;
             }
@@ -160,19 +142,11 @@ public class Controleur implements Observateur {
                     choix = sc.nextLine();
                     if (choix.equals("null")) {
                         choixValide = true;
-                    } else {  
-                        try {
-                            X = new Integer(choix);
-                        } catch (NumberFormatException e) {
-                            X = 0;
-                        }
+                    } else {
+                        X = new Integer(choix);
                         System.out.print("Y = ");
                         choix = sc.nextLine();
-                        try {
-                            Y = new Integer(choix);
-                        } catch (NumberFormatException e) {
-                            Y = 0;
-                        }
+                        Y = new Integer(choix);
                         Tuile tuileChoisie = g.getTuile(X - 1, Y - 1);
                         if (tuilesDispo.contains(tuileChoisie)) {
                             choixValide = true;
@@ -243,18 +217,14 @@ public class Controleur implements Observateur {
                 System.out.println("\t- Annuler\n");
                 System.out.println("choix (role ou annuler) => ");
                 choix = sc.nextLine();
-                for (Aventurier a : jDispo) {
-                    try {
+                if (choix.toLowerCase().substring(0, 2).equals("an")) {
+                    choixConforme = true;
+                } else {
+                    for (Aventurier a : jDispo) {
                         if (choix.toLowerCase().substring(0, 2).equals(getJoueurs().get(a).toLowerCase().substring(0, 2))) {
                             choixConforme = true;
                         }
-                    } catch (StringIndexOutOfBoundsException e){
-                        choix = "#AUCUNE ENTREE#";
-                        System.out.println("CHOIX NON-VALIDE");
                     }
-                }
-                if (choix.toLowerCase().substring(0, 2).equals("an")) {
-                    choixConforme = true;
                 }
             } while (!choixConforme);
             if (choix.toLowerCase().substring(0, 2).equals("an")) {
@@ -297,8 +267,9 @@ public class Controleur implements Observateur {
                 if (joueur.getTuile().getNom()==NomTuile.LE_TEMPLE_DU_SOLEIL || joueur.getTuile().getNom()==NomTuile.LE_TEMPLE_DE_LA_LUNE) {
                     if (nbCarteTresorPS >= 4) {
                         for (CarteOrange cO : joueur.getMain()) {
-                            for (CarteTrésor cT : cartesTresors) {
-                                if (cT.getNomTresor()==NomTresor.LA_PIERRE_SACREE && cO==cT) {
+                            for (int i = 0 ; i < 4 ; i++) {
+                                CarteTrésor cTresor = cartesTresors.get(i); 
+                                if (cTresor.getNomTresor()==NomTresor.LA_PIERRE_SACREE && cO==cTresor) {
                                     joueur.getMain().remove(cO);
                                 }
                             }
@@ -309,8 +280,9 @@ public class Controleur implements Observateur {
                 } else if (joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_HURLEMENTS || joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_MURMURES) {
                     if (nbCarteTresorSZ >= 4) {
                         for (CarteOrange cO : joueur.getMain()) {
-                            for (CarteTrésor cT : cartesTresors) {
-                                if (cT.getNomTresor()==NomTresor.LA_STATUE_DU_ZEPHYR && cO==cT) {
+                            for (int i = 0 ; i < 4 ; i++) {
+                                CarteTrésor cTresor = cartesTresors.get(i); 
+                                if (cTresor.getNomTresor()==NomTresor.LA_STATUE_DU_ZEPHYR && cO==cTresor) {
                                     joueur.getMain().remove(cO);
                                 }
                             }
@@ -321,8 +293,9 @@ public class Controleur implements Observateur {
                 } else if (joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES || joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES) {
                     if (nbCarteTresorCA >= 4) {
                         for (CarteOrange cO : joueur.getMain()) {
-                            for (CarteTrésor cT : cartesTresors) {
-                                if (cT.getNomTresor()==NomTresor.LE_CRISTAL_ARDENT && cO==cT) {
+                            for (int i = 0 ; i < 4 ; i++) {
+                                CarteTrésor cTresor = cartesTresors.get(i); 
+                                if (cTresor.getNomTresor()==NomTresor.LE_CRISTAL_ARDENT && cO==cTresor) {
                                     joueur.getMain().remove(cO);
                                 }
                             }
@@ -333,8 +306,9 @@ public class Controleur implements Observateur {
                 } else if (joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DE_CORAIL || joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DES_MAREES) {
                     if (nbCarteTresorCO >= 4) {
                         for (CarteOrange cO : joueur.getMain()) {
-                            for (CarteTrésor cT : cartesTresors) {
-                                if (cT.getNomTresor()==NomTresor.LE_CALICE_DE_L_ONDE && cO==cT) {
+                            for (int i = 0 ; i < 4 ; i++) {
+                                CarteTrésor cTresor = cartesTresors.get(i); 
+                                if (cTresor.getNomTresor()==NomTresor.LE_CALICE_DE_L_ONDE && cO==cTresor) {
                                     joueur.getMain().remove(cO);
                                 }
                             }
@@ -521,7 +495,7 @@ public class Controleur implements Observateur {
             tmpOranges.add(new CarteTrésor(NomTresor.LA_PIERRE_SACREE));
         }
         for (int i = 0; i < 2; i++) {
-            tmpOranges.add(new CarteMonteeDesEaux());
+            tmpOranges.add(new CarteMonteeDesEaux()); //2 cartes montée des eaux, modification : 18/06/2018 (m2107 consignes m.à.j.)
             tmpOranges.add(new CarteSacDeSable());
         }
         Collections.shuffle(tmpOranges);
@@ -577,11 +551,7 @@ public class Controleur implements Observateur {
             System.out.println("Quel niveau de difficulté ? (1/2/3/4)");
             System.out.print("\t =>");
             choix = sc.nextLine();
-            try {
-                choixInt = new Integer(choix);
-            } catch (NumberFormatException e) {
-                choixInt = 0;
-            }
+            choixInt = new Integer(choix);
             if (choixInt >= 1 && choixInt <= 4) {
                 this.niveauEau = choixInt;
                 choixConforme = true;
@@ -621,11 +591,6 @@ public class Controleur implements Observateur {
                     System.out.println("Choix");
                     System.out.print("\t =>");
                     choix = sc.nextLine();
-                    try {
-                        choix = choix.toLowerCase().substring(0, 2);
-                    } catch (StringIndexOutOfBoundsException | NullPointerException e) {
-                        choix = "AUCUNE SELECTION";
-                    }
                     if (choix.equals("pi") && avDispo.contains("Pilote")) {
                         avDispo.remove("Pilote");
                         aventuriers.add(new Pilote());
@@ -671,11 +636,7 @@ public class Controleur implements Observateur {
             System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 4) : ");
             System.out.print("\t=> ");
             choix = sc.nextLine();
-            try {
-                choixInt = new Integer(choix);
-            } catch (NumberFormatException e) {
-                choixInt = 0;
-            }
+            choixInt = new Integer(choix);
             if (choixInt >= 2 && choixInt <= 4) {
                 nbJoueurs = choixInt;
                 choixConforme = true;
