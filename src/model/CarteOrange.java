@@ -13,11 +13,19 @@ public abstract class CarteOrange {
         this.piochée = null;
     }
 
+    public Aventurier getOwner() {
+        return piochée;
+    }    
+
     public final void setRole(String roleCarte) {
         this.roleCarte = roleCarte;
     }
     
     public final String getRole() {
         return roleCarte;
+    }
+    
+    public void affiche() {
+        System.out.println("Carte "+getRole()+" (appartient à : "+getOwner().getClass().toString().substring(12)+")");
     }
 }
