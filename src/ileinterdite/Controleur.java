@@ -215,7 +215,7 @@ public class Controleur implements Observateur {
                     System.out.println("\t- ["+a.getClass().toString().substring(12)+"] "+getJoueurs().get(a));
                 }
                 System.out.println("\t- Annuler\n");
-                System.out.println("choix (role ou annuler) => ");
+                System.out.println("choix (pseudo ou annuler) => ");
                 choix = sc.nextLine();
                 if (choix.toLowerCase().substring(0, 2).equals("an")) {
                     choixConforme = true;
@@ -591,6 +591,7 @@ public class Controleur implements Observateur {
                     System.out.println("Choix");
                     System.out.print("\t =>");
                     choix = sc.nextLine();
+                    choix = choix.toLowerCase().substring(0, 2);
                     if (choix.equals("pi") && avDispo.contains("Pilote")) {
                         avDispo.remove("Pilote");
                         aventuriers.add(new Pilote());
@@ -770,8 +771,10 @@ public class Controleur implements Observateur {
                 System.out.println(joueurs.get(a) + ", quelle action voulez-vous réaliser ?");
                 System.out.println("\t1 - Se déplacer");
                 System.out.println("\t2 - Assécher");
-                System.out.println("\t3 - Finir mon tour");
-                System.out.print("choix (1/2/3) : ");
+                System.out.println("\t3 - Donner une carte");
+                System.out.println("\t4 - Gagner un trésor");
+                System.out.println("\t5 - Finir mon tour");
+                System.out.print("choix (1 à 5) : ");
                 choix = sc.nextLine();
                 if (choix.equals("1")) {
                     choixConforme = true;
@@ -786,6 +789,18 @@ public class Controleur implements Observateur {
                         nbActions--;
                     }
                 } else if (choix.equals("3")) {
+                    choixConforme = true;
+                    actionEffectuée = gererDonation(a);
+                    if (actionEffectuée) {
+                        nbActions--;
+                    }
+                } else if (choix.equals("4")) {
+                    choixConforme = true;
+                    actionEffectuée = gererGainTresor(a);
+                    if (actionEffectuée) {
+                        nbActions--;
+                    }
+                } else if (choix.equals("5")) {
                     choixConforme = true;
                     nbActions = 0;
                 }
