@@ -14,4 +14,9 @@ public class CarteTrésor extends CarteOrange {
     public NomTresor getNomTresor() {
         return Trésor;
     }
+    
+    @Override
+    public void affiche() {
+        System.out.println("Carte "+getRole()+ "["+ getNomTresor().toString() +"] (appartient à : "+getOwner().getClass().toString().substring(12)+")");
+    }
 }
