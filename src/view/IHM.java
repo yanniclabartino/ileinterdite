@@ -8,13 +8,14 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
  *
  * @author yannic
  */
-public class IHM extends JPanel {
+public class IHM extends JFrame {
 
     private JButton bDepl;
     private JButton bAss;
@@ -31,6 +32,8 @@ public class IHM extends JPanel {
         bGagner = new JButton("Gagner un trésor");
         
         // CRÉATION DES JPANEL
+        JPanel layer0 = new JPanel();
+        
         JPanel layer1north = new JPanel();
         JPanel layer1south = new JPanel();
         
@@ -46,7 +49,7 @@ public class IHM extends JPanel {
         JPanel layer4eastCenterCenter = new JPanel();
         
         // AFFECTATION DE TYPES AUX PANELS
-        this.setLayout(new BorderLayout()); // = layer 0
+        layer0.setLayout(new BorderLayout()); // = layer 0
         
         layer1north.setLayout(new BorderLayout());
         layer1south.setLayout(new BorderLayout());
@@ -62,8 +65,8 @@ public class IHM extends JPanel {
         layer4eastCenterCenter.setLayout(new GridLayout(4,1));
         
         // PLACEMENT DES PANELS
-        this.add(layer1north, BorderLayout.NORTH);
-        this.add(layer1south, BorderLayout.SOUTH);
+        layer0.add(layer1north, BorderLayout.NORTH);
+        layer0.add(layer1south, BorderLayout.SOUTH);
         
         layer1north.add(layer2north, BorderLayout.NORTH);
         layer1north.add(layer2east, BorderLayout.EAST);
@@ -82,7 +85,11 @@ public class IHM extends JPanel {
         layer4eastCenterCenter.add(bPioch);
         layer4eastCenterCenter.add(bGagner);
         
-        
+        // PROPRIÉTÉS DU JFRAME
+        this.setTitle("L'Île Interdite");
+        this.setSize(1000, 563); // équivalent 16:9
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
         }
         
             
