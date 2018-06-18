@@ -175,13 +175,15 @@ public class Controleur implements Observateur {
         if (joueur.getMain().isEmpty()){
             return !donnationEffectuée;
         }
-        int cartesDispo = 0;
+        int nbDispo = 0;
+        ArrayList<CarteOrange> cartesDispo = new ArrayList<CarteOrange>();
         for (CarteOrange c : joueur.getMain()) {
             if (!(c.getRole().equals("Helicoptere") || c.getRole().equals("Sac de sable"))) {
-                cartesDispo++;
+                nbDispo++;
+                cartesDispo.add(c);
             }
         }
-        if (cartesDispo == 0) {
+        if (nbDispo == 0) {
             return !donnationEffectuée;
         }
         //début méthode
@@ -207,22 +209,30 @@ public class Controleur implements Observateur {
         //variables pour la saisie utilisateur 
         Scanner sc = new Scanner(System.in);
         String choix;
+        Integer choixInt;
         boolean choixConforme = false;
+        //Joueur a qui on donne
+        Aventurier jRecoit = null;
+        //Carte donnée
+        CarteOrange cCédée = null;
+        
         if (jDispo.size() > 0) {
             do {
                 System.out.println("Voici la liste des aventuriers à qui vous pouvez donner une carte :");
                 for (Aventurier a : jDispo) {
-                    System.out.println("\t- ["+a.getClass().toString().substring(12)+"] "+getJoueurs().get(a));
+                    System.out.println("\t- "+a.getClass().toString().substring(12)+" ("+getJoueurs().get(a)+")");
                 }
                 System.out.println("\t- Annuler\n");
                 System.out.println("choix (role ou annuler) => ");
                 choix = sc.nextLine();
-                if (choix.toLowerCase().substring(0, 2).equals("an")) {
+                choix = choix.toLowerCase().substring(0, 2);
+                if (choix.equals("an")) {
                     choixConforme = true;
                 } else {
                     for (Aventurier a : jDispo) {
-                        if (choix.toLowerCase().substring(0, 2).equals(getJoueurs().get(a).toLowerCase().substring(0, 2))) {
+                        if (choix.equals(a.getClass().toString().toLowerCase().substring(0, 2))) {
                             choixConforme = true;
+                            jRecoit = a;
                         }
                     }
                 }
@@ -230,6 +240,27 @@ public class Controleur implements Observateur {
             if (choix.toLowerCase().substring(0, 2).equals("an")) {
                 return !donnationEffectuée;
             } else {
+                System.out.println("Voici les cartes que vous pouvez céder : ");
+                for (int i = 0 ; i < cartesDispo.size() ; i++) {
+                    System.out.print("\t ("+(i+1)+") - ");
+                    cartesDispo.get(i).affiche();
+                }
+                choixConforme = false;
+                do {
+                    System.out.println("\n\tChoix => ");
+                    choix = sc.nextLine();
+                    choixInt = new Integer(choix);
+                    if (choixInt <= cartesDispo.size() && choixInt >= 1) {
+                        choixConforme = true;
+                        cCédée = cartesDispo.get(choixInt);
+                        //on passe la carte d'un joueur à l'autre...
+                        cCédée.affiche();
+                        joueur.defausseCarte(cCédée);
+                        System.out.println("passage de la carte ...");
+                        jRecoit.piocheCarte(cCédée);
+                        cCédée.affiche();
+                    }
+                } while (!choixConforme);
                 return donnationEffectuée;
             }
         } else {
@@ -591,6 +622,7 @@ public class Controleur implements Observateur {
                     System.out.println("Choix");
                     System.out.print("\t =>");
                     choix = sc.nextLine();
+                    choix = choix.toLowerCase().substring(0, 2);
                     if (choix.equals("pi") && avDispo.contains("Pilote")) {
                         avDispo.remove("Pilote");
                         aventuriers.add(new Pilote());
@@ -759,6 +791,7 @@ public class Controleur implements Observateur {
         
         //Un tour de jeu
         debutJeu();
+        System.out.println("\033[1;31mBienvenue\033[0m");
         pouvoirPiloteDispo = true;
         boolean actionEffectuée;
         for (Aventurier a : joueurs.keySet()) {
@@ -770,8 +803,10 @@ public class Controleur implements Observateur {
                 System.out.println(joueurs.get(a) + ", quelle action voulez-vous réaliser ?");
                 System.out.println("\t1 - Se déplacer");
                 System.out.println("\t2 - Assécher");
-                System.out.println("\t3 - Finir mon tour");
-                System.out.print("choix (1/2/3) : ");
+                System.out.println("\t3 - Donner une carte");
+                System.out.println("\t4 - Gagner un trésor");
+                System.out.println("\t5 - Finir mon tour");
+                System.out.print("choix (1 à 5) : ");
                 choix = sc.nextLine();
                 if (choix.equals("1")) {
                     choixConforme = true;
@@ -786,6 +821,18 @@ public class Controleur implements Observateur {
                         nbActions--;
                     }
                 } else if (choix.equals("3")) {
+                    choixConforme = true;
+                    actionEffectuée = gererDonation(a);
+                    if (actionEffectuée) {
+                        nbActions--;
+                    }
+                } else if (choix.equals("4")) {
+                    choixConforme = true;
+                    actionEffectuée = gererGainTresor(a);
+                    if (actionEffectuée) {
+                        nbActions--;
+                    }
+                } else if (choix.equals("5")) {
                     choixConforme = true;
                     nbActions = 0;
                 }
