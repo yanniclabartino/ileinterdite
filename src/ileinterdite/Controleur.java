@@ -595,13 +595,19 @@ public class Controleur implements Observateur {
     private boolean estPerdu(){
         Grille g = getGrille();
         Utils.EtatTuile coulee = Utils.EtatTuile.COULEE;
+        int joueurVivant = getNbJoueur();
+        for (Aventurier a : getJoueurs().keySet()) {
+            if (a.getTuile()==null) {
+                joueurVivant--;
+            }
+        }
         return (   g.getTuile(NomTuile.HELIPORT).getEtat()==coulee
                 || getNiveau() >= 10
                 || (g.getTuile(NomTuile.LE_TEMPLE_DU_SOLEIL).getEtat()==coulee && g.getTuile(NomTuile.LE_TEMPLE_DE_LA_LUNE).getEtat()==coulee && !getTrésors()[0].isGagne())
                 || (g.getTuile(NomTuile.LE_JARDIN_DES_HURLEMENTS).getEtat()==coulee && g.getTuile(NomTuile.LE_JARDIN_DES_MURMURES).getEtat()==coulee && !getTrésors()[1].isGagne())
                 || (g.getTuile(NomTuile.LA_CAVERNE_DES_OMBRES).getEtat()==coulee && g.getTuile(NomTuile.LA_CAVERNE_DU_BRASIER).getEtat()==coulee && !getTrésors()[2].isGagne())
                 || (g.getTuile(NomTuile.LE_PALAIS_DE_CORAIL).getEtat()==coulee && g.getTuile(NomTuile.LE_PALAIS_DES_MAREES).getEtat()==coulee && !getTrésors()[3].isGagne())
-                );
+                || joueurVivant < nbJoueurs);
     }
     
     //METHODES INTERFACE TEXTE
@@ -828,52 +834,54 @@ public class Controleur implements Observateur {
         pouvoirPiloteDispo = true;
         jeuEnCours = true;
         boolean actionEffectuée;
-        for (Aventurier a : joueurs.keySet()) {
-            int nbActions = 3;
-            String nomRole = a.getClass().toString().substring(12);
-            do {
-                choixConforme = false;
-                grille.afficheGrilleTexte(a);
-                System.out.println(joueurs.get(a) + "(" + nomRole + ") , quelle action voulez-vous réaliser ?");
-                System.out.println("\t1 - Se déplacer");
-                System.out.println("\t2 - Assécher");
-                System.out.println("\t3 - Donner une carte");
-                System.out.println("\t4 - Gagner un trésor");
-                System.out.println("\t5 - Finir mon tour");
-                System.out.print("choix (1 à 5) : ");
-                choix = sc.nextLine();
-                if (choix.equals("1")) {
-                    choixConforme = true;
-                    actionEffectuée = gererDeplacement(a);
-                    if (actionEffectuée) {
-                        nbActions--;
+        while (!this.estTerminé()) {
+            for (Aventurier a : joueurs.keySet()) {
+                int nbActions = 3;
+                String nomRole = a.getClass().toString().substring(12);
+                do {
+                    choixConforme = false;
+                    grille.afficheGrilleTexte(a);
+                    System.out.println(joueurs.get(a) + "(" + nomRole + ") , quelle action voulez-vous réaliser ?");
+                    System.out.println("\t1 - Se déplacer");
+                    System.out.println("\t2 - Assécher");
+                    System.out.println("\t3 - Donner une carte");
+                    System.out.println("\t4 - Gagner un trésor");
+                    System.out.println("\t5 - Finir mon tour");
+                    System.out.print("choix (1 à 5) : ");
+                    choix = sc.nextLine();
+                    if (choix.equals("1")) {
+                        choixConforme = true;
+                        actionEffectuée = gererDeplacement(a);
+                        if (actionEffectuée) {
+                            nbActions--;
+                        }
+                    } else if (choix.equals("2")) {
+                        choixConforme = true;
+                        actionEffectuée = gererAssechement(a);
+                        if (actionEffectuée) {
+                            nbActions--;
+                        }
+                    } else if (choix.equals("3")) {
+                        choixConforme = true;
+                        actionEffectuée = gererDonation(a);
+                        if (actionEffectuée) {
+                            nbActions--;
+                            a.afficheMain();
+                        }
+                    } else if (choix.equals("4")) {
+                        choixConforme = true;
+                        actionEffectuée = gererGainTresor(a);
+                        if (actionEffectuée) {
+                            nbActions--;
+                        }
+                    } else if (choix.equals("5")) {
+                        choixConforme = true;
+                        nbActions = 0;
                     }
-                } else if (choix.equals("2")) {
-                    choixConforme = true;
-                    actionEffectuée = gererAssechement(a);
-                    if (actionEffectuée) {
-                        nbActions--;
-                    }
-                } else if (choix.equals("3")) {
-                    choixConforme = true;
-                    actionEffectuée = gererDonation(a);
-                    if (actionEffectuée) {
-                        nbActions--;
-                        a.afficheMain();
-                    }
-                } else if (choix.equals("4")) {
-                    choixConforme = true;
-                    actionEffectuée = gererGainTresor(a);
-                    if (actionEffectuée) {
-                        nbActions--;
-                    }
-                } else if (choix.equals("5")) {
-                    choixConforme = true;
-                    nbActions = 0;
-                }
-            } while (!choixConforme || nbActions > 0);
-            gererCarteOrange(a);
-            gererCarteBleue();
+                } while (!choixConforme || nbActions > 0);
+                gererCarteOrange(a);
+                gererCarteBleue();
+            }
         }
     }
 
