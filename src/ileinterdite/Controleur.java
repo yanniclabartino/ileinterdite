@@ -294,10 +294,60 @@ public class Controleur implements Observateur {
                 } 
             }
             if ((nbCarteTresorCA | nbCarteTresorCO | nbCarteTresorPS | nbCarteTresorSZ) >= 4) {
-                joueur.getTuile().getNom()
+                if (joueur.getTuile().getNom()==NomTuile.LE_TEMPLE_DU_SOLEIL || joueur.getTuile().getNom()==NomTuile.LE_TEMPLE_DE_LA_LUNE) {
+                    if (nbCarteTresorPS >= 4) {
+                        for (CarteOrange cO : joueur.getMain()) {
+                            for (CarteTrésor cT : cartesTresors) {
+                                if (cT.getNomTresor()==NomTresor.LA_PIERRE_SACREE && cO==cT) {
+                                    joueur.getMain().remove(cO);
+                                }
+                            }
+                        }
+                        getTrésors()[0].setGagne(true);
+                        return gainEffectué;
+                    }
+                } else if (joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_HURLEMENTS || joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_MURMURES) {
+                    if (nbCarteTresorSZ >= 4) {
+                        for (CarteOrange cO : joueur.getMain()) {
+                            for (CarteTrésor cT : cartesTresors) {
+                                if (cT.getNomTresor()==NomTresor.LA_STATUE_DU_ZEPHYR && cO==cT) {
+                                    joueur.getMain().remove(cO);
+                                }
+                            }
+                        }
+                        getTrésors()[1].setGagne(true);
+                        return gainEffectué;
+                    }  
+                } else if (joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES || joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES) {
+                    if (nbCarteTresorCA >= 4) {
+                        for (CarteOrange cO : joueur.getMain()) {
+                            for (CarteTrésor cT : cartesTresors) {
+                                if (cT.getNomTresor()==NomTresor.LE_CRISTAL_ARDENT && cO==cT) {
+                                    joueur.getMain().remove(cO);
+                                }
+                            }
+                        }
+                        getTrésors()[2].setGagne(true);
+                        return gainEffectué;
+                    }
+                } else if (joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DE_CORAIL || joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DES_MAREES) {
+                    if (nbCarteTresorCO >= 4) {
+                        for (CarteOrange cO : joueur.getMain()) {
+                            for (CarteTrésor cT : cartesTresors) {
+                                if (cT.getNomTresor()==NomTresor.LE_CALICE_DE_L_ONDE && cO==cT) {
+                                    joueur.getMain().remove(cO);
+                                }
+                            }
+                        }
+                        getTrésors()[3].setGagne(true);
+                        return gainEffectué;
+                    }
+                }
+            } else {
+                return !gainEffectué;
             }
+            return !gainEffectué;
         }
-        return !gainEffectué;
     }
 
     private void gererCarteOrange(Aventurier a) {
@@ -462,7 +512,6 @@ public class Controleur implements Observateur {
         //Création des cartes oranges (trésor)        
         ArrayList<CarteOrange> tmpOranges = new ArrayList<CarteOrange>();
         for (int i = 0; i < 3; i++) {
-            tmpOranges.add(new CarteMonteeDesEaux());
             tmpOranges.add(new CarteHelicoptere());
         }
         for (int i = 0; i < 5; i++) {
@@ -471,8 +520,10 @@ public class Controleur implements Observateur {
             tmpOranges.add(new CarteTrésor(NomTresor.LE_CALICE_DE_L_ONDE));
             tmpOranges.add(new CarteTrésor(NomTresor.LA_PIERRE_SACREE));
         }
-        tmpOranges.add(new CarteSacDeSable());
-        tmpOranges.add(new CarteSacDeSable());
+        for (int i = 0; i < 2; i++) {
+            tmpOranges.add(new CarteMonteeDesEaux());
+            tmpOranges.add(new CarteSacDeSable());
+        }
         Collections.shuffle(tmpOranges);
         //Ajout de celles-ci dans la pioche orange.
         for (CarteOrange c : tmpOranges) {
@@ -645,7 +696,11 @@ public class Controleur implements Observateur {
     }
     
     //METHODES UTILES
-    private int getNbJoueur(){
+    
+    private Trésor[] getTrésors(){
+        return trésors;
+    }
+    private int getNbJoueur() {
         return this.nbJoueurs;
     }
     private Grille getGrille() {

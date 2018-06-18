@@ -16,4 +16,7 @@ public class Trésor {
         return gagne;
     }
 
+    public void setGagne(boolean gagne) {
+        this.gagne = gagne;
+    }
 }
