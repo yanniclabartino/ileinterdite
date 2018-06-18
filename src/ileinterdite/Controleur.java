@@ -22,7 +22,7 @@ public class Controleur implements Observateur {
     
     private Grille grille;
     private int niveauEau;
-    private VueAventurier[] ihm;
+    //private VueAventurier[] ihm;
     private Trésor[] trésors;
     private HashMap<Aventurier, String> joueurs;
     private Stack<CarteBleue> piocheBleues;
@@ -355,6 +355,7 @@ public class Controleur implements Observateur {
         }
     }
 
+    //non-complète
     private void gererCarteOrange(Aventurier a) {
         /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
         boolean carteMDEpiochée = false;
@@ -403,6 +404,7 @@ public class Controleur implements Observateur {
                 int numCarte = 1;
                 for (CarteOrange c : a.getMain()) {
                     System.out.println("\t [" + numCarte + "] - " + c.getRole());
+                    numCarte++;
                 }
                 System.out.println("Quelle carte voulez-vous défaussez de votre main ?\nNB: s'il s'agit d'une carte spéciale, vous pourrez l'utiliser.");
                 System.out.print("\t choix (numéro de la carte ) : ");
@@ -419,6 +421,7 @@ public class Controleur implements Observateur {
                             choixConforme = true;
                         } else if (choix.equals("2")) {
                             // à  compléter pour que le joueur puisse utiliser sa carte spéciale ou non
+                            
                             choixConforme = true;
                         }
                     } while (!choixConforme);
@@ -427,6 +430,7 @@ public class Controleur implements Observateur {
                 }
             }
         }
+        a.afficheMain();
     }
 
     private void gererCarteBleue() {
@@ -791,7 +795,6 @@ public class Controleur implements Observateur {
         
         //Un tour de jeu
         debutJeu();
-        System.out.println("\033[4;31;46mBienvenue\033[0m");
         pouvoirPiloteDispo = true;
         boolean actionEffectuée;
         for (Aventurier a : joueurs.keySet()) {
@@ -800,7 +803,7 @@ public class Controleur implements Observateur {
             do {
                 choixConforme = false;
                 grille.afficheGrilleTexte(a);
-                System.out.println(joueurs.get(a) + ", quelle action voulez-vous réaliser ?");
+                System.out.println(joueurs.get(a) + "(" + nomRole + ") , quelle action voulez-vous réaliser ?");
                 System.out.println("\t1 - Se déplacer");
                 System.out.println("\t2 - Assécher");
                 System.out.println("\t3 - Donner une carte");
@@ -825,6 +828,7 @@ public class Controleur implements Observateur {
                     actionEffectuée = gererDonation(a);
                     if (actionEffectuée) {
                         nbActions--;
+                        a.afficheMain();
                     }
                 } else if (choix.equals("4")) {
                     choixConforme = true;

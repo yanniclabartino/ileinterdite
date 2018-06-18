@@ -48,6 +48,13 @@ public abstract class Aventurier {
         c.delOwner();
     }
 
+    public void afficheMain() {
+        System.out.println("Main de "+this.getClass().toString().substring(12)+" : ");
+        for (CarteOrange c : getMain()) {
+            c.affiche();
+        }
+    }
+    
     public abstract ArrayList<Tuile> calculTuileDispo(Grille g);
 
     public abstract ArrayList<Tuile> calculTuileAss(Grille g);
