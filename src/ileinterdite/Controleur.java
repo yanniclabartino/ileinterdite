@@ -211,6 +211,11 @@ public class Controleur implements Observateur {
         String choix;
         Integer choixInt;
         boolean choixConforme = false;
+        //Joueur a qui on donne
+        Aventurier jRecoit = null;
+        //Carte donnée
+        CarteOrange cCédée = null;
+        
         if (jDispo.size() > 0) {
             do {
                 System.out.println("Voici la liste des aventuriers à qui vous pouvez donner une carte :");
@@ -227,6 +232,7 @@ public class Controleur implements Observateur {
                     for (Aventurier a : jDispo) {
                         if (choix.equals(a.getClass().toString().toLowerCase().substring(0, 2))) {
                             choixConforme = true;
+                            jRecoit = a;
                         }
                     }
                 }
@@ -244,8 +250,15 @@ public class Controleur implements Observateur {
                     System.out.println("\n\tChoix => ");
                     choix = sc.nextLine();
                     choixInt = new Integer(choix);
-                    if (choixInt < ) {
-                        
+                    if (choixInt <= cartesDispo.size() && choixInt >= 1) {
+                        choixConforme = true;
+                        cCédée = cartesDispo.get(choixInt);
+                        //on passe la carte d'un joueur à l'autre...
+                        cCédée.affiche();
+                        joueur.defausseCarte(cCédée);
+                        System.out.println("passage de la carte ...");
+                        jRecoit.piocheCarte(cCédée);
+                        cCédée.affiche();
                     }
                 } while (!choixConforme);
                 return donnationEffectuée;
