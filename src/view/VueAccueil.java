@@ -13,4 +13,8 @@ import ileinterdite.Observe;
  */
 public class VueAccueil extends Observe{
     
+    
+    //classe à supprimer.
+    
+    
 }

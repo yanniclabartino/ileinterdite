@@ -203,7 +203,7 @@ public class Controleur implements Observateur {
         }
         int cartesDispo = 0;
         for (CarteOrange c : joueur.getMain()) {
-            if (!c.getRole().equals("Helicoptere") && !c.getRole().equals("Sac de sable")) {
+            if (!(c.getRole().equals("Helicoptere") || c.getRole().equals("Sac de sable"))) {
                 cartesDispo++;
             }
         }
@@ -241,7 +241,7 @@ public class Controleur implements Observateur {
                     System.out.println("\t- ["+a.getClass().toString().substring(12)+"] "+getJoueurs().get(a));
                 }
                 System.out.println("\t- Annuler\n");
-                System.out.println("choix (pseudo ou annuler) => ");
+                System.out.println("choix (role ou annuler) => ");
                 choix = sc.nextLine();
                 for (Aventurier a : jDispo) {
                     try {
@@ -267,7 +267,38 @@ public class Controleur implements Observateur {
         }
     }
 
-    private void gererGainTresor() {/*Pour plus tard*/}
+    private boolean gererGainTresor(Aventurier joueur) {
+        boolean gainEffectué = true;
+        if (joueur.getMain().size() < 4) {
+            return !gainEffectué;
+        } else {
+            int nbCarteTresorPS = 0;
+            int nbCarteTresorSZ = 0;
+            int nbCarteTresorCA = 0;
+            int nbCarteTresorCO = 0;
+            ArrayList<CarteTrésor> cartesTresors = new ArrayList<CarteTrésor>();
+            for (CarteOrange c : joueur.getMain()) {
+                if (c.getRole().equals("Trésor")) {
+                    cartesTresors.add((CarteTrésor)c);
+                }
+            }
+            for (CarteTrésor c : cartesTresors) {
+                if(c.getNomTresor()==NomTresor.LA_PIERRE_SACREE){
+                    nbCarteTresorPS++;
+                } else if (c.getNomTresor()==NomTresor.LA_STATUE_DU_ZEPHYR) {
+                    nbCarteTresorSZ++;
+                } else if (c.getNomTresor()==NomTresor.LE_CALICE_DE_L_ONDE) {
+                    nbCarteTresorCO++;
+                } else if (c.getNomTresor()==NomTresor.LE_CRISTAL_ARDENT) {
+                    nbCarteTresorCA++;
+                } 
+            }
+            if ((nbCarteTresorCA | nbCarteTresorCO | nbCarteTresorPS | nbCarteTresorSZ) >= 4) {
+                joueur.getTuile().getNom()
+            }
+        }
+        return !gainEffectué;
+    }
 
     private void gererCarteOrange(Aventurier a) {
         /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
