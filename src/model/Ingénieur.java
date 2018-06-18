@@ -64,6 +64,9 @@ public class Ingénieur extends Aventurier {
                 + 1) != null && g.getTuile(x, y + 1).getEtat() != Utils.EtatTuile.COULEE && g.getTuile(x, y + 1).getEtat() != Utils.EtatTuile.ASSECHEE) {
             tuileDispoAss.add(g.getTuile(x, y + 1));
         }
+        if (this.getTuile().getEtat() == Utils.EtatTuile.INONDEE) {
+            tuileDispoAss.add(this.getTuile());
+        }
         return tuileDispoAss;
     }
 }

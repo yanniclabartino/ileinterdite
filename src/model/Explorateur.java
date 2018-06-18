@@ -55,7 +55,7 @@ public class Explorateur extends Aventurier {
         }
         return tuileDispo;
     }
-    
+
     @Override
     public ArrayList calculTuileAss(Grille g) {
         ArrayList<Tuile> tuileDispoAss = new ArrayList<Tuile>();
@@ -97,6 +97,9 @@ public class Explorateur extends Aventurier {
         if (g.getTuile(x - 1, y
                 - 1) != null && g.getTuile(x - 1, y - 1).getEtat() != Utils.EtatTuile.COULEE && g.getTuile(x - 1, y - 1).getEtat() != Utils.EtatTuile.ASSECHEE) {
             tuileDispoAss.add(g.getTuile(x - 1, y - 1));
+        }
+        if (this.getTuile().getEtat() == Utils.EtatTuile.INONDEE) {
+            tuileDispoAss.add(this.getTuile());
         }
         return tuileDispoAss;
     }
