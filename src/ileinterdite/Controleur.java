@@ -3,7 +3,7 @@ package ileinterdite;
 import model.*;
 import util.*;
 import util.Utils.Pion;
-import view.VueAventurier;
+//import view.VueAventurier;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +29,7 @@ public class Controleur implements Observateur {
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
     private ArrayList<CarteOrange> defausseOranges;
-    private boolean pouvoirPiloteDispo;
+    private boolean pouvoirPiloteDispo, jeuEnCours;
     private int nbJoueurs;
 
     @Override
@@ -485,9 +485,9 @@ public class Controleur implements Observateur {
             - place les aventuriers
             - distribue les cartes Trésor
          */
+        Grille g = getGrille();
         //tout ceci dépendant du parametres.ALEAS
         if (!Parameters.ALEAS) {
-            Grille g = getGrille();
             g.getTuile(3, 0).setEtat(Utils.EtatTuile.INONDEE);
             g.getTuile(1, 3).setEtat(Utils.EtatTuile.INONDEE);
             g.getTuile(3, 3).setEtat(Utils.EtatTuile.INONDEE);
@@ -498,21 +498,35 @@ public class Controleur implements Observateur {
             g.getTuile(2, 4).setEtat(Utils.EtatTuile.COULEE);
             g.getTuile(4, 3).setEtat(Utils.EtatTuile.COULEE);
 
-            for (Aventurier aventuriers : joueurs.keySet()) {
-                if (aventuriers.getCouleur() == Pion.BLANC) {
-                    g.getTuile(1, 2).addAventurier(aventuriers);
-                } else if (aventuriers.getCouleur() == Pion.BLEU) {
-                    g.getTuile(3, 2).addAventurier(aventuriers);
-                } else if (aventuriers.getCouleur() == Pion.JAUNE) {
-                    g.getTuile(3, 1).addAventurier(aventuriers);
-                } else if (aventuriers.getCouleur() == Pion.NOIR) {
-                    g.getTuile(2, 1).addAventurier(aventuriers);
-                } else if (aventuriers.getCouleur() == Pion.ROUGE) {
-                    g.getTuile(3, 0).addAventurier(aventuriers);
-                } else if (aventuriers.getCouleur() == Pion.VERT) {
-                    g.getTuile(4, 2).addAventurier(aventuriers);
+            for (Aventurier a : getJoueurs().keySet()) {
+                if (a.getCouleur() == Pion.BLANC) {
+                    g.getTuile(1, 2).addAventurier(a);
+                } else if (a.getCouleur() == Pion.BLEU) {
+                    g.getTuile(3, 2).addAventurier(a);
+                } else if (a.getCouleur() == Pion.JAUNE) {
+                    g.getTuile(3, 1).addAventurier(a);
+                } else if (a.getCouleur() == Pion.NOIR) {
+                    g.getTuile(2, 1).addAventurier(a);
+                } else if (a.getCouleur() == Pion.ROUGE) {
+                    g.getTuile(3, 0).addAventurier(a);
+                } else if (a.getCouleur() == Pion.VERT) {
+                    g.getTuile(4, 2).addAventurier(a);
                 }
-                gererCarteOrange(aventuriers);
+                gererCarteOrange(a);
+            }
+        } else { // ALEAS == true
+            gererCarteBleue();
+            boolean randomCorrect = false;
+            for (Aventurier a : getJoueurs().keySet()) {
+                do {
+                    int x = (int) (Math.random()*5);
+                    int y = (int) (Math.random()*5);
+                    if (g.getTuile(x, y) != null) {
+                        g.getTuile(x, y).addAventurier(a);
+                        gererCarteOrange(a);
+                        randomCorrect = true;
+                    }
+                } while (!randomCorrect);
             }
         }
     }
@@ -559,7 +573,7 @@ public class Controleur implements Observateur {
         }
 
         //Initialisation de la Grille
-        if (Parameters.ALEAS){
+        if (!Parameters.ALEAS){
             Collections.shuffle(Tuiles);
         }
         grille = new Grille(Tuiles);
@@ -568,10 +582,26 @@ public class Controleur implements Observateur {
     
     private void iniTrésor(){
         //Création des Trésors
-        trésors[0] = new Trésor(NomTresor.LE_CRISTAL_ARDENT);
-        trésors[1] = new Trésor(NomTresor.LA_PIERRE_SACREE);
-        trésors[2] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
+        trésors[0] = new Trésor(NomTresor.LA_PIERRE_SACREE);
+        trésors[1] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
+        trésors[2] = new Trésor(NomTresor.LE_CRISTAL_ARDENT);
         trésors[3] = new Trésor(NomTresor.LE_CALICE_DE_L_ONDE);
+    }
+    
+    private boolean estTerminé(){
+        return (estPerdu() || !jeuEnCours);
+    }
+    
+    private boolean estPerdu(){
+        Grille g = getGrille();
+        Utils.EtatTuile coulee = Utils.EtatTuile.COULEE;
+        return (   g.getTuile(NomTuile.HELIPORT).getEtat()==coulee
+                || getNiveau() >= 10
+                || (g.getTuile(NomTuile.LE_TEMPLE_DU_SOLEIL).getEtat()==coulee && g.getTuile(NomTuile.LE_TEMPLE_DE_LA_LUNE).getEtat()==coulee && !getTrésors()[0].isGagne())
+                || (g.getTuile(NomTuile.LE_JARDIN_DES_HURLEMENTS).getEtat()==coulee && g.getTuile(NomTuile.LE_JARDIN_DES_MURMURES).getEtat()==coulee && !getTrésors()[1].isGagne())
+                || (g.getTuile(NomTuile.LA_CAVERNE_DES_OMBRES).getEtat()==coulee && g.getTuile(NomTuile.LA_CAVERNE_DU_BRASIER).getEtat()==coulee && !getTrésors()[2].isGagne())
+                || (g.getTuile(NomTuile.LE_PALAIS_DE_CORAIL).getEtat()==coulee && g.getTuile(NomTuile.LE_PALAIS_DES_MAREES).getEtat()==coulee && !getTrésors()[3].isGagne())
+                );
     }
     
     //METHODES INTERFACE TEXTE
@@ -601,7 +631,7 @@ public class Controleur implements Observateur {
         String choix;
         ArrayList<Aventurier> aventuriers = new ArrayList<Aventurier>();
         int nombreJ = getNbJoueur();
-        if (Parameters.ALEAS) {
+        if (!Parameters.ALEAS) {
             aventuriers.add(new Pilote());
             aventuriers.add(new Navigateur());
             aventuriers.add(new Ingénieur());
@@ -796,6 +826,7 @@ public class Controleur implements Observateur {
         //Un tour de jeu
         debutJeu();
         pouvoirPiloteDispo = true;
+        jeuEnCours = true;
         boolean actionEffectuée;
         for (Aventurier a : joueurs.keySet()) {
             int nbActions = 3;
