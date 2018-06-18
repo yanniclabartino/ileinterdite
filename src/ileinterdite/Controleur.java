@@ -230,7 +230,7 @@ public class Controleur implements Observateur {
                     choixConforme = true;
                 } else {
                     for (Aventurier a : jDispo) {
-                        if (choix.equals(a.getClass().toString().toLowerCase().substring(0, 2))) {
+                        if (choix.equals(a.getClass().toString().toLowerCase().substring(12, 14))) {
                             choixConforme = true;
                             jRecoit = a;
                         }
@@ -252,7 +252,7 @@ public class Controleur implements Observateur {
                     choixInt = new Integer(choix);
                     if (choixInt <= cartesDispo.size() && choixInt >= 1) {
                         choixConforme = true;
-                        cCédée = cartesDispo.get(choixInt);
+                        cCédée = cartesDispo.get(choixInt-1);
                         //on passe la carte d'un joueur à l'autre...
                         cCédée.affiche();
                         joueur.defausseCarte(cCédée);
@@ -791,7 +791,7 @@ public class Controleur implements Observateur {
         
         //Un tour de jeu
         debutJeu();
-        System.out.println("\033[1;31mBienvenue\033[0m");
+        System.out.println("\033[4;31;46mBienvenue\033[0m");
         pouvoirPiloteDispo = true;
         boolean actionEffectuée;
         for (Aventurier a : joueurs.keySet()) {
