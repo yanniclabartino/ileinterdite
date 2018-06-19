@@ -342,6 +342,17 @@ public class Controleur implements Observateur {
                 } else if (joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_HURLEMENTS || joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_MURMURES) {
                     if (nbCarteTresorSZ >= 4) {
                         for (CarteOrange cO : joueur.getMain()) {
+                            /*
+Exception in thread "main" java.util.ConcurrentModificationException
+at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:909)
+at java.util.ArrayList$Itr.next(ArrayList.java:859)
+at ileinterdite.Controleur.gererGainTresor(Controleur.java:344)
+at ileinterdite.Controleur.<init>(Controleur.java:1093)
+at ileinterdite.Controleur.main(Controleur.java:1139)
+C:\Users\Mac Reaper\Documents\NetBeansProjects\ileinterdite\nbproject\build-impl.xml:1051: The following error occurred while executing this line:
+C:\Users\Mac Reaper\Documents\NetBeansProjects\ileinterdite\nbproject\build-impl.xml:805: Java returned: 1
+BUILD FAILED (total time: 7 minutes 50 seconds)
+                            */
                             for (int i = 0 ; i < 4 ; i++) {
                                 CarteTrésor cTresor = cartesTresors.get(i); 
                                 if (cTresor.getNomTresor()==NomTresor.LA_STATUE_DU_ZEPHYR && cO==cTresor) {
