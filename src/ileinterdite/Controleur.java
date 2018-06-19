@@ -354,6 +354,10 @@ public class Controleur implements Observateur {
         }
     }
 
+    private boolean gererCarteSpecial(Aventurier joueur){
+        boolean carteUtilisée = false;
+        
+    }
         //non-complète
     private void gererCarteOrange(Aventurier a) {
         /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
