@@ -600,6 +600,7 @@ public class Controleur implements Observateur {
                         choix = sc.nextLine();
                         if (choix.equals("1")) {
                             joueur.defausseCarte(joueur.getMain().get(numChoix - 1));
+                            addDefausseOranges(joueur.getMain().get(numChoix - 1));
                             choixConforme = true;
                         } else if (choix.equals("2")) {
                             choixConforme = gererCarteSpecial(joueur, joueur.getMain().get(numChoix - 1));
@@ -607,6 +608,7 @@ public class Controleur implements Observateur {
                     } while (!choixConforme);
                 } else {
                     joueur.defausseCarte(joueur.getMain().get(numChoix - 1));
+                    addDefausseOranges(joueur.getMain().get(numChoix - 1));
                 }
             }
         }
@@ -1044,9 +1046,6 @@ public class Controleur implements Observateur {
         while (!this.estTerminé()) {
             for (Aventurier a : joueurs.keySet()) {
                 if (!this.estTerminé()) {
-                    /*Lignes de test :*/
-                    //grille.getTuile(NomTuile.HELIPORT).setEtat(Utils.EtatTuile.COULEE);
-                    /*FIN des lignes de tests*/
                     int nbActions;
                     if (a.getCouleur()==Pion.JAUNE) {
                         nbActions = 4;
@@ -1057,6 +1056,10 @@ public class Controleur implements Observateur {
                     String nomRole = a.getClass().toString().substring(12);
                     while (nbActions > 0) {
                         grille.afficheGrilleTexte(a);
+                        System.out.println("Pioche cartes oranges : \033[21;40;32m"+getPiocheOranges().size()+"\033[0m");
+                        System.out.println("Defausse cartes oranges : \033[21;40;31m"+getDefausseOranges().size()+"\033[0m");
+                        System.out.println("Pioche cartes bleues : \033[21;40;32m"+getPiocheBleues().size()+"\033[0m");
+                        System.out.println("Defausse cartes bleues : \033[21;40;31m"+getDefausseBleues().size()+"\033[0m");
                         System.out.println("Niveau d'eau actuelle : \033[36;44m"+getNiveau()+"\033[0m");
                         System.out.println(joueurs.get(a) + "(" + nomRole + ") , quelle action voulez-vous réaliser ?");
                         System.out.println("\t\033[30;42m[Action réstante = \033[21;31;42m"+nbActions+"\033[30;42m]\033[0m");
