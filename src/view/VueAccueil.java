@@ -2,6 +2,8 @@ package view;
 
 import ileinterdite.Observe;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +19,7 @@ public class VueAccueil extends Observe{
     
     //accueil :
     private JButton valider;
-    private JLabel titre;
+    private imagePanel titre;
     private static final Integer[] nbJ = {2,3,4};
     private JComboBox choixJoueurs;
     
@@ -28,16 +30,32 @@ public class VueAccueil extends Observe{
         accueil.setLayout(new BorderLayout());
         
         choixJoueurs = new JComboBox(nbJ);
-        titre = new JLabel("L'Île Interdite");
+        
         JPanel lehaut = new JPanel(new GridLayout(3, 1));
+        JPanel letitre = new JPanel();
+        
         lehaut.add(new JLabel());
-        lehaut.add(titre);
-        lehaut.add(choixJoueurs);
+        
+            titre = new imagePanel( -100 , 0 , 0.7 , System.getProperty("user.dir") + "/src/images/logo_ileinterdite.png");
+            //System.out.println(Integer.toString(accueil.getWidth()/2));
+            letitre.add(titre);
+            letitre.setPreferredSize(new Dimension(accueil.getWidth(), titre.getHeight()));
+            //letitre.setBackground(Color.red);
+            //letitre.add(new JLabel("L'île Interdite"));
+        lehaut.add(letitre);
+        
+            JPanel choixNb = new JPanel();
+            choixNb.add(new JLabel("Nombre de joueurs :"));
+            choixJoueurs.setPreferredSize(new Dimension(40, 20));
+            choixNb.add(choixJoueurs);
+        lehaut.add(choixNb);
+        
         accueil.add(lehaut, BorderLayout.NORTH);
         
         JPanel lesjoueurs = new JPanel();
-        for ( int i = 0 ; i < 4 ; i ++ ){
+        for ( int i = 0 ; i < 2 ; i ++ ){
             SaisiJoueur j = new SaisiJoueur(i+1);
+            
             lesjoueurs.add(j);
         }
         
