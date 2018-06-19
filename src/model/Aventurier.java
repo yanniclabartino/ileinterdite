@@ -48,8 +48,8 @@ public abstract class Aventurier {
         c.delOwner();
     }
 
-    public void afficheMain() {
-        System.out.println("Main de "+this.getClass().toString().substring(12)+" : ");
+    public void afficheInfo() {
+        System.out.println("Main de "+this.getClass().toString().substring(12)+" ("+this.getTuile().getNom().toString()+") : ");
         for (CarteOrange c : getMain()) {
             c.affiche();
         }
