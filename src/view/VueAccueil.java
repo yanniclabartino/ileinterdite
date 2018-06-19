@@ -5,6 +5,7 @@ import ileinterdite.Observe;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,10 +39,11 @@ public class VueAccueil extends Observe{
         
         lehaut.add(new JLabel());
         
-            //titre = new imagePanel( -100 , 0 , 0.7 , System.getProperty("user.dir") + "/src/images/logo_ileinterdite.png");
+            titre = new imagePanel( 0 , 0 , 0.7 , System.getProperty("user.dir") + "/src/images/logo_ileinterdite.png");
             //System.out.println(Integer.toString(accueil.getWidth()/2));
-            
-            letitre.add(new JLabel("L'île Interdite"));
+            JLabel ti = new JLabel("L'île Interdite");
+            ti.setFont(new Font(Font.DIALOG, Font.PLAIN , 35));
+            letitre.add(ti);
         lehaut.add(letitre);
         
             JPanel choixNb = new JPanel();
@@ -62,8 +64,10 @@ public class VueAccueil extends Observe{
         saisiJoueurs.add(j2);
         saisiJoueurs.add(j3);
         saisiJoueurs.add(j4);
-        j3.setEnabled(false);
-        j4.setEnabled(false);
+        j1.setenabled(true);
+        j2.setenabled(true);
+        j3.setenabled(false);
+        j4.setenabled(false);
         lesjoueurs.add(j1);
         lesjoueurs.add(j2);
         lesjoueurs.add(j3);
@@ -74,11 +78,11 @@ public class VueAccueil extends Observe{
             public void actionPerformed(ActionEvent e) {
                 for ( int i = 0 ; i < 4 ; i ++ ){
                     if ( i < (int)choixJoueurs.getSelectedItem() ){
-                        saisiJoueurs.get(i).setEnabled(true);
+                        saisiJoueurs.get(i).setenabled(true);
                         saisiJoueurs.get(i).updateUI();
                         
                     }else{
-                        saisiJoueurs.get(i).setEnabled(false);
+                        saisiJoueurs.get(i).setenabled(false);
                         saisiJoueurs.get(i).updateUI();
                     }
                 }

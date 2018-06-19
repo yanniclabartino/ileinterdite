@@ -14,6 +14,7 @@ public class SaisiJoueur extends JPanel {
     //private static final String[] listAv = {"Explorateur","Ingénieur","Messager","Navigateur","Pilote","Plongeur"};
     private static String[] avDispo = {"Explorateur","Ingénieur","Messager","Navigateur","Pilote","Plongeur"};
     private String aventurier;
+    
     SaisiJoueur(Integer num) {
         titre = new JLabel("Joueur "+num);
         nomJ = new JTextField();
@@ -49,12 +50,15 @@ public class SaisiJoueur extends JPanel {
         return this.choixAv;
     }
     
-    @Override
-    public void setEnabled(boolean b){
-        this.choixAv.setEnabled(b);
-        this.choixAv.setBackground(Color.gray);
-        this.nomJ.setEnabled(b);
-        this.nomJ.setBackground(Color.gray);
-        this.setBackground(new Color(180, 180, 180));
+    
+    public void setenabled(boolean b){
+        
+        this.setEnabled(b);System.out.println("set E nabled this");
+        this.choixAv.setEnabled(b);System.out.println("set E nabled choixAv (liste)");
+        //this.choixAv.setBackground((b)?null:Color.gray);System.out.println("setbackGround"+((b)?"null":"Color.gray")+" choixAv (liste)");
+        this.nomJ.setEnabled(b);System.out.println("set E nabled nomJ");
+        this.nomJ.setBackground((b)?null:Color.gray);System.out.println("setbackGround"+((b)?"null":"Color.gray")+" nomJ (zone texte)");
+        this.setBackground((b)?null:new Color(180, 180, 180));System.out.println("setbackGround"+((b)?"null":"Color.gray")+" this");
+        this.titre.setBackground((b)?null:new Color(180, 180, 180));System.out.println("setbackGround"+((b)?"null":"Color.gray")+" titre (titre)");
     }
 }
