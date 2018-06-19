@@ -19,11 +19,15 @@ import javax.swing.JPanel;
 public class imagePanel extends JPanel {
 
     private BufferedImage image;
+    private int x,y;
+    
 
-    public imagePanel(String cheminImage) {
+    public imagePanel(int x, int y, String cheminImage) {
+        this.x = x;
+        this.y = y;
         try {
 
-            File input = new File(cheminImage);
+        File input = new File(cheminImage);
 
             image = ImageIO.read(input);
         } catch (IOException ie) {
@@ -33,6 +37,6 @@ public class imagePanel extends JPanel {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image, 0, 0, null);
+        g.drawImage(image, x, y, null);
     }
 }
