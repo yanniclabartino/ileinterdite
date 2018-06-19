@@ -157,15 +157,15 @@ public class Grille {
                         System.out.print("   ");
                     }
                     if (tuileActive.getEtat() == Utils.EtatTuile.INONDEE) {
-                        System.out.print("~");
+                        System.out.print("\033[34;45m~\033[0m");
                     } else if (tuileActive.getEtat() == Utils.EtatTuile.COULEE) {
-                        System.out.print("#");
+                        System.out.print("\033[31;40m#\033[0m");
                     } else {
                         System.out.print(" ");
                     }
                     if (tuileActive.getPossede().size() > 0) {
                         if (tuileActive.getPossede().contains(joueur)) {
-                            System.out.print("(X)");
+                            System.out.print("(\033[34;47mX\033[0m)");
                         } else {
                             System.out.print("(" + tuileActive.getPossede().size() + ")");
                         }
