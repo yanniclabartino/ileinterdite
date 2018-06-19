@@ -27,9 +27,16 @@ public class VueAccueil extends Observe{
     private ArrayList<SaisiJoueur> saisiJoueurs;
     private JComboBox choixJoueurs;
     
+    //parametres :
+    
+    private JButton retourAcc;
+    private ButtonGroup alea;
+    private JRadioButton ouiA,nonA;
+    private ButtonGroup logs;
+    private JRadioButton ouiL,nonL;
     
     VueAccueil() {
-        //Accueil :
+//Accueil :
         accueil = new JFrame();
         accueil.setLayout(new BorderLayout());
         
@@ -95,15 +102,12 @@ public class VueAccueil extends Observe{
         lecentre.add(lesjoueurs);
         
         accueil.add(lecentre, BorderLayout.CENTER);
-        accueil.setTitle("L'Île Interdite");
-        accueil.setSize(850, 720);
-        accueil.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        accueil.setVisible(true);
         
         JPanel lebas = new JPanel(new GridLayout(1, 4));
         valider = new JButton("Valider");
         boutparam = new JButton("Parametres");
         boutregles = new JButton("Regles du jeu");
+        messageErreur = new JLabel();
         
             JPanel basgauche1 = new JPanel();
             JPanel basgauche2 = new JPanel();
@@ -113,32 +117,114 @@ public class VueAccueil extends Observe{
             basgauche2.add(boutregles);
         lebas.add(basgauche1);
         lebas.add(basgauche2);
-        lebas.add(new JLabel(""));
+        lebas.add(messageErreur);
             JPanel basdroit = new JPanel();
             valider.setPreferredSize(new Dimension(80, 30));
             basdroit.add(valider);
         lebas.add(basdroit);
         accueil.add(lebas, BorderLayout.SOUTH);
         
+        valider.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Message m = new Message();
+                if (avpareil()){
+                    messageErreur.setText("Deux joueurs on le même aventurier");
+                }else{
+                    //création du message de début de partie
+                    notifierObservateur(m);
+                }
+            }
+        });
+        
         boutparam.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                affParam();
             }
         });
         
         boutregles.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                affRegles();
             }
         });
         
-        //Parametres :
+        accueil.setTitle("L'Île Interdite");
+        accueil.setSize(850, 720);
+        accueil.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        accueil.setVisible(true);
         
+//Parametres :
+        parametres = new JFrame("Parametres");
+        parametres.setLayout(new GridLayout(5,1));
         
+        JPanel espaceHaut = new JPanel();
+        espaceHaut.setPreferredSize(new Dimension(0, 20));//marge du haut
+        JPanel espaceMilieu = new JPanel();
+        espaceMilieu.setPreferredSize(new Dimension(0, 50));//marge du milieu
         
-        //Regles :
+        JPanel zoneAlea = new JPanel(new GridLayout(1, 2));
+        JPanel zoneBoutA = new JPanel(new GridLayout(1, 2));
+        JPanel boutAOui = new JPanel(new GridLayout(1, 2));
+        JPanel boutANon = new JPanel(new GridLayout(1, 2));
+        
+        JPanel zoneLog = new JPanel(new GridLayout(1, 2));
+        JPanel zoneBoutL = new JPanel(new GridLayout(1, 2));
+        JPanel boutLOui = new JPanel(new GridLayout(1, 2));
+        JPanel boutLNon = new JPanel(new GridLayout(1, 2));
+        
+        JPanel zoneBoutBas = new JPanel(new GridLayout(1, 2));
+        JPanel zoneBoutAcc = new JPanel(new GridLayout(1, 2));
+        JPanel BoutAcc = new JPanel();
+        
+            alea = new ButtonGroup();
+            ouiA = new JRadioButton("Oui");
+            nonA = new JRadioButton("Non");
+            alea.add(ouiA);
+            alea.add(nonA);
+            zoneBoutA.add(nonA);
+            zoneBoutA.add(ouiA);
+        zoneAlea.add(new JLabel("Aléatoire :"));
+        zoneAlea.setToolTipText("_Disposition aléatoire des Tuiles \n_Atribution aléatoire d'aventurier");
+        zoneAlea.add(zoneBoutA);
+        
+            logs = new ButtonGroup();
+            ouiL = new JRadioButton("Oui");
+            nonL = new JRadioButton("Non");
+            logs.add(ouiL);
+            logs.add(nonL);
+            zoneBoutL.add(nonL);
+            zoneBoutL.add(ouiL);
+        zoneLog.add(new JLabel("Logs :"));
+        zoneLog.setToolTipText("Sortie textuel dans la console");
+        zoneLog.add(zoneBoutL);
+        
+            retourAcc = new JButton("Retour");
+            retourAcc.setPreferredSize(new Dimension(80, 30));
+            BoutAcc.add(retourAcc);
+            zoneBoutAcc.add(BoutAcc);
+        zoneBoutBas.add(new JLabel(""));
+        zoneBoutBas.add(zoneBoutAcc);
+        
+        retourAcc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                affAccueil();
+            }
+        });
+        
+        parametres.add(espaceHaut);
+        parametres.add(zoneAlea);
+        parametres.add(zoneLog);
+        parametres.add(espaceMilieu);
+        parametres.add(zoneBoutBas);
+        
+        parametres.setSize(400, 200);
+        parametres.setVisible(false);
+        
+//Regles :
         
         
     }
@@ -148,7 +234,28 @@ public class VueAccueil extends Observe{
     }
     
     private void affParam(){
-        
+        accueil.setVisible(false);
+        parametres.setVisible(true);
     }
+    
+    private void affAccueil(){
+        //if(regles.isVisible()){
+        //    regles.setVisible(false);
+        //}
+        if(parametres.isVisible()){
+            parametres.setVisible(false);
+        }
+        accueil.setVisible(true);
+    }
+    
+    private boolean avpareil(){
+        return (saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(1).getAventurier()) ||
+                saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(2).getAventurier()) ||
+                saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(3).getAventurier()) ||
+                saisiJoueurs.get(1).getAventurier().equals(saisiJoueurs.get(2).getAventurier()) ||
+                saisiJoueurs.get(1).getAventurier().equals(saisiJoueurs.get(3).getAventurier()) ||
+                saisiJoueurs.get(2).getAventurier().equals(saisiJoueurs.get(3).getAventurier()));
+    }
+    
     
 }
