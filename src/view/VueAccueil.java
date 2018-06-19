@@ -1,5 +1,6 @@
 package view;
 
+import ileinterdite.Message;
 import ileinterdite.Observe;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,6 +22,7 @@ public class VueAccueil extends Observe{
     private JButton valider;
     private imagePanel titre;
     private static final Integer[] nbJ = {2,3,4};
+    private ArrayList<SaisiJoueur> saisiJoueurs;
     private JComboBox choixJoueurs;
     
     
@@ -36,12 +38,10 @@ public class VueAccueil extends Observe{
         
         lehaut.add(new JLabel());
         
-            titre = new imagePanel( -100 , 0 , 0.7 , System.getProperty("user.dir") + "/src/images/logo_ileinterdite.png");
+            //titre = new imagePanel( -100 , 0 , 0.7 , System.getProperty("user.dir") + "/src/images/logo_ileinterdite.png");
             //System.out.println(Integer.toString(accueil.getWidth()/2));
-            letitre.add(titre);
-            letitre.setPreferredSize(new Dimension(accueil.getWidth(), titre.getHeight()));
-            //letitre.setBackground(Color.red);
-            //letitre.add(new JLabel("L'île Interdite"));
+            
+            letitre.add(new JLabel("L'île Interdite"));
         lehaut.add(letitre);
         
             JPanel choixNb = new JPanel();
@@ -53,23 +53,39 @@ public class VueAccueil extends Observe{
         accueil.add(lehaut, BorderLayout.NORTH);
         
         JPanel lesjoueurs = new JPanel();
-        for ( int i = 0 ; i < 2 ; i ++ ){
-            SaisiJoueur j = new SaisiJoueur(i+1);
-            
-            lesjoueurs.add(j);
-        }
+        saisiJoueurs = new ArrayList();
+        SaisiJoueur j1 = new SaisiJoueur(1);
+        SaisiJoueur j2 = new SaisiJoueur(2);
+        SaisiJoueur j3 = new SaisiJoueur(3);
+        SaisiJoueur j4 = new SaisiJoueur(4);
+        saisiJoueurs.add(j1);
+        saisiJoueurs.add(j2);
+        saisiJoueurs.add(j3);
+        saisiJoueurs.add(j4);
+        j3.setEnabled(false);
+        j4.setEnabled(false);
+        lesjoueurs.add(j1);
+        lesjoueurs.add(j2);
+        lesjoueurs.add(j3);
+        lesjoueurs.add(j4);
         
         choixJoueurs.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                lesjoueurs.removeAll();
-                for ( int i = 0 ; i < (int)choixJoueurs.getSelectedItem() ; i ++ ){
-                    SaisiJoueur j = new SaisiJoueur(i+1);
-                    lesjoueurs.add(j);
+                for ( int i = 0 ; i < 4 ; i ++ ){
+                    if ( i < (int)choixJoueurs.getSelectedItem() ){
+                        saisiJoueurs.get(i).setEnabled(true);
+                        saisiJoueurs.get(i).updateUI();
+                        
+                    }else{
+                        saisiJoueurs.get(i).setEnabled(false);
+                        saisiJoueurs.get(i).updateUI();
+                    }
                 }
                 lesjoueurs.updateUI();
             }
         });
+        
         
         
         JPanel lecentre = new JPanel();
@@ -80,6 +96,7 @@ public class VueAccueil extends Observe{
         accueil.setSize(1080, 720);
         accueil.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         accueil.setVisible(true);
+        
         
         
         //Parametres :

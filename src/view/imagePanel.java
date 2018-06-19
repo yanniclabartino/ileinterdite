@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package view;
 
 import java.awt.Graphics;
@@ -52,7 +47,6 @@ public class imagePanel extends JPanel {
         }
         construction = 1;
     }
-    
     public imagePanel(int x, int y,double scale, String cheminImage) {//création de l'image en choisissant la position et le ratio d'echelle
         this.x = x;
         this.y = y;
@@ -79,7 +73,6 @@ public class imagePanel extends JPanel {
             case 2:
                 g.drawImage(image, x, y, (int)(image.getWidth()*scale), (int)(image.getHeight()*scale), null);
         }
-        
     }
     
     public int getWidth(){
