@@ -49,7 +49,7 @@ public abstract class Aventurier {
     }
 
     public void afficheInfo() {
-        System.out.println("Main de "+this.getClass().toString().substring(12)+" ("+this.getTuile().getNom().toString()+") : ");
+        System.out.println("\n\033[32mMain de "+this.getClass().toString().substring(12)+" ("+this.getTuile().getNom().toString()+") : \033[0m");
         for (CarteOrange c : getMain()) {
             c.affiche();
         }
