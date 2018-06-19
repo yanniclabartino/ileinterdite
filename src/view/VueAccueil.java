@@ -5,6 +5,7 @@ import ileinterdite.Observe;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,8 +41,9 @@ public class VueAccueil extends Observe{
         
             titre = new imagePanel( 0 , 0 , 0.7 , System.getProperty("user.dir") + "/src/images/logo_ileinterdite.png");
             //System.out.println(Integer.toString(accueil.getWidth()/2));
-            
-            letitre.add(new JLabel("L'île Interdite"));
+            JLabel ti = new JLabel("L'île Interdite");
+            ti.setFont(new Font(Font.DIALOG, Font.PLAIN , 35));
+            letitre.add(ti);
         lehaut.add(letitre);
         
             JPanel choixNb = new JPanel();
@@ -62,7 +64,8 @@ public class VueAccueil extends Observe{
         saisiJoueurs.add(j2);
         saisiJoueurs.add(j3);
         saisiJoueurs.add(j4);
-        
+        j1.setenabled(true);
+        j2.setenabled(true);
         j3.setenabled(false);
         j4.setenabled(false);
         lesjoueurs.add(j1);

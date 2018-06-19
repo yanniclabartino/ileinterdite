@@ -26,7 +26,7 @@ public class imagePanel extends JPanel {
         this.x = x;
         this.y = y;
         try {
-        File input = new File(cheminImage);
+            File input = new File(cheminImage);
             image = ImageIO.read(input);
         } catch (IOException ie) {
             System.out.println("Error:" + ie.getMessage());
@@ -75,11 +75,4 @@ public class imagePanel extends JPanel {
         }
     }
     
-    public int getWidth(){
-        return image.getWidth();
-    }
-    
-    public int getHeight(){
-        return image.getHeight();
-    }
 }
