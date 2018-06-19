@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,4 +49,12 @@ public class SaisiJoueur extends JPanel {
         return this.choixAv;
     }
     
+    @Override
+    public void setEnabled(boolean b){
+        this.choixAv.setEnabled(b);
+        this.choixAv.setBackground(Color.gray);
+        this.nomJ.setEnabled(b);
+        this.nomJ.setBackground(Color.gray);
+        this.setBackground(new Color(180, 180, 180));
+    }
 }
