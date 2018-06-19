@@ -550,7 +550,7 @@ public class Controleur implements Observateur {
                 }
             }
         }
-        joueur.afficheMain();
+        joueur.afficheInfo();
     }
 
     private void gererCarteBleue() {
@@ -957,7 +957,6 @@ public class Controleur implements Observateur {
         //Declaration de variable utiles pour l'interface texte
         Scanner sc = new Scanner(System.in);
         String choix;
-        boolean choixConforme = false;
         
         //Tours de jeu
         debutJeu();
@@ -970,47 +969,59 @@ public class Controleur implements Observateur {
                     /*Lignes de test :*/
                     //grille.getTuile(NomTuile.HELIPORT).setEtat(Utils.EtatTuile.COULEE);
                     /*FIN des lignes de tests*/
-                    int nbActions = 3;
+                    int nbActions;
+                    if (a.getCouleur()==Pion.JAUNE) {
+                        nbActions = 4;
+                        System.out.println("\n\033[32mEn tant que navigateur vous avez 4 actions.\033[0m\n");
+                    } else {
+                        nbActions = 3;
+                    }
                     String nomRole = a.getClass().toString().substring(12);
-                    while (!choixConforme || nbActions > 0) {
-                        choixConforme = false;
+                    while (nbActions > 0) {
                         grille.afficheGrilleTexte(a);
                         System.out.println(joueurs.get(a) + "(" + nomRole + ") , quelle action voulez-vous réaliser ?");
-                        System.out.println("\t1 - Se déplacer");
-                        System.out.println("\t2 - Assécher");
-                        System.out.println("\t3 - Donner une carte");
-                        System.out.println("\t4 - Gagner un trésor");
-                        System.out.println("\t5 - Finir mon tour");
-                        System.out.print("choix (1 à 5) : ");
+                        System.out.println("\t\033[33m1 - Se déplacer       \033[0m");
+                        System.out.println("\t\033[33m2 - Assécher          \033[0m");
+                        System.out.println("\t\033[33m3 - Donner une carte  \033[0m");
+                        System.out.println("\t\033[33m4 - Gagner un trésor  \033[0m");
+                        System.out.println("\t\033[33m5 - Finir mon tour    \033[0m");
+                        System.out.println("Autre (pas de cout) :");
+                        System.out.println("\t\033[35m0 - Informations sur la grille, main des joueurs et leur position\033[0m");
+                        System.out.println("\t\033[35m6 - Utiliser une carte spéciale de votre main\033[0m");
+                        System.out.print("choix (0 à 6) : ");
                         choix = sc.nextLine();
                         if (choix.equals("1")) {
-                            choixConforme = true;
                             actionEffectuée = gererDeplacement(a);
                             if (actionEffectuée) {
                                 nbActions--;
                             }
                         } else if (choix.equals("2")) {
-                            choixConforme = true;
                             actionEffectuée = gererAssechement(a);
                             if (actionEffectuée) {
                                 nbActions--;
                             }
                         } else if (choix.equals("3")) {
-                            choixConforme = true;
                             actionEffectuée = gererDonation(a);
                             if (actionEffectuée) {
                                 nbActions--;
-                                a.afficheMain();
+                                a.afficheInfo();
                             }
                         } else if (choix.equals("4")) {
-                            choixConforme = true;
                             actionEffectuée = gererGainTresor(a);
                             if (actionEffectuée) {
                                 nbActions--;
                             }
                         } else if (choix.equals("5")) {
-                            choixConforme = true;
                             nbActions = 0;
+                        } else if (choix.equals("0")) {
+                            for (Tuile t : grille.getGrille()) {
+                                t.affiche();
+                            }
+                            for (Aventurier joueur : joueurs.keySet()) {
+                                joueur.afficheInfo();
+                            }
+                        } else if (choix.equals("6")) {
+                            gererCarteSpecial(a, null);
                         }
                     }
                     gererCarteOrange(a);
