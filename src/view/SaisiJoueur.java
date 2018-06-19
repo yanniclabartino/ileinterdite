@@ -14,6 +14,7 @@ public class SaisiJoueur extends JPanel {
     //private static final String[] listAv = {"Explorateur","Ingénieur","Messager","Navigateur","Pilote","Plongeur"};
     private static String[] avDispo = {"Explorateur","Ingénieur","Messager","Navigateur","Pilote","Plongeur"};
     private String aventurier;
+    
     SaisiJoueur(Integer num) {
         titre = new JLabel("Joueur "+num);
         nomJ = new JTextField();
@@ -49,12 +50,15 @@ public class SaisiJoueur extends JPanel {
         return this.choixAv;
     }
     
-    @Override
-    public void setEnabled(boolean b){
+    
+    public void setenabled(boolean b){
+        
+        this.setEnabled(b);
         this.choixAv.setEnabled(b);
-        this.choixAv.setBackground(Color.gray);
+        this.choixAv.setBackground((b)?null:Color.gray);
         this.nomJ.setEnabled(b);
-        this.nomJ.setBackground(Color.gray);
-        this.setBackground(new Color(180, 180, 180));
+        this.nomJ.setBackground((b)?null:Color.gray);
+        this.setBackground((b)?null:new Color(180, 180, 180));
+        this.titre.setBackground((b)?null:new Color(180, 180, 180));
     }
 }
