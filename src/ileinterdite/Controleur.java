@@ -354,17 +354,135 @@ public class Controleur implements Observateur {
         }
     }
 
-    private boolean gererCarteSpecial(Aventurier joueur){
-        boolean carteUtilisée = false;
-        
+    private boolean gererCarteSpecial(Aventurier joueur, CarteOrange carte){
+        boolean carteUtilisée = true;
+        boolean carteHeliDispo = true;
+        boolean carteSacDispo = true;
+        //Variable saisie utilisateur
+        Scanner sc = new Scanner(System.in);
+        String choix;
+        Integer X, Y;
+        boolean choixValide = false;
+        //
+        if (carte == null) {
+            for (CarteOrange c : joueur.getMain()) {
+                if (c.getRole().equals("Helicoptere") && carteHeliDispo) {
+                    Tuile heliport = getGrille().getTuile(NomTuile.HELIPORT);
+                    int nbAventurier = getNbJoueur();
+                    if (heliport.getPossede().size()==nbAventurier) {
+                        System.out.println("Vous possèdez une carte Helicoptère et vous pouvez l'utiliser.");
+                        System.out.print("Confirmer (oui/non) ? ");
+                        choix = sc.nextLine();
+                        choix = choix.toUpperCase().substring(0, 1);
+                        if (choix.equals("O")) {
+                            this.jeuEnCours = false;
+                            return carteUtilisée;
+                        } else {
+                            carteHeliDispo = false;
+                        }
+                    } else {
+                        carteHeliDispo=false;
+                    }
+                } else if (c.getRole().equals("Sac de sable") && carteSacDispo) {
+                    ArrayList<Tuile> tuilesInnondées = new ArrayList<Tuile>();
+                    for (Tuile t : getGrille().getGrille()) {
+                        if (t.getEtat()==Utils.EtatTuile.INONDEE) {
+                            tuilesInnondées.add(t);
+                        }
+                    }
+                    if (!tuilesInnondées.isEmpty() && carteSacDispo) {
+                        System.out.println("Vous possèdez une carte Sac de Sable et vous pouvez l'utiliser.");
+                        System.out.print("Confirmer (oui/non) ? ");
+                        choix = sc.nextLine();
+                        choix = choix.toUpperCase().substring(0, 1);
+                        if (choix.equals("O")) {
+                            System.out.println("Voici la liste des tuiles dispo à assecher :");
+                            for (Tuile t : tuilesInnondées) {
+                                t.affiche();
+                            }
+                            do { 
+                                System.out.print("X = ");
+                                choix = sc.nextLine();
+                                X = new Integer(choix);
+                                System.out.print("Y = ");
+                                choix = sc.nextLine();
+                                Y = new Integer(choix);
+                                Tuile tuileChoisie = getGrille().getTuile(X - 1, Y - 1);
+                                if (tuilesInnondées.contains(tuileChoisie)) {
+                                    tuileChoisie.setEtat(Utils.EtatTuile.ASSECHEE);
+                                    choixValide = true;
+                                }
+                            } while (!choixValide);
+                            if (choixValide) {
+                                return carteUtilisée;
+                            }
+                        } else {
+                            carteSacDispo = false;
+                        }
+                    } else {
+                        carteSacDispo = false;
+                    }
+                }
+            }
+        } else {
+            if (carte.getRole().equals("Helicoptere")) {
+                Tuile heliport = getGrille().getTuile(NomTuile.HELIPORT);
+                int nbAventurier = getNbJoueur();
+                if (heliport.getPossede().size()==nbAventurier) {
+                    System.out.print("Confirmer (oui/non) ? ");
+                    choix = sc.nextLine();
+                    choix = choix.toUpperCase().substring(0, 1);
+                    if (choix.equals("O")) {
+                        this.jeuEnCours = false;
+                        return carteUtilisée;
+                    }
+                }
+            } else if (carte.getRole().equals("Sac de sable")) {
+                ArrayList<Tuile> tuilesInnondées = new ArrayList<Tuile>();
+                for (Tuile t : getGrille().getGrille()) {
+                    if (t.getEtat()==Utils.EtatTuile.INONDEE) {
+                        tuilesInnondées.add(t);
+                    }
+                }
+                if (!tuilesInnondées.isEmpty()) {
+                    System.out.print("Confirmer (oui/non) ? ");
+                    choix = sc.nextLine();
+                    choix = choix.toUpperCase().substring(0, 1);
+                    if (choix.equals("O")) {
+                        System.out.println("Voici la liste des tuiles dispo à assecher :");
+                        for (Tuile t : tuilesInnondées) {
+                            t.affiche();
+                        }
+                        do {
+                            System.out.print("X = ");
+                            choix = sc.nextLine();
+                            X = new Integer(choix);
+                            System.out.print("Y = ");
+                            choix = sc.nextLine();
+                            Y = new Integer(choix);
+                            Tuile tuileChoisie = getGrille().getTuile(X - 1, Y - 1);
+                            if (tuilesInnondées.contains(tuileChoisie)) {
+                                tuileChoisie.setEtat(Utils.EtatTuile.ASSECHEE);
+                                choixValide = true;
+                            }
+                        } while (!choixValide);
+                        if (choixValide) {
+                            return carteUtilisée;
+                        }
+                    }
+                }
+            }
+        }
+        return !carteUtilisée;
     }
+    
         //non-complète
-    private void gererCarteOrange(Aventurier a) {
+    private void gererCarteOrange(Aventurier joueur) {
         /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
         boolean carteMDEpiochée = false;
         ArrayList<CarteOrange> cartesPiochées = new ArrayList<CarteOrange>();
         //On picohe deux cartes et on vérifie a chaque fois si la pioche est vide
-        System.out.println("\n"+a.getClass().toString().substring(12)+", vous piochez deux carte oranges.");
+        System.out.println("\n"+joueur.getClass().toString().substring(12)+", vous piochez deux carte oranges.");
         for (int i = 0; i < 2; i++) {
             cartesPiochées.add(piocheCarteOrange());
             if (getPiocheOranges().empty()) {
@@ -383,7 +501,7 @@ public class Controleur implements Observateur {
                 carteMDEpiochée = true;
                 addDefausseOranges(c);
             } else {
-                a.piocheCarte(c);
+                joueur.piocheCarte(c);
             }
         }
         //Si la pioche de carte bleue n'est pas vide et qu'on a pioché au moins
@@ -397,16 +515,16 @@ public class Controleur implements Observateur {
             viderDefausseBleues();
         }
         //Si la main contient plus de 5 cartes
-        if (a.getMain().size() > 5) {
+        if (joueur.getMain().size() > 5) {
             Scanner sc = new Scanner(System.in);
             String choix;
             Integer numChoix;
             System.out.println("Vous avez plus de 5 cartes dans votre main...");
-            int nbCarteDeTrop = a.getMain().size() - 5;
+            int nbCarteDeTrop = joueur.getMain().size() - 5;
             for (int i = 0; i < nbCarteDeTrop; i++) {
-                System.out.println("Voici votre main (" + a.getMain().size() + " cartes) : ");
+                System.out.println("Voici votre main (" + joueur.getMain().size() + " cartes) : ");
                 int numCarte = 1;
-                for (CarteOrange c : a.getMain()) {
+                for (CarteOrange c : joueur.getMain()) {
                     c.affiche();
                     numCarte++;
                 }
@@ -414,27 +532,25 @@ public class Controleur implements Observateur {
                 System.out.print("\t choix (numéro de la carte ) : ");
                 choix = sc.nextLine();
                 numChoix = new Integer(choix);
-                if (a.getMain().get(numChoix - 1).getRole().equals("Helicoptere") || a.getMain().get(numChoix - 1).getRole().equals("Sac de sable")) {
+                if (joueur.getMain().get(numChoix - 1).getRole().equals("Helicoptere") || joueur.getMain().get(numChoix - 1).getRole().equals("Sac de sable")) {
                     boolean choixConforme = false;
                     do {
                         System.out.println("Il s'agit d'une carte à pouvoir spécial,\nvoulez-vous vous en débarrasser(1) ou jouer cette carte(2) ?");
                         System.out.print("\tchoix (1/2) : ");
                         choix = sc.nextLine();
                         if (choix.equals("1")) {
-                            a.defausseCarte(a.getMain().get(numChoix - 1));
+                            joueur.defausseCarte(joueur.getMain().get(numChoix - 1));
                             choixConforme = true;
                         } else if (choix.equals("2")) {
-                            // à  compléter pour que le joueur puisse utiliser sa carte spéciale ou non
-                            
-                            choixConforme = true;
+                            choixConforme = gererCarteSpecial(joueur, joueur.getMain().get(numChoix - 1));
                         }
                     } while (!choixConforme);
                 } else {
-                    a.defausseCarte(a.getMain().get(numChoix - 1));
+                    joueur.defausseCarte(joueur.getMain().get(numChoix - 1));
                 }
             }
         }
-        a.afficheMain();
+        joueur.afficheMain();
     }
 
     private void gererCarteBleue() {
