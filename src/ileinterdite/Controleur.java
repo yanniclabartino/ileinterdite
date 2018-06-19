@@ -47,7 +47,7 @@ public class Controleur implements Observateur {
         Integer X, Y;
         //Pouvoir pilote (interface texte) :
         if (joueur.getCouleur() == Utils.Pion.BLEU && pouvoirPiloteDispo) {
-            System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (utilisable une fois par tour) :");
+            System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (\033[31mutilisable une fois par tour\033[0m) :");
             System.out.print("(oui/non) => ");
             choix = sc.nextLine();
             try {
@@ -77,7 +77,7 @@ public class Controleur implements Observateur {
             boolean choixValide = false;
             do {
                 System.out.println("\n\tChoix de la tuile :");
-                System.out.println("Rentrez : X = null\npour annuler tout déplacement.");
+                System.out.println("Rentrez : \033[33mX = null\033[0m\npour annuler tout déplacement.");
                 System.out.print("X = ");
                 choix = sc.nextLine();
                 if (choix.equals("null")) {
@@ -101,7 +101,7 @@ public class Controleur implements Observateur {
                         //le joueur se déplace.
                         joueur.seDeplace(tuileChoisie);
                     } else {
-                        System.out.println("\tCHOIX NON-VALIDE.");
+                        System.out.println("\t\033[31mCHOIX NON-VALIDE.\033[0m");
                     }
                 }
             } while (!choixValide);
@@ -129,7 +129,7 @@ public class Controleur implements Observateur {
         //Si le joueur est un ingénieur : 
         if ((joueur.getCouleur() == Utils.Pion.ROUGE) && (tuilesDispo.size() >= 2)) {
             System.out.println("Voulez-vous assecher 2 tuiles pour cette action ?");
-            System.out.print("\t(oui/non)=> ");
+            System.out.print("\t(\033[32moui\033[0m/\033[31mnon\033[0m)=> ");
             choix = sc.nextLine();
             try {
                 choix = choix.toUpperCase().substring(0, 1);
@@ -154,7 +154,7 @@ public class Controleur implements Observateur {
                 boolean choixValide = false;
                 do {
                     System.out.println("\n\tChoix de la tuile :");
-                    System.out.println("Rentrez : X = null\npour annuler tout assèchement.");
+                    System.out.println("Rentrez : \033[33mX = null\033[0m\npour annuler tout assèchement.");
                     System.out.print("X = ");
                     choix = sc.nextLine();
                     if (choix.equals("null")) {
@@ -178,7 +178,7 @@ public class Controleur implements Observateur {
                             //asséchement de la tuile
                             tuileChoisie.setEtat(sec);
                         } else {
-                            System.out.println("\tCHOIX NON-VALIDE.");
+                            System.out.println("\t\033[31mCHOIX NON-VALIDE.\033[0m");
                         }
                     }
                 } while (!choixValide);
@@ -249,7 +249,7 @@ public class Controleur implements Observateur {
                     System.out.println("\t- "+a.getClass().toString().substring(12)+" ("+getJoueurs().get(a)+")");
                 }
                 System.out.println("\t- Annuler\n");
-                System.out.println("choix (role ou annuler) => ");
+                System.out.println("choix (\033[31mrole\033[0m ou annuler) => ");
                 choix = sc.nextLine();
                 choix = choix.toLowerCase().substring(0, 2);
                 if (choix.equals("an")) {
@@ -286,7 +286,7 @@ public class Controleur implements Observateur {
                         //on passe la carte d'un joueur à l'autre...
                         cCédée.affiche();
                         joueur.defausseCarte(cCédée);
-                        System.out.println("passage de la carte ...");
+                        System.out.println("\033[33mpassage de la carte ...\033[0m");
                         jRecoit.piocheCarte(cCédée);
                         cCédée.affiche();
                     }
@@ -336,6 +336,7 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[0].setGagne(true);
+                        System.out.println("\033[21;33mVous gagnez le trésor "+getTrésors()[0].toString()+"\033[0m");
                         return gainEffectué;
                     }
                 } else if (joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_HURLEMENTS || joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_MURMURES) {
@@ -349,6 +350,7 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[1].setGagne(true);
+                        System.out.println("\033[21;33mVous gagnez le trésor "+getTrésors()[1].toString()+"\033[0m");
                         return gainEffectué;
                     }  
                 } else if (joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES || joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES) {
@@ -362,6 +364,7 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[2].setGagne(true);
+                        System.out.println("\033[21;33mVous gagnez le trésor "+getTrésors()[2].toString()+"\033[0m");
                         return gainEffectué;
                     }
                 } else if (joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DE_CORAIL || joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DES_MAREES) {
@@ -375,6 +378,7 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[3].setGagne(true);
+                        System.out.println("\033[21;33mVous gagnez le trésor "+getTrésors()[3].toString()+"\033[0m");
                         return gainEffectué;
                     }
                 }
@@ -401,8 +405,8 @@ public class Controleur implements Observateur {
                     Tuile heliport = getGrille().getTuile(NomTuile.HELIPORT);
                     int nbAventurier = getNbJoueur();
                     if (heliport.getPossede().size()==nbAventurier) {
-                        System.out.println("Vous possèdez une carte Helicoptère et vous pouvez l'utiliser.");
-                        System.out.print("Confirmer (oui/non) ? ");
+                        System.out.println("Vous possèdez une carte \033[33mHelicoptère\033[0m et vous pouvez l'utiliser.");
+                        System.out.print("Confirmer (\033[32moui\033[0m/\033[31mnon\033[0m) ? ");
                         choix = sc.nextLine();
                         choix = choix.toUpperCase().substring(0, 1);
                         if (choix.equals("O")) {
@@ -422,8 +426,8 @@ public class Controleur implements Observateur {
                         }
                     }
                     if (!tuilesInnondées.isEmpty() && carteSacDispo) {
-                        System.out.println("Vous possèdez une carte Sac de Sable et vous pouvez l'utiliser.");
-                        System.out.print("Confirmer (oui/non) ? ");
+                        System.out.println("Vous possèdez une carte \033[33mSac de Sable\033[0m et vous pouvez l'utiliser.");
+                        System.out.print("Confirmer (\033[32moui\033[0m/\033[31mnon\033[0m) ? ");
                         choix = sc.nextLine();
                         choix = choix.toUpperCase().substring(0, 1);
                         if (choix.equals("O")) {
@@ -528,7 +532,7 @@ public class Controleur implements Observateur {
         boolean carteMDEpiochée = false;
         ArrayList<CarteOrange> cartesPiochées = new ArrayList<CarteOrange>();
         //On picohe deux cartes et on vérifie a chaque fois si la pioche est vide
-        System.out.println("\n"+joueur.getClass().toString().substring(12)+", vous piochez deux carte oranges.");
+        System.out.println("\n"+joueur.getClass().toString().substring(12)+", \033[32mvous piochez deux carte oranges.\033[0m");
         for (int i = 0; i < 2; i++) {
             cartesPiochées.add(piocheCarteOrange());
             if (getPiocheOranges().empty()) {
@@ -542,7 +546,7 @@ public class Controleur implements Observateur {
         //Pour les cartes les piochées, on vérifie si celle-ci sont des cartes "montée des eaux"
         for (CarteOrange c : cartesPiochées) {
             if (c.getRole().equals("Montée des eaux")) {
-                System.out.println("Vous avez pioché une carte Montée des eaux, le niveau d'eau monte...");
+                System.out.println("Vous avez pioché une carte Montée des eaux, \033[31mle niveau d'eau monte...\033[0m");
                 this.niveauEau++;
                 carteMDEpiochée = true;
                 addDefausseOranges(c);
@@ -554,7 +558,7 @@ public class Controleur implements Observateur {
         //une carte MDE alors on mélange puis remet la defausse de carte bleue sur le tas de pioche
         if (!getPiocheBleues().empty() && carteMDEpiochée) {
             Collections.shuffle(getDefausseBleues());
-            System.out.println("Mélange de la défausse de carte innondations sur la pioche");
+            System.out.println("\033[33mMélange de la défausse de carte innondations sur la pioche\033[0m");
             for (CarteBleue b : getDefausseBleues()) {
                 addPiocheBleue(b);
             }
@@ -566,16 +570,17 @@ public class Controleur implements Observateur {
             String choix;
             Integer numChoix;
             boolean choixConforme = false;
-            System.out.println("Vous avez plus de 5 cartes dans votre main...");
+            System.out.println("\033[31mVous avez plus de 5 cartes dans votre main...\033[0m");
             int nbCarteDeTrop = joueur.getMain().size() - 5;
             for (int i = 0; i < nbCarteDeTrop; i++) {
                 System.out.println("Voici votre main (" + joueur.getMain().size() + " cartes) : ");
                 int numCarte = 1;
                 for (CarteOrange c : joueur.getMain()) {
+                    System.out.print("\t "+numCarte+" - ");
                     c.affiche();
                     numCarte++;
                 }
-                System.out.println("Quelle carte voulez-vous défaussez de votre main ?\nNB: s'il s'agit d'une carte spéciale, vous pourrez l'utiliser.");
+                System.out.println("\033[33mQuelle carte voulez-vous défaussez de votre main ?\033[0m\nNB: s'il s'agit d'une carte spéciale, vous pourrez l'utiliser.");
                 do {
                     System.out.print("\t choix (numéro de la carte ) : ");
                     choix = sc.nextLine();
@@ -583,14 +588,14 @@ public class Controleur implements Observateur {
                         numChoix = new Integer(choix);
                         choixConforme = true;
                     } catch (NumberFormatException e) {
-                        System.out.println("SAISIE INVALIDE");
+                        System.out.println("\033[31mSAISIE INVALIDE\033[0m");
                         numChoix = 0;
                     }
                 } while (!choixConforme && numChoix <= 0 && numChoix > joueur.getMain().size());
                 if (joueur.getMain().get(numChoix - 1).getRole().equals("Helicoptere") || joueur.getMain().get(numChoix - 1).getRole().equals("Sac de sable")) {
                     choixConforme = false;
                     do {
-                        System.out.println("Il s'agit d'une carte à pouvoir spécial,\nvoulez-vous vous en débarrasser(1) ou jouer cette carte(2) ?");
+                        System.out.println("Il s'agit d'une carte à pouvoir spécial,\nvoulez-vous vous en débarrasser(\033[31m1\033[0m) ou jouer cette carte(\033[31m2\033[0m) ?");
                         System.out.print("\tchoix (1/2) : ");
                         choix = sc.nextLine();
                         if (choix.equals("1")) {
@@ -613,7 +618,7 @@ public class Controleur implements Observateur {
         //On pioche un certain nombre de cartes en fonction du niveau d'eau
         int nbPioche;
         int nivEau = this.getNiveau();
-        System.out.print("Le niveau d'eau s'élève à : " + nivEau + ".\nVous piochez donc : ");
+        System.out.print("Le niveau d'eau s'élève à : \033[36;44m" + nivEau + "\033[m.\nVous piochez donc : ");
         if (nivEau >= 8) {
             System.out.println("5 cartes.\n");
             nbPioche = 5;
@@ -635,15 +640,15 @@ public class Controleur implements Observateur {
             System.out.println("\nla carte innondation " + t.getNom().toString() + " à été piochée...");
             if (t.getEtat() == Utils.EtatTuile.ASSECHEE) {
                 t.setEtat(Utils.EtatTuile.INONDEE);
-                System.out.print("La tuile correspondante est désormais innondée : ");
+                System.out.print("La tuile correspondante est désormais \033[36minnondée\033[0m : ");
                 t.affiche();
                 addDefausseBleues(c);
             } else if (t.getEtat() == Utils.EtatTuile.INONDEE) {
                 t.setEtat(Utils.EtatTuile.COULEE);
-                System.out.print("La tuile correspondante est désormais coulée : ");
+                System.out.print("La tuile correspondante est désormais \033[31mcoulée\033[0m : ");
                 t.affiche();
-                if (t.getPossede().size() > 0) {
-                    System.out.println("La tuile contenait un ou plusieurs aventuriers ! Il faut qu'il(s) nage(nt) :");
+                if (t.getPossede().size() > 0 && !this.estPerdu()) {
+                    System.out.println("\033[31mLa tuile contenait un ou plusieurs aventuriers !\033[0m Il faut qu'il(s) nage(nt) :");
                     boolean deplAventurier = false;
                     boolean joueurNoyé = false;
                     int indice = 0;
@@ -812,7 +817,7 @@ public class Controleur implements Observateur {
         String choix;
         Integer choixInt;
         do {
-            System.out.println("Quel niveau de difficulté ? (1/2/3/4)");
+            System.out.println("Quel niveau de difficulté ? (\033[36m1\033[0m/\033[32m2\033[0m/\033[33m3\033[0m/\033[31m4\033[0m)");
             System.out.print("\t =>");
             choix = sc.nextLine();
             try {
@@ -858,7 +863,11 @@ public class Controleur implements Observateur {
                     System.out.println("Choix");
                     System.out.print("\t =>");
                     choix = sc.nextLine();
-                    choix = choix.toLowerCase().substring(0, 2);
+                    try {
+                        choix = choix.toLowerCase().substring(0, 2);
+                    } catch (StringIndexOutOfBoundsException e) {
+                        choix = "//";
+                    }
                     if (choix.equals("pi") && avDispo.contains("Pilote")) {
                         avDispo.remove("Pilote");
                         aventuriers.add(new Pilote());
@@ -901,7 +910,7 @@ public class Controleur implements Observateur {
         String choix;
         Integer choixInt;
         do {
-            System.out.println("Combien de joueurs vont jouer ? Faites un choix (entier entre 2 et 4) : ");
+            System.out.println("Combien de joueurs vont jouer ? Faites un choix (\033[32mentier entre 2 et 4\033[0m) : ");
             System.out.print("\t=> ");
             choix = sc.nextLine();
             try {
@@ -921,7 +930,7 @@ public class Controleur implements Observateur {
         String choix;
         Scanner sc = new Scanner(System.in);
         for (Aventurier a : getJoueurs().keySet()) {
-            System.out.println("Nom du joueur du role "+a.getClass().toString().substring(12)+" : ");
+            System.out.println("Nom du joueur du role \033[36m"+a.getClass().toString().substring(12)+"\033[0m : ");
             choix = sc.nextLine();
             getJoueurs().put(a, choix);
         }
@@ -1049,6 +1058,7 @@ public class Controleur implements Observateur {
                     while (nbActions > 0) {
                         grille.afficheGrilleTexte(a);
                         System.out.println(joueurs.get(a) + "(" + nomRole + ") , quelle action voulez-vous réaliser ?");
+                        System.out.println("\t\033[30;42m[Action réstante = \033[21;31;42m"+nbActions+"\033[30;42m]\033[0m");
                         System.out.println("\t\033[33m1 - Se déplacer       \033[0m");
                         System.out.println("\t\033[33m2 - Assécher          \033[0m");
                         System.out.println("\t\033[33m3 - Donner une carte  \033[0m");
