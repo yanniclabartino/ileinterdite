@@ -14,15 +14,15 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author pc
+ * @author prapantb
  */
-public class imagePanel extends JPanel {
+public class ImagePanel extends JPanel {
 
     private BufferedImage image;
     private int x,y;
     
 
-    public imagePanel(int x, int y, String cheminImage) {
+    public ImagePanel(int x, int y, String cheminImage) {
         this.x = x;
         this.y = y;
         try {
