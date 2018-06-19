@@ -39,20 +39,25 @@ public class VueAccueil extends Observe{
 //Accueil :
         accueil = new JFrame();
         accueil.setLayout(new BorderLayout());
+        accueil.setTitle("L'Île Interdite");
+        accueil.setSize(850, 720);
+        accueil.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         choixJoueurs = new JComboBox(nbJ);
         
-        JPanel lehaut = new JPanel(new GridLayout(3, 1));
+        JPanel lehaut = new JPanel(new GridLayout(3, 1, 0, 5));
         JPanel letitre = new JPanel();
         
-        lehaut.add(new JLabel());
+        //lehaut.add(new JLabel(""));
         
-            titre = new imagePanel( 0 , 0 , 0.7 , System.getProperty("user.dir") + "/src/images/logo_ileinterdite.png");
-            //System.out.println(Integer.toString(accueil.getWidth()/2));
+            titre = new imagePanel( 0 , 0 , 0.45 , System.getProperty("user.dir") + "/src/images/ile-interdite-logo.png");
+            titre.replacer((accueil.getWidth()/2)-(titre.getPreferredSize().width/2), 0);
+            System.out.println(Integer.toString(titre.getPreferredSize().width));
             JLabel ti = new JLabel("L'Île Interdite");
             ti.setFont(new Font(Font.DIALOG, Font.PLAIN , 35));
             letitre.add(ti);
-        lehaut.add(letitre);
+            //titre.setPreferredSize(new Dimension(titre.getWidth(), titre.getHeight()));
+        lehaut.add(titre);
         
             JPanel choixNb = new JPanel();
             choixNb.add(new JLabel("Nombre de joueurs :"));
@@ -151,9 +156,7 @@ public class VueAccueil extends Observe{
             }
         });
         
-        accueil.setTitle("L'Île Interdite");
-        accueil.setSize(850, 720);
-        accueil.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         accueil.setVisible(true);
         
 //Parametres :
@@ -225,7 +228,7 @@ public class VueAccueil extends Observe{
         parametres.setVisible(false);
         
 //Regles :
-        
+        regles = new JFrame("Regles du jeu");
         
     }
     
@@ -239,9 +242,9 @@ public class VueAccueil extends Observe{
     }
     
     private void affAccueil(){
-        //if(regles.isVisible()){
-        //    regles.setVisible(false);
-        //}
+        if(regles.isVisible()){
+            regles.setVisible(false);
+        }
         if(parametres.isVisible()){
             parametres.setVisible(false);
         }
