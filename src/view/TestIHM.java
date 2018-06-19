@@ -10,7 +10,7 @@ package view;
  * @author yannic
  */
 
-public class testIHM {
+public class TestIHM {
 
     
     public static void main(String[] args) {
