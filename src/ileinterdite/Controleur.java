@@ -407,7 +407,7 @@ public class Controleur implements Observateur {
                 System.out.println("Voici votre main (" + a.getMain().size() + " cartes) : ");
                 int numCarte = 1;
                 for (CarteOrange c : a.getMain()) {
-                    System.out.println("\t [" + numCarte + "] - " + c.getRole());
+                    c.affiche();
                     numCarte++;
                 }
                 System.out.println("Quelle carte voulez-vous défaussez de votre main ?\nNB: s'il s'agit d'une carte spéciale, vous pourrez l'utiliser.");
