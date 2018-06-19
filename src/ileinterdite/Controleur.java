@@ -325,9 +325,11 @@ public class Controleur implements Observateur {
                 } 
             }
             if ((nbCarteTresorCA | nbCarteTresorCO | nbCarteTresorPS | nbCarteTresorSZ) >= 4) {
+                ArrayList<CarteOrange> cartesDuJoueur = new ArrayList<CarteOrange>();
+                cartesDuJoueur.addAll(joueur.getMain());
                 if (joueur.getTuile().getNom()==NomTuile.LE_TEMPLE_DU_SOLEIL || joueur.getTuile().getNom()==NomTuile.LE_TEMPLE_DE_LA_LUNE) {
                     if (nbCarteTresorPS >= 4) {
-                        for (CarteOrange cO : joueur.getMain()) {
+                        for (CarteOrange cO : cartesDuJoueur) {
                             for (int i = 0 ; i < 4 ; i++) {
                                 CarteTrésor cTresor = cartesTresors.get(i); 
                                 if (cTresor.getNomTresor()==NomTresor.LA_PIERRE_SACREE && cO==cTresor) {
@@ -341,7 +343,7 @@ public class Controleur implements Observateur {
                     }
                 } else if (joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_HURLEMENTS || joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_MURMURES) {
                     if (nbCarteTresorSZ >= 4) {
-                        for (CarteOrange cO : joueur.getMain()) {
+                        for (CarteOrange cO : cartesDuJoueur) {
                             for (int i = 0 ; i < 4 ; i++) {
                                 CarteTrésor cTresor = cartesTresors.get(i); 
                                 if (cTresor.getNomTresor()==NomTresor.LA_STATUE_DU_ZEPHYR && cO==cTresor) {
@@ -355,7 +357,7 @@ public class Controleur implements Observateur {
                     }  
                 } else if (joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES || joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES) {
                     if (nbCarteTresorCA >= 4) {
-                        for (CarteOrange cO : joueur.getMain()) {
+                        for (CarteOrange cO : cartesDuJoueur) {
                             for (int i = 0 ; i < 4 ; i++) {
                                 CarteTrésor cTresor = cartesTresors.get(i); 
                                 if (cTresor.getNomTresor()==NomTresor.LE_CRISTAL_ARDENT && cO==cTresor) {
@@ -369,7 +371,7 @@ public class Controleur implements Observateur {
                     }
                 } else if (joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DE_CORAIL || joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DES_MAREES) {
                     if (nbCarteTresorCO >= 4) {
-                        for (CarteOrange cO : joueur.getMain()) {
+                        for (CarteOrange cO : cartesDuJoueur) {
                             for (int i = 0 ; i < 4 ; i++) {
                                 CarteTrésor cTresor = cartesTresors.get(i); 
                                 if (cTresor.getNomTresor()==NomTresor.LE_CALICE_DE_L_ONDE && cO==cTresor) {
@@ -389,10 +391,13 @@ public class Controleur implements Observateur {
         }
     }
 
+    //a compléter pour que la carte spéciale aille dans la défausse.
     private boolean gererCarteSpecial(Aventurier joueur, CarteOrange carte){
         boolean carteUtilisée = true;
         boolean carteHeliDispo = true;
         boolean carteSacDispo = true;
+        ArrayList<CarteOrange> cartesJoueur = new ArrayList<CarteOrange>();
+        cartesJoueur.addAll(joueur.getMain());
         //Variable saisie utilisateur
         Scanner sc = new Scanner(System.in);
         String choix;
@@ -400,7 +405,7 @@ public class Controleur implements Observateur {
         boolean choixValide = false;
         //
         if (carte == null) {
-            for (CarteOrange c : joueur.getMain()) {
+            for (CarteOrange c : cartesJoueur) {
                 if (c.getRole().equals("Helicoptere") && carteHeliDispo) {
                     Tuile heliport = getGrille().getTuile(NomTuile.HELIPORT);
                     int nbAventurier = getNbJoueur();
@@ -410,6 +415,8 @@ public class Controleur implements Observateur {
                         choix = sc.nextLine();
                         choix = choix.toUpperCase().substring(0, 1);
                         if (choix.equals("O")) {
+                            joueur.defausseCarte(c);
+                            addDefausseOranges(c);
                             this.jeuEnCours = false;
                             return carteUtilisée;
                         } else {
@@ -453,6 +460,7 @@ public class Controleur implements Observateur {
                                 Tuile tuileChoisie = getGrille().getTuile(X - 1, Y - 1);
                                 if (tuilesInnondées.contains(tuileChoisie)) {
                                     tuileChoisie.setEtat(Utils.EtatTuile.ASSECHEE);
+                                    //à compléter
                                     choixValide = true;
                                 }
                             } while (!choixValide);
@@ -988,7 +996,7 @@ public class Controleur implements Observateur {
         this.defausseBleues.add(carte);
     }
     private void viderDefausseBleues() {
-        this.defausseOranges.removeAll(this.defausseOranges);
+        this.defausseBleues.removeAll(this.defausseBleues);
     }
 
     //méthodes pour les cartes oranges
