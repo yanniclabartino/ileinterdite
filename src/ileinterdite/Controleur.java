@@ -1057,6 +1057,7 @@ public class Controleur implements Observateur {
                     String nomRole = a.getClass().toString().substring(12);
                     while (nbActions > 0) {
                         grille.afficheGrilleTexte(a);
+                        System.out.println("Niveau d'eau actuelle : \033[36;44m"+getNiveau()+"\033[0m");
                         System.out.println(joueurs.get(a) + "(" + nomRole + ") , quelle action voulez-vous réaliser ?");
                         System.out.println("\t\033[30;42m[Action réstante = \033[21;31;42m"+nbActions+"\033[30;42m]\033[0m");
                         System.out.println("\t\033[33m1 - Se déplacer       \033[0m");
@@ -1109,9 +1110,24 @@ public class Controleur implements Observateur {
             }
         }
         if (estPerdu()) {
-            System.out.println("Partie perdue");
+            System.out.println("Partie perdue !");
+            int joueurVivant = getNbJoueur();
+            for (Aventurier a : getJoueurs().keySet()) {
+                if (a.getTuile()==null) {
+                    joueurVivant--;
+                }
+            }
+            if (grille.getTuile(NomTuile.HELIPORT).getEtat()==Utils.EtatTuile.COULEE) {
+                System.out.println("L'héliport à sombré.");
+            } else if (getNiveau() >= 10) {
+                System.out.println("Le niveau d'eau vous a submergé.");
+            } else if (joueurVivant < getNbJoueur()) {
+                System.out.println("Un de vos coéquipier à sombré.");
+            } else {
+                System.out.println("Les tuiles de trésor ont sombrées.");
+            }
         } else {
-            System.out.println("Partie gagnée");
+            System.out.println("Partie gagnée, WP !");
         }
     }
 
