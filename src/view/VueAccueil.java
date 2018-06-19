@@ -20,7 +20,8 @@ public class VueAccueil extends Observe{
     private JFrame regles;
     
     //accueil :
-    private JButton valider;
+    private JButton valider,boutregles,boutparam;
+    private JLabel messageErreur;
     private imagePanel titre;
     private static final Integer[] nbJ = {2,3,4};
     private ArrayList<SaisiJoueur> saisiJoueurs;
@@ -41,7 +42,7 @@ public class VueAccueil extends Observe{
         
             titre = new imagePanel( 0 , 0 , 0.7 , System.getProperty("user.dir") + "/src/images/logo_ileinterdite.png");
             //System.out.println(Integer.toString(accueil.getWidth()/2));
-            JLabel ti = new JLabel("L'île Interdite");
+            JLabel ti = new JLabel("L'Île Interdite");
             ti.setFont(new Font(Font.DIALOG, Font.PLAIN , 35));
             letitre.add(ti);
         lehaut.add(letitre);
@@ -90,18 +91,48 @@ public class VueAccueil extends Observe{
             }
         });
         
-        
-        
         JPanel lecentre = new JPanel();
         lecentre.add(lesjoueurs);
         
         accueil.add(lecentre, BorderLayout.CENTER);
         accueil.setTitle("L'Île Interdite");
-        accueil.setSize(1080, 720);
+        accueil.setSize(850, 720);
         accueil.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         accueil.setVisible(true);
         
+        JPanel lebas = new JPanel(new GridLayout(1, 4));
+        valider = new JButton("Valider");
+        boutparam = new JButton("Parametres");
+        boutregles = new JButton("Regles du jeu");
         
+            JPanel basgauche1 = new JPanel();
+            JPanel basgauche2 = new JPanel();
+            boutparam.setPreferredSize(new Dimension(150, 30));
+            basgauche1.add(boutparam);
+            boutregles.setPreferredSize(new Dimension(150, 30));
+            basgauche2.add(boutregles);
+        lebas.add(basgauche1);
+        lebas.add(basgauche2);
+        lebas.add(new JLabel(""));
+            JPanel basdroit = new JPanel();
+            valider.setPreferredSize(new Dimension(80, 30));
+            basdroit.add(valider);
+        lebas.add(basdroit);
+        accueil.add(lebas, BorderLayout.SOUTH);
+        
+        boutparam.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
+        
+        boutregles.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
         
         //Parametres :
         
@@ -109,6 +140,14 @@ public class VueAccueil extends Observe{
         
         //Regles :
         
+        
+    }
+    
+    private void affRegles(){
+        
+    }
+    
+    private void affParam(){
         
     }
     
