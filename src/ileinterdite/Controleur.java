@@ -24,6 +24,7 @@ public class Controleur implements Observateur {
     private int niveauEau;
     private Trésor[] trésors;
     private HashMap<Aventurier, String> joueurs;
+    private Aventurier joueurCourant;
     private Stack<CarteBleue> piocheBleues;
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
@@ -35,22 +36,33 @@ public class Controleur implements Observateur {
     public void traiterMessage(Message m) {
         switch (m.type) {
             case COMMENCER:
+                iniJeu();
                 this.niveauEau = m.difficulté;
                 this.nbJoueurs = m.nbJoueurs;
                 this.joueurs.putAll(m.joueurs);
                 Parameters.setLogs(m.logs);
                 Parameters.setAleas(m.aleas);
-                //à compléter
+                debutJeu();
+                //à compléter avce les méthodes de l'ihm.
                 break;
             case SOUHAITE_DEPLACEMENT:
+                if (deplacementPossible()) {
+                    gererDeplacement();
+                }
                 break;
             case ACTION_DEPLACEMENT:
+                joueurCourant.seDeplace(m.tuile);
                 break;
             case SOUHAITE_ASSECHER:
+                if (assechementPossible()) {
+                    gererAssechement();
+                }
                 break;
             case ACTION_ASSECHER:
+                m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
                 break;
             case SOUHAITE_DONNER:
+                
                 break;
             case ACTION_DONNER:
                 break;
@@ -63,170 +75,70 @@ public class Controleur implements Observateur {
             case FINIR_TOUR:
                 break;
             case ANNULER:
+                //à compléter avec les méthodes de l'ihm pour :
+                //  - annuler une action en cours et remettre l'ihm en état.
                 break;
         }
         
     }
 
     //METHODES DE GESTION DU JEU
-    private boolean gererDeplacement(Aventurier joueur) {
-        //Gère les déplacements d'un joueur
-        boolean deplEffectué = true;
+    
+    private boolean deplacementPossible() {
+        boolean deplDispo = true;
+        Aventurier joueur = getJoueurCourant();
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = new ArrayList<Tuile>();
-        //variables pour les saisis utilisateur :
-        Scanner sc = new Scanner(System.in);
-        String choix;
-        Integer X, Y;
-        //Pouvoir pilote (interface texte) :
         if (joueur.getCouleur() == Utils.Pion.BLEU && pouvoirPiloteDispo) {
-            System.out.println("Voulez-vous vous déplacer sur n'importe qu'elle tuile ? (\033[31mutilisable une fois par tour\033[0m) :");
-            System.out.print("(oui/non) => ");
-            choix = sc.nextLine();
-            try {
-                choix = choix.toUpperCase().substring(0, 1);
-            } catch (StringIndexOutOfBoundsException e) {
-                choix = "N";
-            }
-            if (choix.equals("O")) {
-                pouvoirPiloteDispo = false;
-                tuilesDispo = calculTouteTuileDispo(g);
-            } else {
-                tuilesDispo = joueur.calculTuileDispo(g);
-            }
-        //Sinon si non-pilote (ou sans pouvoir) :
+            return deplDispo;
         } else {
             tuilesDispo = joueur.calculTuileDispo(g);
-        }
-        //vérification tuileDispo
-        if (tuilesDispo.size() > 0) {
-            //affichage tuiles dispo
-            g.afficheGrilleTexte(joueur);
-            System.out.println("Voici la liste des tuiles disponible :");
-            for (Tuile t : tuilesDispo) {
-                t.affiche();
+            if (!tuilesDispo.isEmpty()) {
+                return deplDispo;
             }
-            //choix utilisateur
-            boolean choixValide = false;
-            do {
-                System.out.println("\n\tChoix de la tuile :");
-                System.out.println("Rentrez : \033[33mX = null\033[0m\npour annuler tout déplacement.");
-                System.out.print("X = ");
-                choix = sc.nextLine();
-                if (choix.equals("null")) {
-                    choixValide = true;
-                } else {
-                    try {
-                        X = new Integer(choix);
-                    } catch (NumberFormatException e) {
-                        X = 0;
-                    }
-                    System.out.print("Y = ");
-                    choix = sc.nextLine();
-                    try {
-                        Y = new Integer(choix);
-                    } catch (NumberFormatException e) {
-                        Y = 0;
-                    }
-                    Tuile tuileChoisie = g.getTuile(X - 1, Y - 1);
-                    if (tuilesDispo.contains(tuileChoisie)) {
-                        choixValide = true;
-                        //le joueur se déplace.
-                        joueur.seDeplace(tuileChoisie);
-                    } else {
-                        System.out.println("\t\033[31mCHOIX NON-VALIDE.\033[0m");
-                    }
-                }
-            } while (!choixValide);
-            if (choix.equals("null")) {
-                return !deplEffectué;
-            } else {
-                return deplEffectué;
-            }
-        } else {
-            return !deplEffectué;
         }
+        return !deplDispo;
+    }
+    
+    //à compléter avec l'ihm
+    private void gererDeplacement() {
+        Aventurier joueur = getJoueurCourant();
+        Grille g = getGrille();
+        ArrayList<Tuile> tuilesDispo = new ArrayList<Tuile>();
+        ArrayList<Tuile> tuilesPlongeur = new ArrayList<Tuile>();
+        if (joueur.getCouleur() == Utils.Pion.BLEU && pouvoirPiloteDispo) {
+            tuilesPlongeur.addAll(calculTouteTuileDispo(g));
+        }
+        tuilesDispo.addAll(joueur.calculTuileDispo(g));
+        //afficher les tuiles dispo sur l'ihm
+        //ajoute les tuiles du pilote
     }
 
-    private boolean gererAssechement(Aventurier joueur) {
+    private boolean assechementPossible() {
+        ArrayList<Tuile> tuilesDispo = getJoueurCourant().calculTuileAss(getGrille());
+        return (!tuilesDispo.isEmpty());
+    }
+    
+    //à compléter avec l'ihm
+    private void gererAssechement() {
         //méthode qui permet a un aventurier d'assécher une tuile
-        boolean assEffectué = true;
+        Aventurier joueur = getJoueurCourant();
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = joueur.calculTuileAss(g);
-        Utils.EtatTuile sec = Utils.EtatTuile.ASSECHEE;
         int nbAssechement = 1;
-        //variables pour la saisie utilisateur 
-        Scanner sc = new Scanner(System.in);
-        String choix;
-        Integer X, Y;
         //Si le joueur est un ingénieur : 
         if ((joueur.getCouleur() == Utils.Pion.ROUGE) && (tuilesDispo.size() >= 2)) {
-            System.out.println("Voulez-vous assecher 2 tuiles pour cette action ?");
-            System.out.print("\t(\033[32moui\033[0m/\033[31mnon\033[0m)=> ");
-            choix = sc.nextLine();
-            try {
-                choix = choix.toUpperCase().substring(0, 1);
-            } catch (StringIndexOutOfBoundsException e) {
-                choix = "N";
-            }
-            if (choix.equals("O")) {
-                nbAssechement = 2;
-            }
+            nbAssechement = 2;
         }
-        //vérification tuileDispo
-        if (tuilesDispo.size() > 0) {
-            g.afficheGrilleTexte(joueur);
-            //affichage des tuiles disponibles 
-            System.out.println("Voici la liste des tuiles disponible :");
-            for (Tuile t : tuilesDispo) {
-                t.affiche();
-            }
-            //choix de l'utilisateur
-            int i = 0;
-            do {
-                boolean choixValide = false;
-                do {
-                    System.out.println("\n\tChoix de la tuile :");
-                    System.out.println("Rentrez : \033[33mX = null\033[0m\npour annuler tout assèchement.");
-                    System.out.print("X = ");
-                    choix = sc.nextLine();
-                    if (choix.equals("null")) {
-                        choixValide = true;
-                    } else {
-                        try {
-                            X = new Integer(choix);
-                        } catch (NumberFormatException e) {
-                            X = 0;
-                        }
-                        System.out.print("Y = ");
-                        choix = sc.nextLine();
-                        try {
-                            Y = new Integer(choix);
-                        } catch (NumberFormatException e) {
-                            Y = 0;
-                        }
-                        Tuile tuileChoisie = g.getTuile(X - 1, Y - 1);
-                        if (tuilesDispo.contains(tuileChoisie)) {
-                            choixValide = true;
-                            //asséchement de la tuile
-                            tuileChoisie.setEtat(sec);
-                        } else {
-                            System.out.println("\t\033[31mCHOIX NON-VALIDE.\033[0m");
-                        }
-                    }
-                } while (!choixValide);
-                i++;
-            } while (i < nbAssechement && !choix.equals("null"));
-            if (choix.equals("null")) {
-                return !assEffectué;
-            } else {
-                return assEffectué;
-            }
-        } else {
-            return !assEffectué;
-        }
+        //à compléter avec l'ihm en fonction du nombre d'assèchement possible.
     }
 
+    private boolean donnationPossible(){
+        boolean donnDispo = true;
+        
+        return !donnDispo;
+    }
+    
     private boolean gererDonation(Aventurier joueur) {
         boolean donnationEffectuée = true;
         //vérification de la main du joueur
@@ -725,19 +637,28 @@ public class Controleur implements Observateur {
         }
     }
 
-    private void debutJeu() {
-        //méthode qui :
-        /*
-            - initialise : trésors / grille / cartes
-            - tire les premieres cartes innondations
-            - place les aventuriers
-            - distribue les cartes Trésor
-         */
+    private void iniJeu() {
+        //initialisations des tableaux/vecteurs
+        joueurs = new HashMap<Aventurier, String>();
+        trésors = new Trésor[4];
+        piocheOranges = new Stack<CarteOrange>();
+        defausseOranges = new ArrayList<CarteOrange>();
+        piocheBleues = new Stack<CarteBleue>();
+        defausseBleues = new ArrayList<CarteBleue>();
         
         //initialisations
         iniTrésor();
         iniGrille();
         iniCartes();
+    }
+    
+    private void debutJeu() {
+        //méthode qui :
+        /*
+            - tire les premieres cartes innondations
+            - place les aventuriers
+            - distribue les cartes Trésor
+         */
         
         Grille g = getGrille();
         //tout ceci dépendant du parametres.ALEAS
@@ -783,6 +704,7 @@ public class Controleur implements Observateur {
                 } while (!randomCorrect);
             }
         }
+        this.joueurCourant = 
     }
     
     private void iniCartes(){
@@ -994,6 +916,9 @@ public class Controleur implements Observateur {
     
     //METHODES UTILES
     
+    private Aventurier getJoueurCourant() {
+        return this.joueurCourant;
+    }
     private Trésor[] getTrésors(){
         return trésors;
     }
@@ -1068,15 +993,7 @@ public class Controleur implements Observateur {
     }
 
     //CONSTUCTEUR
-    public Controleur() {
-        //initialisations des tableaux/vecteurs
-        joueurs = new HashMap<Aventurier, String>();
-        trésors = new Trésor[4];
-        piocheOranges = new Stack<CarteOrange>();
-        defausseOranges = new ArrayList<CarteOrange>();
-        piocheBleues = new Stack<CarteBleue>();
-        defausseBleues = new ArrayList<CarteBleue>();
-        
+    public Controleur() {        
         //Declaration de variable utiles pour l'interface texte
         Scanner sc = new Scanner(System.in);
         String choix;
