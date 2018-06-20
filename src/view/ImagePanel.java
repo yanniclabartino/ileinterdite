@@ -12,7 +12,7 @@ import javax.swing.JPanel;
  *
  * @author pc
  */
-public class imagePanel extends JPanel {
+public class ImagePanel extends JPanel {
 
     private BufferedImage image;
     private int x,
@@ -23,7 +23,7 @@ public class imagePanel extends JPanel {
     private int construction;//choix selon le constructeur
     
 
-    imagePanel(int x, int y, String cheminImage) {//création de l'image en choisissant uniquement la position
+    ImagePanel(int x, int y, String cheminImage) {//création de l'image en choisissant uniquement la position
         this.x = x;
         this.y = y;
         try {
@@ -35,7 +35,7 @@ public class imagePanel extends JPanel {
         construction = 0;
         this.setPreferredSize(new Dimension(image.getWidth(this), image.getHeight(this)));
     }
-    imagePanel(int x, int y,int width, int height, String cheminImage) {//création de l'image en choisissant la position et la taille
+    ImagePanel(int x, int y,int width, int height, String cheminImage) {//création de l'image en choisissant la position et la taille
         this.x = x;
         this.y = y;
         this.width = width;
@@ -49,7 +49,7 @@ public class imagePanel extends JPanel {
         construction = 1;
         this.setPreferredSize(new Dimension(width, height));
     }
-    imagePanel(int x, int y,double scale, String cheminImage) {//création de l'image en choisissant la position et le ratio d'echelle
+    ImagePanel(int x, int y,double scale, String cheminImage) {//création de l'image en choisissant la position et le ratio d'echelle
         this.x = x;
         this.y = y;
         this.scale = scale;
