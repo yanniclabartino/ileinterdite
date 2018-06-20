@@ -152,7 +152,7 @@ public class VueAccueil extends Observe {
             public void actionPerformed(ActionEvent e) {
                 Message m = new Message();
                 if (avpareil()) {
-                    messageErreur.setText("Deux joueurs on le même aventurier");
+                    messageErreur.setText("Plusieurs joueurs ont le même aventurier");
                 } else {
                     //création du message de début de partie
                     //m.type = TypesMessages.DEMARRER_PARTIE;
