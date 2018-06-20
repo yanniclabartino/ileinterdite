@@ -1,8 +1,9 @@
 package ileinterdite;
 public class Message {
 
-	private Actions type;
-	private double x;
-	private double y;
+	public Actions type;
+	public double x;
+	public double y;
+        public String joueur;
 
 }
