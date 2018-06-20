@@ -250,6 +250,8 @@ public class VueAccueil extends Observe {
         regles = new JFrame("Regles du jeu");
         
         imageregles = new imagePanel(0, 0, 1, System.getProperty("user.dir") + "/src/images/ile-interdite-logo.png");
+        lesregles = new JScrollPane(imageregles, verticalp, horizontalp);
+        
 
     }
 
