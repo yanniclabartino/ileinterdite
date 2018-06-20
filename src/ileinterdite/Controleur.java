@@ -62,15 +62,36 @@ public class Controleur implements Observateur {
                 m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
                 break;
             case SOUHAITE_DONNER:
-                
+                if (donationPossible()) {
+                    gererDonation();
+                }
                 break;
             case ACTION_DONNER:
+                joueurCourant.defausseCarte(m.carte);
+                m.receveur.piocheCarte(m.carte);
                 break;
             case ACTION_GAGNER_TRESOR:
+                if (gererGainTresor()) {
+                    //à completer avec l'ihm quand un trésor a été gagné
+                } else {
+                    //à completer avec l'ihm quand le gain est impossible
+                }
                 break;
             case SOUHAITE_JOUER_SPECIALE:
+                if (specialePossible() != 0) {
+                    gererCarteSpecial();
+                }
                 break;
             case JOUER_SPECIALE:
+                if (specialePossible() == 1) {
+                    getJoueurCourant().defausseCarte(m.carte);
+                    addDefausseOranges(m.carte);
+                    this.jeuEnCours = false;
+                } else {
+                    m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
+                    getJoueurCourant().defausseCarte(m.carte);
+                    addDefausseOranges(m.carte);
+                }
                 break;
             case FINIR_TOUR:
                 break;
@@ -133,28 +154,57 @@ public class Controleur implements Observateur {
         //à compléter avec l'ihm en fonction du nombre d'assèchement possible.
     }
 
-    private boolean donnationPossible(){
+    private boolean donationPossible(){
         boolean donnDispo = true;
-        
+        Aventurier joueur = getJoueurCourant();
+        if (!joueur.getMain().isEmpty()) {
+            ArrayList<CarteOrange> cartesDispo = new ArrayList<CarteOrange>();
+            for (CarteOrange c : joueur.getMain()) {
+                if (!(c.getRole().equals("Helicoptere") || c.getRole().equals("Sac de sable"))) {
+                    cartesDispo.add(c);
+                }
+            }
+            if (!cartesDispo.isEmpty()) {
+                Grille g = getGrille();
+                ArrayList<Tuile> tuiles = g.getGrille();
+                ArrayList<Aventurier> jDispo = new ArrayList<Aventurier>();
+                //vérification s'il s'agit du messager pour son pouvoir
+                if (joueur.getCouleur()==Pion.BLANC) {
+                    for (Tuile t : tuiles){
+                        if (!t.getPossede().isEmpty()){
+                            for (Aventurier a : t.getPossede()){
+                                if (a.getMain().size() < 9) {
+                                    jDispo.add(a);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (!joueur.getTuile().getPossede().isEmpty()) {
+                        for(Aventurier a : joueur.getTuile().getPossede()){
+                            if (a.getMain().size() < 9) {
+                                jDispo.add(a);
+                            }
+                        }
+                    }
+                }
+                jDispo.remove(joueur);
+                if (!jDispo.isEmpty()) {
+                    return donnDispo;
+                }
+            }
+        }
         return !donnDispo;
     }
     
-    private boolean gererDonation(Aventurier joueur) {
-        boolean donnationEffectuée = true;
-        //vérification de la main du joueur
-        if (joueur.getMain().isEmpty()){
-            return !donnationEffectuée;
-        }
-        int nbDispo = 0;
+    //à compléter avec l'ihm
+    private void gererDonation() {
         ArrayList<CarteOrange> cartesDispo = new ArrayList<CarteOrange>();
+        Aventurier joueur = getJoueurCourant();
         for (CarteOrange c : joueur.getMain()) {
             if (!(c.getRole().equals("Helicoptere") || c.getRole().equals("Sac de sable"))) {
-                nbDispo++;
                 cartesDispo.add(c);
             }
-        }
-        if (nbDispo == 0) {
-            return !donnationEffectuée;
         }
         //début méthode
         Grille g = getGrille();
@@ -163,14 +213,16 @@ public class Controleur implements Observateur {
         //vérification s'il s'agit du messager pour son pouvoir
         if (joueur.getCouleur()==Pion.BLANC) {
             for (Tuile t : tuiles){
-                if (t.getPossede().size() > 0){
+                if (!t.getPossede().isEmpty()){
                     for (Aventurier a : t.getPossede()){
-                        jDispo.add(a);
+                        if (a.getMain().size() < 9) {
+                            jDispo.add(a);
+                        }
                     }
                 }
             }
         } else {
-            if (joueur.getTuile().getPossede().size() > 0) {
+            if (!joueur.getTuile().getPossede().isEmpty()) {
                 for(Aventurier a : joueur.getTuile().getPossede()){
                     if (a.getMain().size() < 9) {
                         jDispo.add(a);
@@ -178,75 +230,19 @@ public class Controleur implements Observateur {
                 }
             }
         }
-        //variables pour la saisie utilisateur 
-        Scanner sc = new Scanner(System.in);
-        String choix;
-        Integer choixInt;
-        boolean choixConforme = false;
+        jDispo.remove(joueur);
+        
         //Joueur a qui on donne
         Aventurier jRecoit = null;
         //Carte donnée
         CarteOrange cCédée = null;
         
-        jDispo.remove(joueur);
-        if (jDispo.size() > 0) {
-            do {
-                System.out.println("Voici la liste des aventuriers à qui vous pouvez donner une carte :");
-                for (Aventurier a : jDispo) {
-                    System.out.println("\t- "+a.getClass().toString().substring(12)+" ("+getJoueurs().get(a)+")");
-                }
-                System.out.println("\t- Annuler\n");
-                System.out.println("choix (\033[31mrole\033[0m ou annuler) => ");
-                choix = sc.nextLine();
-                choix = choix.toLowerCase().substring(0, 2);
-                if (choix.equals("an")) {
-                    choixConforme = true;
-                } else {
-                    for (Aventurier a : jDispo) {
-                        if (choix.equals(a.getClass().toString().toLowerCase().substring(12, 14))) {
-                            choixConforme = true;
-                            jRecoit = a;
-                        }
-                    }
-                }
-            } while (!choixConforme);
-            if (choix.toLowerCase().substring(0, 2).equals("an")) {
-                return !donnationEffectuée;
-            } else {
-                System.out.println("Voici les cartes que vous pouvez céder : ");
-                for (int i = 0 ; i < cartesDispo.size() ; i++) {
-                    System.out.print("\t ("+(i+1)+") - ");
-                    cartesDispo.get(i).affiche();
-                }
-                choixConforme = false;
-                do {
-                    System.out.println("\n\tChoix => ");
-                    choix = sc.nextLine();
-                    try {
-                        choixInt = new Integer(choix);
-                    } catch (NumberFormatException e){
-                        choixInt = 0;
-                    }
-                    if (choixInt <= cartesDispo.size() && choixInt >= 1) {
-                        choixConforme = true;
-                        cCédée = cartesDispo.get(choixInt-1);
-                        //on passe la carte d'un joueur à l'autre...
-                        cCédée.affiche();
-                        joueur.defausseCarte(cCédée);
-                        System.out.println("\033[33mpassage de la carte ...\033[0m");
-                        jRecoit.piocheCarte(cCédée);
-                        cCédée.affiche();
-                    }
-                } while (!choixConforme);
-                return donnationEffectuée;
-            }
-        } else {
-            return !donnationEffectuée;
-        }
+        //compléter avec l'ihm pour proposer les cartes possibles a céder ainsi que les aventurier receuveurs possibles.
     }
 
-    private boolean gererGainTresor(Aventurier joueur) {
+    private boolean gererGainTresor() {
         boolean gainEffectué = true;
+        Aventurier joueur = getJoueurCourant();
         if (joueur.getMain().size() < 4) {
             return !gainEffectué;
         } else {
@@ -285,7 +281,6 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[0].setGagne(true);
-                        System.out.println("\033[21;33mVous gagnez le trésor "+getTrésors()[0].toString()+"\033[0m");
                         return gainEffectué;
                     }
                 } else if (joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_HURLEMENTS || joueur.getTuile().getNom()==NomTuile.LE_JARDIN_DES_MURMURES) {
@@ -299,7 +294,6 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[1].setGagne(true);
-                        System.out.println("\033[21;33mVous gagnez le trésor "+getTrésors()[1].toString()+"\033[0m");
                         return gainEffectué;
                     }  
                 } else if (joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES || joueur.getTuile().getNom()==NomTuile.LA_CAVERNE_DES_OMBRES) {
@@ -313,7 +307,6 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[2].setGagne(true);
-                        System.out.println("\033[21;33mVous gagnez le trésor "+getTrésors()[2].toString()+"\033[0m");
                         return gainEffectué;
                     }
                 } else if (joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DE_CORAIL || joueur.getTuile().getNom()==NomTuile.LE_PALAIS_DES_MAREES) {
@@ -327,7 +320,6 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[3].setGagne(true);
-                        System.out.println("\033[21;33mVous gagnez le trésor "+getTrésors()[3].toString()+"\033[0m");
                         return gainEffectué;
                     }
                 }
@@ -338,152 +330,56 @@ public class Controleur implements Observateur {
         }
     }
 
-    private boolean gererCarteSpecial(Aventurier joueur, CarteOrange carte){
-        boolean carteUtilisée = true;
-        boolean carteHeliDispo = true;
-        boolean carteSacDispo = true;
+    private int specialePossible() {
+        // retourne : 0 si pas possible
+        // 1 si carte Helicoptere
+        // 2 si carte Sac de sable
+        Grille g = getGrille();
+        Aventurier joueur = getJoueurCourant();
         ArrayList<CarteOrange> cartesJoueur = new ArrayList<CarteOrange>();
         cartesJoueur.addAll(joueur.getMain());
-        //Variable saisie utilisateur
-        Scanner sc = new Scanner(System.in);
-        String choix;
-        Integer X, Y;
-        boolean choixValide = false;
-        //
-        if (carte == null) {
-            for (CarteOrange c : cartesJoueur) {
-                if (c.getRole().equals("Helicoptere") && carteHeliDispo) {
-                    Tuile heliport = getGrille().getTuile(NomTuile.HELIPORT);
-                    int nbAventurier = getNbJoueur();
-                    if (heliport.getPossede().size()==nbAventurier) {
-                        System.out.println("Vous possèdez une carte \033[33mHelicoptère\033[0m et vous pouvez l'utiliser.");
-                        System.out.print("Confirmer (\033[32moui\033[0m/\033[31mnon\033[0m) ? ");
-                        choix = sc.nextLine();
-                        choix = choix.toUpperCase().substring(0, 1);
-                        if (choix.equals("O")) {
-                            joueur.defausseCarte(c);
-                            addDefausseOranges(c);
-                            this.jeuEnCours = false;
-                            return carteUtilisée;
-                        } else {
-                            carteHeliDispo = false;
-                        }
-                    } else {
-                        carteHeliDispo=false;
-                    }
-                } else if (c.getRole().equals("Sac de sable") && carteSacDispo) {
-                    ArrayList<Tuile> tuilesInnondées = new ArrayList<Tuile>();
-                    for (Tuile t : getGrille().getGrille()) {
-                        if (t.getEtat()==Utils.EtatTuile.INONDEE) {
-                            tuilesInnondées.add(t);
-                        }
-                    }
-                    if (!tuilesInnondées.isEmpty() && carteSacDispo) {
-                        System.out.println("Vous possèdez une carte \033[33mSac de Sable\033[0m et vous pouvez l'utiliser.");
-                        System.out.print("Confirmer (\033[32moui\033[0m/\033[31mnon\033[0m) ? ");
-                        choix = sc.nextLine();
-                        choix = choix.toUpperCase().substring(0, 1);
-                        if (choix.equals("O")) {
-                            System.out.println("Voici la liste des tuiles dispo à assecher :");
-                            for (Tuile t : tuilesInnondées) {
-                                t.affiche();
-                            }
-                            do { 
-                                System.out.print("X = ");
-                                choix = sc.nextLine();
-                                try {
-                                    X = new Integer(choix);
-                                } catch (NumberFormatException e){
-                                    X = 0;
-                                }
-                                System.out.print("Y = ");
-                                choix = sc.nextLine();
-                                try {
-                                    Y = new Integer(choix);
-                                } catch (NumberFormatException e) {
-                                    Y = 0;
-                                }
-                                Tuile tuileChoisie = getGrille().getTuile(X - 1, Y - 1);
-                                if (tuilesInnondées.contains(tuileChoisie)) {
-                                    tuileChoisie.setEtat(Utils.EtatTuile.ASSECHEE);
-                                    joueur.defausseCarte(c);
-                                    addDefausseOranges(c);
-                                    choixValide = true;
-                                }
-                            } while (!choixValide);
-                            if (choixValide) {
-                                return carteUtilisée;
-                            }
-                        } else {
-                            carteSacDispo = false;
-                        }
-                    } else {
-                        carteSacDispo = false;
+        int nbJoueur = getNbJoueur();
+        if (!joueur.getMain().isEmpty()) {
+            if (g.getTuile(NomTuile.HELIPORT).getPossede().size()==nbJoueur) {
+                boolean carteHelico = false;
+                for (CarteOrange c : cartesJoueur){
+                    if (c.getRole().equals("Helicoptere") ) {
+                        carteHelico = true;
                     }
                 }
-            }
-        } else {
-            if (carte.getRole().equals("Helicoptere")) {
-                Tuile heliport = getGrille().getTuile(NomTuile.HELIPORT);
-                int nbAventurier = getNbJoueur();
-                if (heliport.getPossede().size()==nbAventurier) {
-                    System.out.print("Confirmer (oui/non) ? ");
-                    choix = sc.nextLine();
-                    choix = choix.toUpperCase().substring(0, 1);
-                    if (choix.equals("O")) {
-                        joueur.defausseCarte(carte);
-                        addDefausseOranges(carte);
-                        this.jeuEnCours = false;
-                        return carteUtilisée;
-                    }
+                if (carteHelico) {
+                    return 1;
                 }
-            } else if (carte.getRole().equals("Sac de sable")) {
+            } else {
                 ArrayList<Tuile> tuilesInnondées = new ArrayList<Tuile>();
-                for (Tuile t : getGrille().getGrille()) {
+                for (Tuile t : g.getGrille()) {
                     if (t.getEtat()==Utils.EtatTuile.INONDEE) {
                         tuilesInnondées.add(t);
                     }
                 }
                 if (!tuilesInnondées.isEmpty()) {
-                    System.out.print("Confirmer (oui/non) ? ");
-                    choix = sc.nextLine();
-                    choix = choix.toUpperCase().substring(0, 1);
-                    if (choix.equals("O")) {
-                        System.out.println("Voici la liste des tuiles dispo à assecher :");
-                        for (Tuile t : tuilesInnondées) {
-                            t.affiche();
+                    boolean carteSac = false;
+                    for (CarteOrange c : cartesJoueur){
+                        if (c.getRole().equals("Sac de sable")) {
+                            carteSac = true;
                         }
-                        do {
-                            System.out.print("X = ");
-                            choix = sc.nextLine();
-                            try {
-                                X = new Integer(choix);
-                            } catch (NumberFormatException e) {
-                                X = 0;
-                            }
-                            System.out.print("Y = ");
-                            choix = sc.nextLine();
-                            try {
-                                Y = new Integer(choix);
-                            } catch (NumberFormatException e) {
-                                Y = 0;
-                            }
-                            Tuile tuileChoisie = getGrille().getTuile(X - 1, Y - 1);
-                            if (tuilesInnondées.contains(tuileChoisie)) {
-                                tuileChoisie.setEtat(Utils.EtatTuile.ASSECHEE);
-                                joueur.defausseCarte(carte);
-                                addDefausseOranges(carte);
-                                choixValide = true;
-                            }
-                        } while (!choixValide);
-                        if (choixValide) {
-                            return carteUtilisée;
-                        }
+                    }
+                    if (carteSac) {
+                        return 2;
                     }
                 }
             }
         }
-        return !carteUtilisée;
+        return 0;
+    }
+    
+    //à compléter avec l'ihm
+    private void gererCarteSpecial(){
+        if (specialePossible() == 1) {
+            //à compléter avec l'ihm pour montrer que les cartes Helico sont dispo
+        } else { //specialePossible() == 2
+            //à completer avec l'ihm pour montrer que les cartes Sac de sable sont dispo
+        }
     }
     
     private void gererCarteOrange(Aventurier joueur) {

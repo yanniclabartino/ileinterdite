@@ -13,7 +13,7 @@ public class Message {
     public HashMap<Aventurier, String> joueurs; //Champ utilisé pour COMMENCER
     public boolean logs, aleas;                 //Champ utilisé pour COMMENCER
     
-    public Tuile tuile;                         //Champ utilisé pour ACTION_ASSECHER, ACTION_DEPLACEMENT
+    public Tuile tuile;                         //Champ utilisé pour ACTION_ASSECHER, ACTION_DEPLACEMENT ou JOUER_SPECIAL (Sac de sable)
     
     public CarteOrange carte;                   //Champ utilisé pour ACTION_DONNER, JOUER_SPECIALE
     public Aventurier receveur;                 //Champ utilisé pour ACTION_DONNER
