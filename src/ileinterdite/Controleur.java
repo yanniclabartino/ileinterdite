@@ -391,7 +391,6 @@ public class Controleur implements Observateur {
         }
     }
 
-    //a compléter pour que la carte spéciale aille dans la défausse.
     private boolean gererCarteSpecial(Aventurier joueur, CarteOrange carte){
         boolean carteUtilisée = true;
         boolean carteHeliDispo = true;
@@ -460,7 +459,8 @@ public class Controleur implements Observateur {
                                 Tuile tuileChoisie = getGrille().getTuile(X - 1, Y - 1);
                                 if (tuilesInnondées.contains(tuileChoisie)) {
                                     tuileChoisie.setEtat(Utils.EtatTuile.ASSECHEE);
-                                    //à compléter
+                                    joueur.defausseCarte(c);
+                                    addDefausseOranges(c);
                                     choixValide = true;
                                 }
                             } while (!choixValide);
@@ -484,6 +484,8 @@ public class Controleur implements Observateur {
                     choix = sc.nextLine();
                     choix = choix.toUpperCase().substring(0, 1);
                     if (choix.equals("O")) {
+                        joueur.defausseCarte(carte);
+                        addDefausseOranges(carte);
                         this.jeuEnCours = false;
                         return carteUtilisée;
                     }
@@ -522,6 +524,8 @@ public class Controleur implements Observateur {
                             Tuile tuileChoisie = getGrille().getTuile(X - 1, Y - 1);
                             if (tuilesInnondées.contains(tuileChoisie)) {
                                 tuileChoisie.setEtat(Utils.EtatTuile.ASSECHEE);
+                                joueur.defausseCarte(carte);
+                                addDefausseOranges(carte);
                                 choixValide = true;
                             }
                         } while (!choixValide);
