@@ -21,7 +21,7 @@ import javax.swing.JTextField;
  * @author yannic
  */
 public class IHM extends JFrame {
-    
+    private JFrame window;
     private JButton bDepl, bAss, bPioch, bGagner, bSpecial, bAnnuler, bFinir;
     private JLabel instructions;
 /*    
@@ -40,9 +40,11 @@ public class IHM extends JFrame {
     public IHM() {
 
         // INSTANCIATIONS DES ÉLÉMENTS DE L'IHM
+        window = new JFrame();
+        
         bDepl = new JButton("Déplacer");
         bAss = new JButton("Assécher");
-        bPioch = new JButton("Piocher");
+        bPioch = new JButton("Donner une carte");
         bGagner = new JButton("Gagner un trésor");
         bSpecial = new JButton("Jouer une carte spéciale");
         bAnnuler = new JButton("Annuler");
@@ -246,13 +248,13 @@ public class IHM extends JFrame {
         layer4eastCenterNorth.add(tresor4);
 
         
-        this.add(layer0);
+        window.add(layer0);
         // PROPRIÉTÉS DU JFRAME
-        this.setTitle("L'Île Interdite");
-        this.setSize(lfenetre, hfenetre); // équivalent 16:9
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
-        this.setResizable(false);
+        window.setTitle("L'Île Interdite");
+        window.setSize(lfenetre, hfenetre); // équivalent 16:9
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setVisible(true);
+        window.setResizable(false);
     }
 
 }
