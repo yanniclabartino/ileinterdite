@@ -33,6 +33,39 @@ public class Controleur implements Observateur {
 
     @Override
     public void traiterMessage(Message m) {
+        switch (m.type) {
+            case COMMENCER:
+                this.niveauEau = m.difficulté;
+                this.nbJoueurs = m.nbJoueurs;
+                this.joueurs.putAll(m.joueurs);
+                Parameters.setLogs(m.logs);
+                Parameters.setAleas(m.aleas);
+                //à compléter
+                break;
+            case SOUHAITE_DEPLACEMENT:
+                break;
+            case ACTION_DEPLACEMENT:
+                break;
+            case SOUHAITE_ASSECHER:
+                break;
+            case ACTION_ASSECHER:
+                break;
+            case SOUHAITE_DONNER:
+                break;
+            case ACTION_DONNER:
+                break;
+            case ACTION_GAGNER_TRESOR:
+                break;
+            case SOUHAITE_JOUER_SPECIALE:
+                break;
+            case JOUER_SPECIALE:
+                break;
+            case FINIR_TOUR:
+                break;
+            case ANNULER:
+                break;
+        }
+        
     }
 
     //METHODES DE GESTION DU JEU
@@ -696,7 +729,6 @@ public class Controleur implements Observateur {
         //méthode qui :
         /*
             - initialise : trésors / grille / cartes
-            - demande aux utilisateur : nombre joueur / les aventuriers / les noms / la difficulté
             - tire les premieres cartes innondations
             - place les aventuriers
             - distribue les cartes Trésor
@@ -706,12 +738,6 @@ public class Controleur implements Observateur {
         iniTrésor();
         iniGrille();
         iniCartes();
-        
-        //Paramètres joueurs
-        choixNbJoueurs();
-        choixAventuriers();
-        choixNomJoueurs();
-        choixDifficulté();
         
         Grille g = getGrille();
         //tout ceci dépendant du parametres.ALEAS
