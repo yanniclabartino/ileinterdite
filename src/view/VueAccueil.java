@@ -2,8 +2,8 @@ package view;
 
 import ileinterdite.Message;
 import ileinterdite.Observe;
+import ileinterdite.TypesMessages;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
-import javax.xml.crypto.dsig.spec.ExcC14NParameterSpec;
 import model.Aventurier;
 import model.Explorateur;
 import model.Ingénieur;
@@ -33,14 +32,19 @@ public class VueAccueil extends Observe {
     private imagePanel titre;
     private static final Integer[] nbJ = {2, 3, 4};
     private ArrayList<SaisiJoueur> saisiJoueurs;
-    private JComboBox choixJoueurs;
+    private JComboBox choixNbJoueurs;
 
     //parametres :
-    private JButton retourAcc;
+    private JButton retourPar;
     private ButtonGroup alea;
     private JRadioButton ouiA, nonA;
     private ButtonGroup logs;
     private JRadioButton ouiL, nonL;
+    
+    //regles :
+    private JScrollPane lesregles;
+    private JButton retourReg;
+    private imagePanel imageregles;
 
     VueAccueil() {
 //Accueil :
@@ -50,7 +54,7 @@ public class VueAccueil extends Observe {
         accueil.setSize(850, 720);
         accueil.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        choixJoueurs = new JComboBox(nbJ);
+        choixNbJoueurs = new JComboBox(nbJ);
 
         JPanel lehaut = new JPanel(new GridLayout(3, 1, 0, 5));
         JPanel letitre = new JPanel();
@@ -67,8 +71,8 @@ public class VueAccueil extends Observe {
 
         JPanel choixNb = new JPanel();
         choixNb.add(new JLabel("Nombre de joueurs :"));
-        choixJoueurs.setPreferredSize(new Dimension(40, 20));
-        choixNb.add(choixJoueurs);
+        choixNbJoueurs.setPreferredSize(new Dimension(40, 20));
+        choixNb.add(choixNbJoueurs);
         lehaut.add(choixNb);
 
         accueil.add(lehaut, BorderLayout.NORTH);
@@ -92,11 +96,11 @@ public class VueAccueil extends Observe {
         lesjoueurs.add(j3);
         lesjoueurs.add(j4);
 
-        choixJoueurs.addActionListener(new ActionListener() {
+        choixNbJoueurs.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 for (int i = 0; i < 4; i++) {
-                    if (i < (int) choixJoueurs.getSelectedItem()) {
+                    if (i < (int) choixNbJoueurs.getSelectedItem()) {
                         saisiJoueurs.get(i).setenabled(true);
                         saisiJoueurs.get(i).updateUI();
 
@@ -143,7 +147,7 @@ public class VueAccueil extends Observe {
                     messageErreur.setText("Deux joueurs on le même aventurier");
                 } else {
                     //création du message de début de partie
-                    m.type = TypesMessages.DEMARRER_PARTIE;
+                    //m.type = TypesMessages.DEMARRER_PARTIE;
                     for (SaisiJoueur joueur : saisiJoueurs) {
                         m.joueurs.put(stringEnAventurier(joueur), joueur.getNom());
                     }
@@ -200,8 +204,10 @@ public class VueAccueil extends Observe {
         alea.add(nonA);
         zoneBoutA.add(nonA);
         zoneBoutA.add(ouiA);
-        zoneAlea.add(new JLabel("Aléatoire :"));
-        zoneAlea.setToolTipText("_Disposition aléatoire des Tuiles \n_Atribution aléatoire d'aventurier");
+        JLabel alea = new JLabel("Aléatoire :");
+        alea.setToolTipText("Disposition aléatoire des Tuiles et Atribution aléatoire d'aventurier");
+        zoneAlea.add(alea);
+        zoneAlea.setToolTipText("Disposition aléatoire des Tuiles et Atribution aléatoire d'aventurier");
         zoneAlea.add(zoneBoutA);
 
         logs = new ButtonGroup();
@@ -211,18 +217,20 @@ public class VueAccueil extends Observe {
         logs.add(nonL);
         zoneBoutL.add(nonL);
         zoneBoutL.add(ouiL);
-        zoneLog.add(new JLabel("Logs :"));
+        JLabel log = new JLabel("Logs :");
+        log.setToolTipText("Sortie textuel dans la console");
+        zoneLog.add(log);
         zoneLog.setToolTipText("Sortie textuel dans la console");
         zoneLog.add(zoneBoutL);
 
-        retourAcc = new JButton("Retour");
-        retourAcc.setPreferredSize(new Dimension(80, 30));
-        BoutAcc.add(retourAcc);
+        retourPar = new JButton("Retour");
+        retourPar.setPreferredSize(new Dimension(80, 30));
+        BoutAcc.add(retourPar);
         zoneBoutAcc.add(BoutAcc);
         zoneBoutBas.add(new JLabel(""));
         zoneBoutBas.add(zoneBoutAcc);
 
-        retourAcc.addActionListener(new ActionListener() {
+        retourPar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 affAccueil();
@@ -240,11 +248,14 @@ public class VueAccueil extends Observe {
 
 //Regles :
         regles = new JFrame("Regles du jeu");
+        
+        imageregles = new imagePanel(0, 0, 1, cheminImage)
 
     }
 
     private void affRegles() {
-
+        accueil.setVisible(false);
+        regles.setVisible(true);
     }
 
     private void affParam() {
@@ -263,12 +274,24 @@ public class VueAccueil extends Observe {
     }
 
     private boolean avpareil() {
-        return (saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(1).getAventurier())
-                || saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(2).getAventurier())
-                || saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(3).getAventurier())
-                || saisiJoueurs.get(1).getAventurier().equals(saisiJoueurs.get(2).getAventurier())
-                || saisiJoueurs.get(1).getAventurier().equals(saisiJoueurs.get(3).getAventurier())
-                || saisiJoueurs.get(2).getAventurier().equals(saisiJoueurs.get(3).getAventurier()));
+        
+        switch (choixNbJoueurs.getSelectedIndex()){
+            case 0:
+                return (saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(1).getAventurier()));
+            case 1:
+                return (saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(1).getAventurier())
+                     || saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(2).getAventurier())
+                     || saisiJoueurs.get(1).getAventurier().equals(saisiJoueurs.get(2).getAventurier()));
+            case 2:
+                return (saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(1).getAventurier())
+                     || saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(2).getAventurier())
+                     || saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(3).getAventurier())
+                     || saisiJoueurs.get(1).getAventurier().equals(saisiJoueurs.get(2).getAventurier())
+                     || saisiJoueurs.get(1).getAventurier().equals(saisiJoueurs.get(3).getAventurier())
+                     || saisiJoueurs.get(2).getAventurier().equals(saisiJoueurs.get(3).getAventurier()));
+            default:
+                return (saisiJoueurs.get(0).getAventurier().equals(saisiJoueurs.get(1).getAventurier()));
+        }
     }
 
     private Aventurier stringEnAventurier(SaisiJoueur joueur) {
