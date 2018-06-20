@@ -5,3 +5,9 @@ public class TestAccueil {
         new VueAccueil();
     }
 }
+
+/*
+//regles :
+    private JScrollPane lesregles;
+    private JButton retourReg;
+*/
