@@ -23,9 +23,9 @@ public class ImagePanel extends JPanel {
     private int construction;//choix selon le constructeur
     
 
-    ImagePanel(int x, int y, String cheminImage) {//création de l'image en choisissant uniquement la position
-        this.x = x;
-        this.y = y;
+    ImagePanel(String cheminImage) {//création de l'image en choisissant uniquement la position
+        this.x = 0;
+        this.y = 0;
         try {
             File input = new File(cheminImage);
             image = ImageIO.read(input);
@@ -35,9 +35,9 @@ public class ImagePanel extends JPanel {
         construction = 0;
         this.setPreferredSize(new Dimension(image.getWidth(this), image.getHeight(this)));
     }
-    ImagePanel(int x, int y,int width, int height, String cheminImage) {//création de l'image en choisissant la position et la taille
-        this.x = x;
-        this.y = y;
+    ImagePanel(int width, int height, String cheminImage) {//création de l'image en choisissant la taille
+        this.x = 0;
+        this.y = 0;
         this.width = width;
         this.height = height;
         try {
@@ -49,9 +49,9 @@ public class ImagePanel extends JPanel {
         construction = 1;
         this.setPreferredSize(new Dimension(width, height));
     }
-    ImagePanel(int x, int y,double scale, String cheminImage) {//création de l'image en choisissant la position et le ratio d'echelle
-        this.x = x;
-        this.y = y;
+    ImagePanel(double scale, String cheminImage) {//création de l'image en choisissant la position et le ratio d'echelle
+        this.x = 0;
+        this.y = 0;
         this.scale = scale;
         
         try {
