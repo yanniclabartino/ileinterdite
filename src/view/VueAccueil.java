@@ -2,11 +2,11 @@ package view;
 
 import ileinterdite.Message;
 import ileinterdite.Observe;
-import ileinterdite.TypesMessages;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class VueAccueil extends Observe {
     private JButton retourReg;
     private ImagePanel imageregles;
 
-    VueAccueil() {
+    public VueAccueil() {
 //Accueil :
         accueil = new JFrame();
         accueil.setLayout(new BorderLayout());
@@ -54,6 +54,7 @@ public class VueAccueil extends Observe {
         accueil.setSize(720, 480);
         accueil.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         accueil.setResizable(false);
+        accueil.setLocation((int)((Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2) - (accueil.getWidth() / 2)), (int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2) - (accueil.getHeight() / 2)));
 
         choixNbJoueurs = new JComboBox(nbJ);
 
@@ -186,7 +187,7 @@ public class VueAccueil extends Observe {
         parametres = new JFrame("Parametres");
         parametres.setResizable(false);
         parametres.setLayout(new GridLayout(5, 1));
-        
+        parametres.setLocation((int)((Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2) - (parametres.getWidth() / 2)), (int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2) - (parametres.getHeight() / 2)));
 
         JPanel espaceHaut = new JPanel();
         espaceHaut.setPreferredSize(new Dimension(0, 20));//marge du haut
@@ -255,6 +256,8 @@ public class VueAccueil extends Observe {
 //Regles :
         regles = new JFrame("Regles du jeu");
         regles.setResizable(false);
+        regles.setLocation((int)((Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2) - (regles.getWidth() / 2)), (int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2) - (regles.getHeight() / 2)));
+        
         int verticalp = ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
         int horizontalp = ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
         imageregles = new ImagePanel(0.688, System.getProperty("user.dir") + "/src/images/règles.jpg");
