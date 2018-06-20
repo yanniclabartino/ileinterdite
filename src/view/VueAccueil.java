@@ -31,9 +31,12 @@ public class VueAccueil extends Observe {
     private JButton valider, boutregles, boutparam;
     private JLabel messageErreur;
     private ImagePanel titre;
-    private static final Integer[] nbJ = {2, 3, 4};
+    private final Integer[] nbJ = {2, 3, 4};
     private ArrayList<SaisiJoueur> saisiJoueurs;
     private JComboBox choixNbJoueurs;
+    private final String[] diff = {"Novice","Normal","Elite","Légendaire"};
+    private JComboBox choixDiff;
+    private JButton randomize;
 
     //parametres :
     private JButton retourPar;
@@ -96,11 +99,20 @@ public class VueAccueil extends Observe {
         valider = new JButton("Valider");
         boutparam = new JButton("Parametres");
         boutregles = new JButton("Regles du jeu");
-        messageErreur = new JLabel();
+        messageErreur = new JLabel(" ");
+        randomize = new JButton("Randomize");
+        choixDiff = new JComboBox(diff);
         
         JPanel lecentre = new JPanel(new BorderLayout());
+        JPanel jouRandDiff = new JPanel(new BorderLayout());
         JPanel messageserreur = new JPanel(new BorderLayout());
-        lecentre.add(lesjoueurs, BorderLayout.CENTER);
+        JPanel randDiff = new JPanel();
+        jouRandDiff.add(lesjoueurs, BorderLayout.CENTER);
+        randDiff.add(randomize);
+        randDiff.add(new JLabel("  Difficulté"));
+        randDiff.add(choixDiff);
+        jouRandDiff.add(randDiff, BorderLayout.SOUTH);
+        lecentre.add(jouRandDiff, BorderLayout.CENTER);
         messageserreur.add(messageErreur, BorderLayout.EAST);
         lecentre.add(messageserreur, BorderLayout.SOUTH);
         
@@ -246,6 +258,9 @@ public class VueAccueil extends Observe {
                 } else {
                     //création du message de début de partie
                     //m.type = TypesMessages.DEMARRER_PARTIE;
+                    m.difficulté = choixDiff.getSelectedIndex();
+                    m.logs = ouiL.isSelected();
+                    m.nbJoueurs = (int)choixNbJoueurs.getSelectedItem();
                     m.joueurs = new HashMap<>();
                     for (SaisiJoueur joueur : saisiJoueurs) {
                         if(joueur.isEnabled()){               //si le nom du joueur n'as pas était saisi on renvoi "Joueur 1" ou "Joueur 2" etc. selon le rang du joueur
@@ -270,6 +285,13 @@ public class VueAccueil extends Observe {
             @Override
             public void actionPerformed(ActionEvent e) {
                 affRegles();
+            }
+        });
+        
+        randomize.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                randomize();
             }
         });
         
@@ -352,6 +374,23 @@ public class VueAccueil extends Observe {
         return aventurier;
     }
     
+    private void randomize(){
+        String[] avDispo = SaisiJoueur.avDispo;
+            Random random = new Random();
+            ArrayList<Integer> arrayList = new ArrayList<Integer>();
+
+            while (arrayList.size() < 6) {
+                int a = random.nextInt(avDispo.length);
+                if (!arrayList.contains(a)) {
+                    arrayList.add(a);
+                }
+            }
+            for (int i = 0; i < saisiJoueurs.size(); i++){
+                saisiJoueurs.get(i).setAv(arrayList.get(i));
+                saisiJoueurs.get(i).updateUI();
+            }
+    }
+    
     private void choixAlea(boolean b){//répartition des aventurier aléatoirement
         if (b){//si parametre aléatoiree :
             String[] avDispo = SaisiJoueur.avDispo;
@@ -367,6 +406,7 @@ public class VueAccueil extends Observe {
             for (int i = 0; i < saisiJoueurs.size(); i++){
                 saisiJoueurs.get(i).setAv(arrayList.get(i));
                 saisiJoueurs.get(i).setAlea(!b);
+                saisiJoueurs.get(i).updateUI();
             }
             
         }
