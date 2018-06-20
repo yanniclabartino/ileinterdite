@@ -13,7 +13,6 @@ public class SaisiJoueur extends JPanel {
     private JComboBox choixAv;
     //private static final String[] listAv = {"Explorateur","Ingénieur","Messager","Navigateur","Pilote","Plongeur"};
     private static String[] avDispo = {"Explorateur","Ingénieur","Messager","Navigateur","Pilote","Plongeur"};
-    private String aventurier;
     
     SaisiJoueur(Integer num) {
         titre = new JLabel("Joueur "+num);
@@ -23,13 +22,6 @@ public class SaisiJoueur extends JPanel {
         JPanel nom = new JPanel(new GridLayout(1, 2));
         nom.add(new JLabel("Nom :"));
         nom.add(nomJ);
-        
-        choixAv.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                aventurier = choixAv.getSelectedItem().toString();
-            }
-        });
         
         this.add(titre);
         this.add(nom);
@@ -43,7 +35,7 @@ public class SaisiJoueur extends JPanel {
     }
     
     public String getAventurier(){
-        return this.aventurier;
+        return choixAv.getSelectedItem().toString();
     }
     
     public JComboBox getChoixAv(){
