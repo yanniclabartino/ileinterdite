@@ -13,21 +13,8 @@ import javax.swing.JPanel;
  * @author yannic
  */
 public class VidePanel extends JPanel {
-    private int largeur;
-    private int hauteur;
     
     VidePanel(int l, int h){
-        setLargeur(l);
-        setHauteur(h);
-        this.setPreferredSize(new Dimension(largeur, hauteur));
-    }
-    
-    
-    public void setLargeur(int largeur){
-        this.largeur = largeur;
-    }
-    
-    public void setHauteur(int hauteur){
-        this.hauteur = hauteur;
+        this.setPreferredSize(new Dimension(l, h));
     }
 }

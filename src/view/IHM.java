@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,7 +22,7 @@ import javax.swing.JTextField;
  */
 public class IHM extends JFrame {
     
-    private JButton bDepl, bAss, bPioch, bGagner;
+    private JButton bDepl, bAss, bPioch, bGagner, bSpecial, bAnnuler, bFinir;
     private JLabel instructions;
 /*    
     private ImagePanel tresor1, tresor2, tresor3, tresor4, niveauEau;
@@ -43,6 +44,9 @@ public class IHM extends JFrame {
         bAss = new JButton("Assécher");
         bPioch = new JButton("Piocher");
         bGagner = new JButton("Gagner un trésor");
+        bSpecial = new JButton("Jouer une carte spéciale");
+        bAnnuler = new JButton("Annuler");
+        bFinir = new JButton("Finir de jouer");
         
         instructions = new JLabel("Instructions");
 /*       
@@ -89,31 +93,31 @@ public class IHM extends JFrame {
         niveauEau.setBackground(Color.blue);
          
         carte1 = new JPanel();
-        carte1.setPreferredSize(new Dimension(100,150));
+        carte1.setPreferredSize(new Dimension(67,100));
         carte1.setBackground(Color.orange);
         carte2 = new JPanel();
-        carte2.setPreferredSize(new Dimension(100,150));
+        carte2.setPreferredSize(new Dimension(67,100));
         carte2.setBackground(Color.orange);
         carte3 = new JPanel();
-        carte3.setPreferredSize(new Dimension(100,150));
+        carte3.setPreferredSize(new Dimension(67,100));
         carte3.setBackground(Color.orange);
         carte4 = new JPanel();
-        carte4.setPreferredSize(new Dimension(100,150));
+        carte4.setPreferredSize(new Dimension(67,100));
         carte4.setBackground(Color.orange);
         carte5 = new JPanel();
-        carte5.setPreferredSize(new Dimension(100,150));
+        carte5.setPreferredSize(new Dimension(67,100));
         carte5.setBackground(Color.orange);
         carte6 = new JPanel();
-        carte6.setPreferredSize(new Dimension(100,150));
+        carte6.setPreferredSize(new Dimension(67,100));
         carte6.setBackground(Color.orange);
         carte7 = new JPanel();
-        carte7.setPreferredSize(new Dimension(100,150));
+        carte7.setPreferredSize(new Dimension(67,100));
         carte7.setBackground(Color.orange);
         carte8 = new JPanel();
-        carte8.setPreferredSize(new Dimension(100,150));
+        carte8.setPreferredSize(new Dimension(67,100));
         carte8.setBackground(Color.orange);
         carte9 = new JPanel();
-        carte9.setPreferredSize(new Dimension(100,150));
+        carte9.setPreferredSize(new Dimension(67,100));
         carte9.setBackground(Color.orange);
         
         cartesOranges = new JPanel();
@@ -130,7 +134,7 @@ public class IHM extends JFrame {
         defausseB.setBackground(Color.gray);
         
         grille = new JPanel();
-        grille.setPreferredSize(new Dimension(400,400));
+        grille.setPreferredSize(new Dimension(500,500));
         grille.setBackground(Color.black);
 
         // INSTANCIATION DES JPANEL DE DISPOSITION
@@ -162,15 +166,17 @@ public class IHM extends JFrame {
         layer2west.setLayout(new BorderLayout());
 
         layer3westCenter.setLayout(new GridLayout(2, 2));
+        layer3westCenter.setPreferredSize(new Dimension(200,300));
         layer3eastCenter.setLayout(new BorderLayout());
 
-        layer4eastCenterCenter.setLayout(new GridLayout(4, 1));
+        layer4eastCenterCenter.setLayout(new GridLayout(7, 1));
         layer4eastCenterNorth.setLayout(new GridLayout(1, 4));
 
         // PLACEMENT DES PANELS
         layer1north.add(layer2north, BorderLayout.NORTH);
         layer1north.add(layer2east, BorderLayout.EAST);
         layer1north.add(layer2west, BorderLayout.WEST);
+
         layer1south.add(layer2south, BorderLayout.CENTER);
         
         layer2west.add(layer3westCenter, BorderLayout.CENTER);
@@ -183,25 +189,25 @@ public class IHM extends JFrame {
         layer0.add(layer1south, BorderLayout.SOUTH);
         
         // AJOUTS DES MARGES
-        layer1south.add(new VidePanel(35, 900), BorderLayout.NORTH);
-        layer1south.add(new VidePanel(190, 900), BorderLayout.EAST);
-        layer1south.add(new VidePanel(190, 900), BorderLayout.WEST);
-        layer1south.add(new VidePanel(40, 900), BorderLayout.SOUTH);
+        layer1south.add(new VidePanel(200, 35), BorderLayout.NORTH);
+        layer1south.add(new VidePanel(190, 1), BorderLayout.EAST);
+        layer1south.add(new VidePanel(190, 1), BorderLayout.WEST);
+        layer1south.add(new VidePanel(1, 20), BorderLayout.SOUTH);
         
-        layer2north.add(new VidePanel(400, 40), BorderLayout.NORTH);
-        layer2north.add(new VidePanel(440, 95), BorderLayout.EAST);
-        layer2north.add(new VidePanel(440, 65), BorderLayout.WEST);
-        layer2north.add(new VidePanel(400, 25), BorderLayout.SOUTH);
+        layer2north.add(new VidePanel(400, 25), BorderLayout.NORTH);
+        layer2north.add(new VidePanel(400, 0), BorderLayout.EAST);
+        layer2north.add(new VidePanel(400, 0), BorderLayout.WEST);
+        layer2north.add(new VidePanel(400, 10), BorderLayout.SOUTH);
         
-        layer2east.add(new VidePanel(440, 15), BorderLayout.NORTH);
-        layer2east.add(new VidePanel(120, 400), BorderLayout.EAST);
-        layer2east.add(new VidePanel(80, 400), BorderLayout.WEST);
-        layer2east.add(new VidePanel(440, 15), BorderLayout.SOUTH);
+        layer2east.add(new VidePanel(300, 15), BorderLayout.NORTH);
+        layer2east.add(new VidePanel(80, 400), BorderLayout.EAST);
+        layer2east.add(new VidePanel(60, 400), BorderLayout.WEST);
+        layer2east.add(new VidePanel(300, 15), BorderLayout.SOUTH);
         
-        layer2west.add(new VidePanel(440, 30), BorderLayout.NORTH);
-        layer2west.add(new VidePanel(80, 400), BorderLayout.EAST);
-        layer2west.add(new VidePanel(120, 400), BorderLayout.WEST);
-        layer2west.add(new VidePanel(440, 30), BorderLayout.SOUTH);
+        layer2west.add(new VidePanel(300, 60), BorderLayout.NORTH);
+        layer2west.add(new VidePanel(60, 400), BorderLayout.EAST);
+        layer2west.add(new VidePanel(80, 400), BorderLayout.WEST);
+        layer2west.add(new VidePanel(300, 60), BorderLayout.SOUTH);
         
         // PLACEMENT DES ÉLÉMENTS    
         layer1north.add(grille, BorderLayout.CENTER);
@@ -229,6 +235,10 @@ public class IHM extends JFrame {
         layer4eastCenterCenter.add(bAss);
         layer4eastCenterCenter.add(bPioch);
         layer4eastCenterCenter.add(bGagner);
+        layer4eastCenterCenter.add(bSpecial);
+        layer4eastCenterCenter.add(bAnnuler);
+        layer4eastCenterCenter.add(bFinir);
+        
         
         layer4eastCenterNorth.add(tresor1);
         layer4eastCenterNorth.add(tresor2);
