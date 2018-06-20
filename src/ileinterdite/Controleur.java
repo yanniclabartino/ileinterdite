@@ -46,12 +46,12 @@ public class Controleur implements Observateur {
                 //à compléter avce les méthodes de l'ihm.
                 break;
             case SOUHAITE_DEPLACEMENT:
-                if (deplacementPossible()) {
-                    gererDeplacement();
+                if (deplacementPossible(getJoueurCourant())) {
+                    gererDeplacement(getJoueurCourant());
                 }
                 break;
             case ACTION_DEPLACEMENT:
-                joueurCourant.seDeplace(m.tuile);
+                getJoueurCourant().seDeplace(m.tuile);
                 break;
             case SOUHAITE_ASSECHER:
                 if (assechementPossible()) {
@@ -67,7 +67,7 @@ public class Controleur implements Observateur {
                 }
                 break;
             case ACTION_DONNER:
-                joueurCourant.defausseCarte(m.carte);
+                getJoueurCourant().defausseCarte(m.carte);
                 m.receveur.piocheCarte(m.carte);
                 break;
             case ACTION_GAGNER_TRESOR:
@@ -75,6 +75,15 @@ public class Controleur implements Observateur {
                     //à completer avec l'ihm quand un trésor a été gagné
                 } else {
                     //à completer avec l'ihm quand le gain est impossible
+                }
+                break;
+            case DEFAUSSE_CARTE :
+                if (specialePossible() == 1 && m.carte.getRole().equals("Helicoptere")) {
+                    //compléter pour que l'ihm demande si on joue ou defausse la carte.
+                } else if (specialePossible() == 2 && m.carte.getRole().equals("Sac de sable")) {
+                    
+                } else {
+                    getJoueurCourant().defausseCarte(m.carte);
                 }
                 break;
             case SOUHAITE_JOUER_SPECIALE:
@@ -94,10 +103,11 @@ public class Controleur implements Observateur {
                 }
                 break;
             case FINIR_TOUR:
+                //à compléter.
                 break;
             case ANNULER:
                 //à compléter avec les méthodes de l'ihm pour :
-                //  - annuler une action en cours et remettre l'ihm en état.
+                //  - annuler une action en cours (remettre l'ihm en état comme si l'action n'avait pas était demandée)
                 break;
         }
         
@@ -105,9 +115,8 @@ public class Controleur implements Observateur {
 
     //METHODES DE GESTION DU JEU
     
-    private boolean deplacementPossible() {
+    private boolean deplacementPossible(Aventurier joueur) {
         boolean deplDispo = true;
-        Aventurier joueur = getJoueurCourant();
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = new ArrayList<Tuile>();
         if (joueur.getCouleur() == Utils.Pion.BLEU && pouvoirPiloteDispo) {
@@ -122,8 +131,7 @@ public class Controleur implements Observateur {
     }
     
     //à compléter avec l'ihm
-    private void gererDeplacement() {
-        Aventurier joueur = getJoueurCourant();
+    private void gererDeplacement(Aventurier joueur) {
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = new ArrayList<Tuile>();
         ArrayList<Tuile> tuilesPlongeur = new ArrayList<Tuile>();
@@ -382,12 +390,16 @@ public class Controleur implements Observateur {
         }
     }
     
-    private void gererCarteOrange(Aventurier joueur) {
+    //imcomplète par rapport à l'ihm
+    private void gererCarteOrange() {
+        /*
+            ATTENTION : cette méthode influence les piles de cartes, il faudra donc rajouté des lignes pour actualiser l'IHM
+        */
         /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
+        Aventurier joueur = getJoueurCourant();
         boolean carteMDEpiochée = false;
         ArrayList<CarteOrange> cartesPiochées = new ArrayList<CarteOrange>();
         //On picohe deux cartes et on vérifie a chaque fois si la pioche est vide
-        System.out.println("\n"+joueur.getClass().toString().substring(12)+", \033[32mvous piochez deux carte oranges.\033[0m");
         for (int i = 0; i < 2; i++) {
             cartesPiochées.add(piocheCarteOrange());
             if (getPiocheOranges().empty()) {
@@ -401,7 +413,6 @@ public class Controleur implements Observateur {
         //Pour les cartes les piochées, on vérifie si celle-ci sont des cartes "montée des eaux"
         for (CarteOrange c : cartesPiochées) {
             if (c.getRole().equals("Montée des eaux")) {
-                System.out.println("Vous avez pioché une carte Montée des eaux, \033[31mle niveau d'eau monte...\033[0m");
                 this.niveauEau++;
                 carteMDEpiochée = true;
                 addDefausseOranges(c);
@@ -413,7 +424,6 @@ public class Controleur implements Observateur {
         //une carte MDE alors on mélange puis remet la defausse de carte bleue sur le tas de pioche
         if (!getPiocheBleues().empty() && carteMDEpiochée) {
             Collections.shuffle(getDefausseBleues());
-            System.out.println("\033[33mMélange de la défausse de carte innondations sur la pioche\033[0m");
             for (CarteBleue b : getDefausseBleues()) {
                 addPiocheBleue(b);
             }
@@ -421,53 +431,11 @@ public class Controleur implements Observateur {
         }
         //Si la main contient plus de 5 cartes
         if (joueur.getMain().size() > 5) {
-            Scanner sc = new Scanner(System.in);
-            String choix;
-            Integer numChoix;
-            boolean choixConforme = false;
-            System.out.println("\033[31mVous avez plus de 5 cartes dans votre main...\033[0m");
             int nbCarteDeTrop = joueur.getMain().size() - 5;
             for (int i = 0; i < nbCarteDeTrop; i++) {
-                System.out.println("Voici votre main (" + joueur.getMain().size() + " cartes) : ");
-                int numCarte = 1;
-                for (CarteOrange c : joueur.getMain()) {
-                    System.out.print("\t "+numCarte+" - ");
-                    c.affiche();
-                    numCarte++;
-                }
-                System.out.println("\033[33mQuelle carte voulez-vous défaussez de votre main ?\033[0m\nNB: s'il s'agit d'une carte spéciale, vous pourrez l'utiliser.");
-                do {
-                    System.out.print("\t choix (numéro de la carte ) : ");
-                    choix = sc.nextLine();
-                    try {
-                        numChoix = new Integer(choix);
-                        choixConforme = true;
-                    } catch (NumberFormatException e) {
-                        System.out.println("\033[31mSAISIE INVALIDE\033[0m");
-                        numChoix = 0;
-                    }
-                } while (!choixConforme && numChoix <= 0 && numChoix > joueur.getMain().size());
-                if (joueur.getMain().get(numChoix - 1).getRole().equals("Helicoptere") || joueur.getMain().get(numChoix - 1).getRole().equals("Sac de sable")) {
-                    choixConforme = false;
-                    do {
-                        System.out.println("Il s'agit d'une carte à pouvoir spécial,\nvoulez-vous vous en débarrasser(\033[31m1\033[0m) ou jouer cette carte(\033[31m2\033[0m) ?");
-                        System.out.print("\tchoix (1/2) : ");
-                        choix = sc.nextLine();
-                        if (choix.equals("1")) {
-                            joueur.defausseCarte(joueur.getMain().get(numChoix - 1));
-                            addDefausseOranges(joueur.getMain().get(numChoix - 1));
-                            choixConforme = true;
-                        } else if (choix.equals("2")) {
-                            choixConforme = gererCarteSpecial(joueur, joueur.getMain().get(numChoix - 1));
-                        }
-                    } while (!choixConforme);
-                } else {
-                    joueur.defausseCarte(joueur.getMain().get(numChoix - 1));
-                    addDefausseOranges(joueur.getMain().get(numChoix - 1));
-                }
+                //appeler une méthode de l'ihm pour défausser une carte.
             }
         }
-        joueur.afficheInfo();
     }
 
     private void gererCarteBleue() {
@@ -475,18 +443,13 @@ public class Controleur implements Observateur {
         //On pioche un certain nombre de cartes en fonction du niveau d'eau
         int nbPioche;
         int nivEau = this.getNiveau();
-        System.out.print("Le niveau d'eau s'élève à : \033[36;44m" + nivEau + "\033[m.\nVous piochez donc : ");
         if (nivEau >= 8) {
-            System.out.println("5 cartes.\n");
             nbPioche = 5;
         } else if (nivEau >= 6) {
-            System.out.println("4 cartes.\n");
             nbPioche = 4;
         } else if (nivEau >= 3) {
-            System.out.println("3 cartes.\n");
             nbPioche = 3;
         } else {
-            System.out.println("2 cartes.\n");
             nbPioche = 2;
         }
         CarteBleue c;
@@ -494,26 +457,22 @@ public class Controleur implements Observateur {
         for (int i = 0; i < nbPioche; i++) {
             c = piocheCarteBleue();
             Tuile t = getGrille().getTuile(c.getInnonde().getNom());
-            System.out.println("\nla carte innondation " + t.getNom().toString() + " à été piochée...");
             if (t.getEtat() == Utils.EtatTuile.ASSECHEE) {
                 t.setEtat(Utils.EtatTuile.INONDEE);
-                System.out.print("La tuile correspondante est désormais \033[36minnondée\033[0m : ");
                 t.affiche();
                 addDefausseBleues(c);
             } else if (t.getEtat() == Utils.EtatTuile.INONDEE) {
                 t.setEtat(Utils.EtatTuile.COULEE);
-                System.out.print("La tuile correspondante est désormais \033[31mcoulée\033[0m : ");
                 t.affiche();
-                if (t.getPossede().size() > 0 && !this.estPerdu()) {
-                    System.out.println("\033[31mLa tuile contenait un ou plusieurs aventuriers !\033[0m Il faut qu'il(s) nage(nt) :");
-                    boolean deplAventurier = false;
+                if (!t.getPossede().isEmpty() && !this.estPerdu()) {
                     boolean joueurNoyé = false;
                     int indice = 0;
                     ArrayList<Aventurier> jEnDetresse = new ArrayList<Aventurier>();
                     jEnDetresse.addAll(t.getPossede());
                     while (indice < jEnDetresse.size() && !joueurNoyé) {
-                        deplAventurier = gererDeplacement(jEnDetresse.get(indice));
-                        if (!deplAventurier) {
+                        if (deplacementPossible(jEnDetresse.get(indice))) {
+                            gererDeplacement(jEnDetresse.get(indice));
+                        } else {
                             jEnDetresse.get(indice).setTuile(null);
                             joueurNoyé = true;
                         }
@@ -547,7 +506,6 @@ public class Controleur implements Observateur {
         iniGrille();
         iniCartes();
     }
-    
     private void debutJeu() {
         //méthode qui :
         /*
@@ -636,7 +594,6 @@ public class Controleur implements Observateur {
             piocheBleues.push(c);
         }
     }
-    
     private void iniGrille(){
         //Génération des 24 tuiles
         ArrayList<Tuile> Tuiles = new ArrayList<Tuile>();
@@ -651,7 +608,6 @@ public class Controleur implements Observateur {
         grille = new Grille(Tuiles);
 
     }
-    
     private void iniTrésor(){
         //Création des Trésors
         trésors[0] = new Trésor(NomTresor.LA_PIERRE_SACREE);
@@ -663,7 +619,6 @@ public class Controleur implements Observateur {
     private boolean estTerminé(){
         return (estPerdu() || !jeuEnCours);
     }
-    
     private boolean estPerdu(){
         Grille g = getGrille();
         Utils.EtatTuile coulee = Utils.EtatTuile.COULEE;
@@ -680,134 +635,6 @@ public class Controleur implements Observateur {
                 || (g.getTuile(NomTuile.LA_CAVERNE_DES_OMBRES).getEtat()==coulee && g.getTuile(NomTuile.LA_CAVERNE_DU_BRASIER).getEtat()==coulee && !getTrésors()[2].isGagne())
                 || (g.getTuile(NomTuile.LE_PALAIS_DE_CORAIL).getEtat()==coulee && g.getTuile(NomTuile.LE_PALAIS_DES_MAREES).getEtat()==coulee && !getTrésors()[3].isGagne())
                 || joueurVivant < nbJoueurs);
-    }
-    
-    //METHODES INTERFACE TEXTE
-    
-    private void choixDifficulté(){
-        //sélection de la difficulté
-        Scanner sc = new Scanner(System.in);
-        boolean choixConforme = false;
-        String choix;
-        Integer choixInt;
-        do {
-            System.out.println("Quel niveau de difficulté ? (\033[36m1\033[0m/\033[32m2\033[0m/\033[33m3\033[0m/\033[31m4\033[0m)");
-            System.out.print("\t =>");
-            choix = sc.nextLine();
-            try {
-                choixInt = new Integer(choix);
-            } catch (NumberFormatException e) {
-                choixInt = 0;
-            }
-            if (choixInt >= 1 && choixInt <= 4) {
-                this.niveauEau = choixInt;
-                choixConforme = true;
-            }
-        } while (!choixConforme);
-    }
-    
-    private void choixAventuriers(){
-        //Création des Aventuriers.
-        Scanner sc = new Scanner(System.in);
-        boolean choixConforme = false;
-        String choix;
-        ArrayList<Aventurier> aventuriers = new ArrayList<Aventurier>();
-        int nombreJ = getNbJoueur();
-        if (Parameters.ALEAS) { //ALEAS == true
-            aventuriers.add(new Pilote());
-            aventuriers.add(new Navigateur());
-            aventuriers.add(new Ingénieur());
-            aventuriers.add(new Explorateur());
-            aventuriers.add(new Messager());
-            aventuriers.add(new Plongeur());
-            Collections.shuffle(aventuriers);
-        } else {
-            ArrayList<String> avDispo = new ArrayList<String>();
-            String[] listeAv = {"Pilote", "Navigateur", "Ingénieur", "Explorateur", "Messager", "Plongeur"};
-            for (String s : listeAv) {
-                avDispo.add(s);
-            }
-            for (int i = 0 ; i < nombreJ ; i++) {
-                System.out.println("Veuillez sélectionner vos aventuriers parmi :");
-                for (String s : avDispo) {
-                    System.out.println("\t- "+s);
-                }
-                do {
-                    choixConforme = false;
-                    System.out.println("Choix");
-                    System.out.print("\t =>");
-                    choix = sc.nextLine();
-                    try {
-                        choix = choix.toLowerCase().substring(0, 2);
-                    } catch (StringIndexOutOfBoundsException e) {
-                        choix = "//";
-                    }
-                    if (choix.equals("pi") && avDispo.contains("Pilote")) {
-                        avDispo.remove("Pilote");
-                        aventuriers.add(new Pilote());
-                        choixConforme = true;
-                    } else if (choix.equals("na") && avDispo.contains("Navigateur")) {
-                        avDispo.remove("Navigateur");
-                        aventuriers.add(new Navigateur());
-                        choixConforme = true;
-                    } else if (choix.equals("in") && avDispo.contains("Ingénieur")) {
-                        avDispo.remove("Ingénieur");
-                        aventuriers.add(new Ingénieur());
-                        choixConforme = true;
-                    } else if (choix.equals("ex") && avDispo.contains("Explorateur")) {
-                        avDispo.remove("Explorateur");
-                        aventuriers.add(new Explorateur());
-                        choixConforme = true;
-                    } else if (choix.equals("me") && avDispo.contains("Messager")) {
-                        avDispo.remove("Messager");
-                        aventuriers.add(new Messager());
-                        choixConforme = true;
-                    } else if (choix.equals("pl") && avDispo.contains("Plongeur")) {
-                        avDispo.remove("Plongeur");
-                        aventuriers.add(new Plongeur());
-                        choixConforme = true;
-                    }
-                } while (!choixConforme);
-            }
-        }
-        //ajout de ceux-ci dans le HashMap des joueurs
-        for (int i = 0 ; i < nombreJ ; i++) {
-            joueurs.put(aventuriers.get(i), null);
-        }
-
-    }
-    
-    private void choixNbJoueurs (){
-        //Choix de l'utilisateur du nombre de joueurs à jouer la partie (max 4)
-        Scanner sc = new Scanner(System.in);
-        boolean choixConforme = false;
-        String choix;
-        Integer choixInt;
-        do {
-            System.out.println("Combien de joueurs vont jouer ? Faites un choix (\033[32mentier entre 2 et 4\033[0m) : ");
-            System.out.print("\t=> ");
-            choix = sc.nextLine();
-            try {
-                choixInt = new Integer(choix);
-            } catch (NumberFormatException e) {
-                choixInt = 0;
-            }
-            if (choixInt >= 2 && choixInt <= 4) {
-                nbJoueurs = choixInt;
-                choixConforme = true;
-            }
-        } while (!choixConforme);
-    }
-    
-    private void choixNomJoueurs () {
-        //sélection des noms de joueurs
-        String choix;
-        Scanner sc = new Scanner(System.in);
-        for (Aventurier a : getJoueurs().keySet()) {
-            System.out.println("Nom du joueur du role \033[36m"+a.getClass().toString().substring(12)+"\033[0m : ");
-            choix = sc.nextLine();
-            getJoueurs().put(a, choix);
-        }
     }
     
     //METHODES UTILES

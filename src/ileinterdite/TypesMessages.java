@@ -28,7 +28,7 @@ public enum TypesMessages {
             - le destinataire de cette carte
     */
     ACTION_GAGNER_TRESOR, /* type de message quand un joueur veut gagner un trésor. */
-    
+    DEFAUSSE_CARTE, /* type de message quand un joueur défausse une carte de trop */
     SOUHAITE_JOUER_SPECIALE, /* type de message quand un joueur veut jouer une carte spéciale. */
     JOUER_SPECIALE, /*
     type de message quand un joueur joue une carte spéciale, accompagné de :

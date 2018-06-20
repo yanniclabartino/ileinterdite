@@ -15,6 +15,6 @@ public class Message {
     
     public Tuile tuile;                         //Champ utilisé pour ACTION_ASSECHER, ACTION_DEPLACEMENT ou JOUER_SPECIAL (Sac de sable)
     
-    public CarteOrange carte;                   //Champ utilisé pour ACTION_DONNER, JOUER_SPECIALE
+    public CarteOrange carte;                   //Champ utilisé pour ACTION_DONNER, JOUER_SPECIALE, DEFAUSSE_CARTE
     public Aventurier receveur;                 //Champ utilisé pour ACTION_DONNER
 }
