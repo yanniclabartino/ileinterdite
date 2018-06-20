@@ -1,14 +1,16 @@
 package ileinterdite;
 
+import java.awt.Color;
 import model.*;
 import util.*;
 import util.Utils.Pion;
-//import view.VueAventurier;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Scanner;
+import view.IHM;
+import view.VueAccueil;
+import view.VueAventurier;
 /*
     Groupe C2 :  Prapant.B, Labartino.Y, Giroud.T, Malod.V
 */
@@ -19,6 +21,8 @@ public class Controleur implements Observateur {
             réduire depuis netbeans chaque méthode pour n'en apercevoir
             que le titre et les paramètres de celles-ci.
     */
+    private VueAccueil accueil;
+    private VueAventurier ihm;
     
     private Grille grille;
     private int niveauEau;
@@ -78,13 +82,8 @@ public class Controleur implements Observateur {
                 }
                 break;
             case DEFAUSSE_CARTE :
-                if (specialePossible() == 1 && m.carte.getRole().equals("Helicoptere")) {
-                    //compléter pour que l'ihm demande si on joue ou defausse la carte.
-                } else if (specialePossible() == 2 && m.carte.getRole().equals("Sac de sable")) {
-                    
-                } else {
-                    getJoueurCourant().defausseCarte(m.carte);
-                }
+                getJoueurCourant().defausseCarte(m.carte);
+                addDefausseOranges(m.carte);
                 break;
             case SOUHAITE_JOUER_SPECIALE:
                 if (specialePossible() != 0) {
@@ -130,17 +129,17 @@ public class Controleur implements Observateur {
         return !deplDispo;
     }
     
-    //à compléter avec l'ihm
     private void gererDeplacement(Aventurier joueur) {
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = new ArrayList<Tuile>();
-        ArrayList<Tuile> tuilesPlongeur = new ArrayList<Tuile>();
+        ArrayList<Tuile> tuilesPilote = new ArrayList<Tuile>();
         if (joueur.getCouleur() == Utils.Pion.BLEU && pouvoirPiloteDispo) {
-            tuilesPlongeur.addAll(calculTouteTuileDispo(g));
+            tuilesPilote.addAll(calculTouteTuileDispo(g));
         }
         tuilesDispo.addAll(joueur.calculTuileDispo(g));
-        //afficher les tuiles dispo sur l'ihm
-        //ajoute les tuiles du pilote
+        tuilesPilote.removeAll(tuilesDispo);
+        getIHM().afficherTuileDispo(tuilesDispo);
+        getIHM().afficherTuilesPilote(tuilesPilote);
     }
 
     private boolean assechementPossible() {
@@ -148,7 +147,6 @@ public class Controleur implements Observateur {
         return (!tuilesDispo.isEmpty());
     }
     
-    //à compléter avec l'ihm
     private void gererAssechement() {
         //méthode qui permet a un aventurier d'assécher une tuile
         Aventurier joueur = getJoueurCourant();
@@ -160,6 +158,9 @@ public class Controleur implements Observateur {
             nbAssechement = 2;
         }
         //à compléter avec l'ihm en fonction du nombre d'assèchement possible.
+        for (int i = 0; i < nbAssechement ; i++) {
+            getIHM().afficherTuileAsse(tuilesDispo);
+        }
     }
 
     private boolean donationPossible(){
@@ -381,12 +382,11 @@ public class Controleur implements Observateur {
         return 0;
     }
     
-    //à compléter avec l'ihm
     private void gererCarteSpecial(){
         if (specialePossible() == 1) {
-            //à compléter avec l'ihm pour montrer que les cartes Helico sont dispo
+            getIHM().afficheCartesHelico();
         } else { //specialePossible() == 2
-            //à completer avec l'ihm pour montrer que les cartes Sac de sable sont dispo
+            getIHM().afficheCartesSac();
         }
     }
     
@@ -506,14 +506,19 @@ public class Controleur implements Observateur {
         iniGrille();
         iniCartes();
     }
+    
+    //FAIRE LA BOUCLE DU JEU
     private void debutJeu() {
         //méthode qui :
         /*
+            - démarre le jeu
             - tire les premieres cartes innondations
             - place les aventuriers
             - distribue les cartes Trésor
-         */
         
+            - lance la boucle de jeu jusqu'à une fin
+         */
+        this.jeuEnCours = true;
         Grille g = getGrille();
         //tout ceci dépendant du parametres.ALEAS
         if (!Parameters.ALEAS) {
@@ -541,7 +546,8 @@ public class Controleur implements Observateur {
                 } else if (a.getCouleur() == Pion.VERT) {
                     g.getTuile(4, 2).addAventurier(a);
                 }
-                gererCarteOrange(a);
+                this.joueurCourant = a;
+                gererCarteOrange();
             }
         } else { // ALEAS == true
             gererCarteBleue();
@@ -552,13 +558,57 @@ public class Controleur implements Observateur {
                     int y = (int) (Math.random()*5);
                     if (g.getTuile(x, y) != null) {
                         g.getTuile(x, y).addAventurier(a);
-                        gererCarteOrange(a);
+                        this.joueurCourant = a;
+                        gererCarteOrange();
                         randomCorrect = true;
                     }
                 } while (!randomCorrect);
             }
         }
-        this.joueurCourant = 
+        this.joueurCourant = (Aventurier) getJoueurs().keySet().toArray()[0];
+        
+        //FAIRE LA BOUCLE DU JEU.
+        /*
+        //Tours de jeu
+        boolean actionEffectuée;
+        while (!this.estTerminé()) {
+            for (Aventurier a : joueurs.keySet()) {
+                pouvoirPiloteDispo = true;
+                if (!this.estTerminé()) {
+                    int nbActions;
+                    if (a.getCouleur()==Pion.JAUNE) {
+                        nbActions = 4;
+                    } else {
+                        nbActions = 3;
+                    }
+                    while (nbActions > 0) {
+                        
+                    }
+                    gererCarteOrange();
+                    gererCarteBleue();
+                }
+            }
+        }
+        if (estPerdu()) {
+            //partie perdue (a afficher sur l'ihm)
+            int joueurVivant = getNbJoueur();
+            for (Aventurier a : getJoueurs().keySet()) {
+                if (a.getTuile()==null) {
+                    joueurVivant--;
+                }
+            }
+            if (grille.getTuile(NomTuile.HELIPORT).getEtat()==Utils.EtatTuile.COULEE) {
+                //L'héliport à sombré.
+            } else if (getNiveau() >= 10) {
+                //Le niveau d'eau vous a submergé.
+            } else if (joueurVivant < getNbJoueur()) {
+                //Un de vos coéquipier à sombré.
+            } else {
+                //Les tuiles de trésor ont sombrées.
+            }
+        } else {
+            //Partie gagnée, WP !
+        } */
     }
     
     private void iniCartes(){
@@ -639,6 +689,9 @@ public class Controleur implements Observateur {
     
     //METHODES UTILES
     
+    private VueAventurier getIHM() {
+        return this.ihm;
+    }
     private Aventurier getJoueurCourant() {
         return this.joueurCourant;
     }
@@ -716,107 +769,13 @@ public class Controleur implements Observateur {
     }
 
     //CONSTUCTEUR
-    public Controleur() {        
-        //Declaration de variable utiles pour l'interface texte
-        Scanner sc = new Scanner(System.in);
-        String choix;
-        
-        //Tours de jeu
-        debutJeu();
-        pouvoirPiloteDispo = true;
-        jeuEnCours = true;
-        boolean actionEffectuée;
-        while (!this.estTerminé()) {
-            for (Aventurier a : joueurs.keySet()) {
-                if (!this.estTerminé()) {
-                    int nbActions;
-                    if (a.getCouleur()==Pion.JAUNE) {
-                        nbActions = 4;
-                        System.out.println("\n\033[32mEn tant que navigateur vous avez 4 actions.\033[0m\n");
-                    } else {
-                        nbActions = 3;
-                    }
-                    String nomRole = a.getClass().toString().substring(12);
-                    while (nbActions > 0) {
-                        grille.afficheGrilleTexte(a);
-                        System.out.println("Pioche cartes oranges : \033[21;40;32m"+getPiocheOranges().size()+"\033[0m");
-                        System.out.println("Defausse cartes oranges : \033[21;40;31m"+getDefausseOranges().size()+"\033[0m");
-                        System.out.println("Pioche cartes bleues : \033[21;40;32m"+getPiocheBleues().size()+"\033[0m");
-                        System.out.println("Defausse cartes bleues : \033[21;40;31m"+getDefausseBleues().size()+"\033[0m");
-                        System.out.println("Niveau d'eau actuelle : \033[36;44m"+getNiveau()+"\033[0m");
-                        System.out.println(joueurs.get(a) + "(" + nomRole + ") , quelle action voulez-vous réaliser ?");
-                        System.out.println("\t\033[30;42m[Action réstante = \033[21;31;42m"+nbActions+"\033[30;42m]\033[0m");
-                        System.out.println("\t\033[33m1 - Se déplacer       \033[0m");
-                        System.out.println("\t\033[33m2 - Assécher          \033[0m");
-                        System.out.println("\t\033[33m3 - Donner une carte  \033[0m");
-                        System.out.println("\t\033[33m4 - Gagner un trésor  \033[0m");
-                        System.out.println("\t\033[33m5 - Finir mon tour    \033[0m");
-                        System.out.println("Autre (pas de cout) :");
-                        System.out.println("\t\033[35m0 - Informations sur la grille, main des joueurs et leur position\033[0m");
-                        System.out.println("\t\033[35m6 - Utiliser une carte spéciale de votre main\033[0m");
-                        System.out.print("choix (0 à 6) : ");
-                        choix = sc.nextLine();
-                        if (choix.equals("1")) {
-                            actionEffectuée = gererDeplacement(a);
-                            if (actionEffectuée) {
-                                nbActions--;
-                            }
-                        } else if (choix.equals("2")) {
-                            actionEffectuée = gererAssechement(a);
-                            if (actionEffectuée) {
-                                nbActions--;
-                            }
-                        } else if (choix.equals("3")) {
-                            actionEffectuée = gererDonation(a);
-                            if (actionEffectuée) {
-                                nbActions--;
-                                a.afficheInfo();
-                            }
-                        } else if (choix.equals("4")) {
-                            actionEffectuée = gererGainTresor(a);
-                            if (actionEffectuée) {
-                                nbActions--;
-                            }
-                        } else if (choix.equals("5")) {
-                            nbActions = 0;
-                        } else if (choix.equals("0")) {
-                            for (Tuile t : grille.getGrille()) {
-                                t.affiche();
-                            }
-                            for (Aventurier joueur : joueurs.keySet()) {
-                                joueur.afficheInfo();
-                            }
-                        } else if (choix.equals("6")) {
-                            gererCarteSpecial(a, null);
-                        }
-                    }
-                    gererCarteOrange(a);
-                    gererCarteBleue();
-                }
-            }
-        }
-        if (estPerdu()) {
-            System.out.println("Partie perdue !");
-            int joueurVivant = getNbJoueur();
-            for (Aventurier a : getJoueurs().keySet()) {
-                if (a.getTuile()==null) {
-                    joueurVivant--;
-                }
-            }
-            if (grille.getTuile(NomTuile.HELIPORT).getEtat()==Utils.EtatTuile.COULEE) {
-                System.out.println("L'héliport à sombré.");
-            } else if (getNiveau() >= 10) {
-                System.out.println("Le niveau d'eau vous a submergé.");
-            } else if (joueurVivant < getNbJoueur()) {
-                System.out.println("Un de vos coéquipier à sombré.");
-            } else {
-                System.out.println("Les tuiles de trésor ont sombrées.");
-            }
-        } else {
-            System.out.println("Partie gagnée, WP !");
-        }
+    public Controleur() { 
+        accueil = new VueAccueil();
+        ihm = new VueAventurier();
+        accueil.addObservateur(this);
+        ihm.addObservateur(this);
     }
-
+    
     //MAIN
     public static void main(String[] args) {
         new Controleur();
