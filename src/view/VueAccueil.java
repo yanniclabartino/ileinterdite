@@ -62,8 +62,6 @@ public class VueAccueil extends Observe {
 
         titre = new ImagePanel(0.45, System.getProperty("user.dir") + "/src/images/ile-interdite-logo.png");
         titre.replacer((accueil.getWidth() / 2) - (titre.getPreferredSize().width / 2), 0);
-        JLabel ti = new JLabel("L'Île Interdite");
-        ti.setFont(new Font(Font.DIALOG, Font.PLAIN, 35));
         lehaut.add(titre);
 
         JPanel choixNb = new JPanel();
