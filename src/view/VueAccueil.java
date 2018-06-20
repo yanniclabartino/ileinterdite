@@ -4,12 +4,13 @@ import ileinterdite.Message;
 import ileinterdite.Observe;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 import javax.swing.*;
 import model.Aventurier;
 import model.Explorateur;
@@ -91,27 +92,6 @@ public class VueAccueil extends Observe {
         lesjoueurs.add(j3);
         lesjoueurs.add(j4);
 
-        choixNbJoueurs.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for (int i = 0; i < 4; i++) {
-                    if (i < (int) choixNbJoueurs.getSelectedItem()) {
-                        saisiJoueurs.get(i).setenabled(true);
-                        saisiJoueurs.get(i).updateUI();
-
-                    } else {
-                        saisiJoueurs.get(i).setenabled(false);
-                        saisiJoueurs.get(i).updateUI();
-                    }
-                }
-                lesjoueurs.updateUI();
-            }
-        });
-
-        
-
-        
-
         JPanel lebas = new JPanel(new GridLayout(1, 4));
         valider = new JButton("Valider");
         boutparam = new JButton("Parametres");
@@ -141,46 +121,13 @@ public class VueAccueil extends Observe {
         lebas.add(basdroit);
         accueil.add(lebas, BorderLayout.SOUTH);
 
-        valider.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                Message m = new Message();
-                if (avpareil()) {
-                    messageErreur.setText("Plusieurs joueurs ont le même aventurier");
-                } else {
-                    //création du message de début de partie
-                    //m.type = TypesMessages.DEMARRER_PARTIE;
-                    for (SaisiJoueur joueur : saisiJoueurs) {
-                        m.joueurs.put(stringEnAventurier(joueur), joueur.getNom());
-                    }
-
-                    notifierObservateur(m);
-                }
-            }
-        }
-        );
-
-        boutparam.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                affParam();
-            }
-        });
-
-        boutregles.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                affRegles();
-            }
-        });
-
         accueil.setVisible(true);
 
 //Parametres :
         parametres = new JFrame("Parametres");
         parametres.setResizable(false);
+        parametres.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         parametres.setLayout(new GridLayout(5, 1));
-        parametres.setLocation((int)((Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2) - (parametres.getWidth() / 2)), (int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2) - (parametres.getHeight() / 2)));
 
         JPanel espaceHaut = new JPanel();
         espaceHaut.setPreferredSize(new Dimension(0, 20));//marge du haut
@@ -200,6 +147,7 @@ public class VueAccueil extends Observe {
         alea = new ButtonGroup();
         ouiA = new JRadioButton("Oui");
         nonA = new JRadioButton("Non");
+        nonA.setSelected(true);
         alea.add(ouiA);
         alea.add(nonA);
         zoneBoutA.add(nonA);
@@ -213,6 +161,7 @@ public class VueAccueil extends Observe {
         logs = new ButtonGroup();
         ouiL = new JRadioButton("Oui");
         nonL = new JRadioButton("Non");
+        nonL.setSelected(true);
         logs.add(ouiL);
         logs.add(nonL);
         zoneBoutL.add(nonL);
@@ -223,19 +172,13 @@ public class VueAccueil extends Observe {
         zoneLog.setToolTipText("Sortie textuel dans la console");
         zoneLog.add(zoneBoutL);
 
-        retourPar = new JButton("Retour");
+        retourPar = new JButton("Valider");
         retourPar.setPreferredSize(new Dimension(90, 30));
         BoutAcc.add(retourPar);
         zoneBoutAcc.add(BoutAcc);
         zoneBoutBas.add(new JLabel(""));
         zoneBoutBas.add(zoneBoutAcc);
 
-        retourPar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                affAccueil();
-            }
-        });
 
         parametres.add(espaceHaut);
         parametres.add(zoneAlea);
@@ -244,12 +187,14 @@ public class VueAccueil extends Observe {
         parametres.add(zoneBoutBas);
 
         parametres.setSize(400, 200);
+        parametres.setLocation((int)((Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2) - (parametres.getWidth() / 2)), (int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2) - (parametres.getHeight() / 2)));
+
         parametres.setVisible(false);
 
 //Regles :
         regles = new JFrame("Regles du jeu");
         regles.setResizable(false);
-        regles.setLocation((int)((Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2) - (regles.getWidth() / 2)), (int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2) - (regles.getHeight() / 2)));
+        regles.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         int verticalp = ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
         int horizontalp = ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
@@ -258,12 +203,6 @@ public class VueAccueil extends Observe {
         lesregles.getVerticalScrollBar().setUnitIncrement(20);
         retourReg = new JButton("Retour");
         retourReg.setPreferredSize(new Dimension(90, 30));
-        retourReg.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                affAccueil();
-            }
-        });
         
         regles.setLayout(new BorderLayout(10, 10));
         regles.add(lesregles, BorderLayout.CENTER);
@@ -276,7 +215,81 @@ public class VueAccueil extends Observe {
         regBas.add(boutRegAc);
         regles.add(regBas, BorderLayout.SOUTH);
         regles.setSize(720, 480);
+        regles.setLocation((int)((Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2) - (regles.getWidth() / 2)), (int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2) - (regles.getHeight() / 2)));
 
+        
+        
+// Action listener Accueil :
+        choixNbJoueurs.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i < 4; i++) {
+                    if (i < (int) choixNbJoueurs.getSelectedItem()) {
+                        saisiJoueurs.get(i).setenabled(true);
+                        saisiJoueurs.get(i).updateUI();
+
+                    } else {
+                        saisiJoueurs.get(i).setenabled(false);
+                        saisiJoueurs.get(i).updateUI();
+                    }
+                }
+                lesjoueurs.updateUI();
+            }
+        });
+        
+        valider.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                Message m = new Message();
+                if (avpareil()) {
+                    messageErreur.setText("Plusieurs joueurs ont le même aventurier");
+                } else {
+                    //création du message de début de partie
+                    //m.type = TypesMessages.DEMARRER_PARTIE;
+                    m.joueurs = new HashMap<>();
+                    for (SaisiJoueur joueur : saisiJoueurs) {
+                        if(joueur.isEnabled()){               //si le nom du joueur n'as pas était saisi on renvoi "Joueur 1" ou "Joueur 2" etc. selon le rang du joueur
+                            m.joueurs.put(stringEnAventurier(joueur), (joueur.getNom().equals(null))?"Joueur "+(saisiJoueurs.indexOf(joueur)+1):joueur.getNom());
+                        }
+                        m.aleas = ouiA.isSelected();
+                    }
+
+                    notifierObservateur(m);
+                }
+            }
+        });
+
+        boutparam.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                affParam();
+            }
+        });
+
+        boutregles.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                affRegles();
+            }
+        });
+        
+//ActionListener Parametre :
+        retourPar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                affAccueil();
+                choixAlea(ouiA.isSelected());
+            }
+        });
+
+//ActionListener Règle :
+        retourReg.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                affAccueil();
+            }
+        });
+        
     }
 
     private void affRegles() {
@@ -338,4 +351,25 @@ public class VueAccueil extends Observe {
         }
         return aventurier;
     }
+    
+    private void choixAlea(boolean b){//répartition des aventurier aléatoirement
+        if (b){//si parametre aléatoiree :
+            String[] avDispo = SaisiJoueur.avDispo;
+            Random random = new Random();
+            ArrayList<Integer> arrayList = new ArrayList<Integer>();
+
+            while (arrayList.size() < 6) {
+                int a = random.nextInt(avDispo.length);
+                if (!arrayList.contains(a)) {
+                    arrayList.add(a);
+                }
+            }
+            for (int i = 0; i < saisiJoueurs.size(); i++){
+                saisiJoueurs.get(i).setAv(arrayList.get(i));
+                saisiJoueurs.get(i).setAlea(!b);
+            }
+            
+        }
+    }
+    
 }

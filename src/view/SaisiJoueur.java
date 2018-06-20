@@ -2,17 +2,17 @@ package view;
 
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.*;
 
 public class SaisiJoueur extends JPanel {
-    
+
     private JLabel titre;
     private JTextField nomJ;
     private JComboBox choixAv;
     //private static final String[] listAv = {"Explorateur","Ingénieur","Messager","Navigateur","Pilote","Plongeur"};
-    private static String[] avDispo = {"Explorateur","Ingénieur","Messager","Navigateur","Pilote","Plongeur"};
+    public static final String[] avDispo = {"Explorateur","Ingénieur","Messager","Navigateur","Pilote","Plongeur"};
     
     SaisiJoueur(Integer num) {
         titre = new JLabel("Joueur "+num);
@@ -42,6 +42,9 @@ public class SaisiJoueur extends JPanel {
         return this.choixAv;
     }
     
+    public void setAlea(boolean b){
+        this.choixAv.setEditable(b);
+    }
     
     public void setenabled(boolean b){
         
@@ -51,5 +54,9 @@ public class SaisiJoueur extends JPanel {
         this.nomJ.setBackground((b)?null:Color.gray);
         this.setBackground((b)?null:new Color(180, 180, 180));
         this.titre.setBackground((b)?null:new Color(180, 180, 180));
+    }
+
+    void setAv(Integer i) {
+        this.choixAv.setSelectedIndex(i);
     }
 }
