@@ -51,12 +51,13 @@ public class VueAccueil extends Observe {
         accueil = new JFrame();
         accueil.setLayout(new BorderLayout());
         accueil.setTitle("L'Île Interdite");
-        accueil.setSize(850, 720);
+        accueil.setSize(720, 480);
         accueil.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        accueil.setResizable(false);
 
         choixNbJoueurs = new JComboBox(nbJ);
 
-        JPanel lehaut = new JPanel(new GridLayout(3, 1, 0, 5));
+        JPanel lehaut = new JPanel(new GridLayout(2, 1, 0, 5));
         JPanel letitre = new JPanel();
 
         //lehaut.add(new JLabel(""));
@@ -113,16 +114,23 @@ public class VueAccueil extends Observe {
             }
         });
 
-        JPanel lecentre = new JPanel();
-        lecentre.add(lesjoueurs);
+        
 
-        accueil.add(lecentre, BorderLayout.CENTER);
+        
 
         JPanel lebas = new JPanel(new GridLayout(1, 4));
         valider = new JButton("Valider");
         boutparam = new JButton("Parametres");
         boutregles = new JButton("Regles du jeu");
         messageErreur = new JLabel();
+        
+        JPanel lecentre = new JPanel(new BorderLayout());
+        JPanel messageserreur = new JPanel(new BorderLayout());
+        lecentre.add(lesjoueurs, BorderLayout.CENTER);
+        messageserreur.add(messageErreur, BorderLayout.EAST);
+        lecentre.add(messageserreur, BorderLayout.SOUTH);
+        
+        accueil.add(lecentre, BorderLayout.CENTER);
 
         JPanel basgauche1 = new JPanel();
         JPanel basgauche2 = new JPanel();
@@ -132,7 +140,7 @@ public class VueAccueil extends Observe {
         basgauche2.add(boutregles);
         lebas.add(basgauche1);
         lebas.add(basgauche2);
-        lebas.add(messageErreur);
+        lebas.add(new JLabel(""));
         JPanel basdroit = new JPanel();
         valider.setPreferredSize(new Dimension(80, 30));
         basdroit.add(valider);
@@ -176,7 +184,9 @@ public class VueAccueil extends Observe {
 
 //Parametres :
         parametres = new JFrame("Parametres");
+        parametres.setResizable(false);
         parametres.setLayout(new GridLayout(5, 1));
+        
 
         JPanel espaceHaut = new JPanel();
         espaceHaut.setPreferredSize(new Dimension(0, 20));//marge du haut
@@ -185,13 +195,9 @@ public class VueAccueil extends Observe {
 
         JPanel zoneAlea = new JPanel(new GridLayout(1, 2));
         JPanel zoneBoutA = new JPanel(new GridLayout(1, 2));
-        JPanel boutAOui = new JPanel(new GridLayout(1, 2));
-        JPanel boutANon = new JPanel(new GridLayout(1, 2));
 
         JPanel zoneLog = new JPanel(new GridLayout(1, 2));
         JPanel zoneBoutL = new JPanel(new GridLayout(1, 2));
-        JPanel boutLOui = new JPanel(new GridLayout(1, 2));
-        JPanel boutLNon = new JPanel(new GridLayout(1, 2));
 
         JPanel zoneBoutBas = new JPanel(new GridLayout(1, 2));
         JPanel zoneBoutAcc = new JPanel(new GridLayout(1, 2));
@@ -224,7 +230,7 @@ public class VueAccueil extends Observe {
         zoneLog.add(zoneBoutL);
 
         retourPar = new JButton("Retour");
-        retourPar.setPreferredSize(new Dimension(80, 30));
+        retourPar.setPreferredSize(new Dimension(90, 30));
         BoutAcc.add(retourPar);
         zoneBoutAcc.add(BoutAcc);
         zoneBoutBas.add(new JLabel(""));
@@ -248,10 +254,26 @@ public class VueAccueil extends Observe {
 
 //Regles :
         regles = new JFrame("Regles du jeu");
-        
-        imageregles = new ImagePanel(1, System.getProperty("user.dir") + "/src/images/ile-interdite-logo.png");
+        regles.setResizable(false);
+        int verticalp = ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
+        int horizontalp = ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
+        imageregles = new ImagePanel(0.688, System.getProperty("user.dir") + "/src/images/règles.jpg");
         lesregles = new JScrollPane(imageregles, verticalp, horizontalp);
+        lesregles.getVerticalScrollBar().setUnitIncrement(20);
+        retourReg = new JButton("Retour");
+        retourReg.setPreferredSize(new Dimension(90, 30));
         
+        regles.setLayout(new BorderLayout(10, 10));
+        regles.add(lesregles, BorderLayout.CENTER);
+        JPanel regBas = new JPanel(new GridLayout(1,4));
+        JPanel boutRegAc = new JPanel();
+        boutRegAc.add(retourReg);
+        regBas.add(new JLabel(""));
+        regBas.add(new JLabel(""));
+        regBas.add(new JLabel(""));
+        regBas.add(boutRegAc);
+        regles.add(regBas, BorderLayout.SOUTH);
+        regles.setSize(720, 480);
 
     }
 
