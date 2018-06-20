@@ -75,7 +75,6 @@ public class ImagePanel extends JPanel {
                 break;
                 
             case 2:
-                System.out.println(Integer.toString(image.getWidth(this)));
                 g.drawImage(image, x, y, (int)(image.getWidth(this)*scale), (int)(image.getHeight(this)*scale), this);
                 break;
             default:

@@ -59,16 +59,11 @@ public class VueAccueil extends Observe {
         choixNbJoueurs = new JComboBox(nbJ);
 
         JPanel lehaut = new JPanel(new GridLayout(2, 1, 0, 5));
-        JPanel letitre = new JPanel();
 
-        //lehaut.add(new JLabel(""));
         titre = new ImagePanel(0.45, System.getProperty("user.dir") + "/src/images/ile-interdite-logo.png");
         titre.replacer((accueil.getWidth() / 2) - (titre.getPreferredSize().width / 2), 0);
-        System.out.println(Integer.toString(titre.getPreferredSize().width));
         JLabel ti = new JLabel("L'Île Interdite");
         ti.setFont(new Font(Font.DIALOG, Font.PLAIN, 35));
-        letitre.add(ti);
-        //titre.setPreferredSize(new Dimension(titre.getWidth(), titre.getHeight()));
         lehaut.add(titre);
 
         JPanel choixNb = new JPanel();
