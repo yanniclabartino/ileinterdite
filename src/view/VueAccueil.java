@@ -265,6 +265,12 @@ public class VueAccueil extends Observe {
         lesregles.getVerticalScrollBar().setUnitIncrement(20);
         retourReg = new JButton("Retour");
         retourReg.setPreferredSize(new Dimension(90, 30));
+        retourReg.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                affAccueil();
+            }
+        });
         
         regles.setLayout(new BorderLayout(10, 10));
         regles.add(lesregles, BorderLayout.CENTER);
