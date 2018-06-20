@@ -5,6 +5,7 @@
  */
 package view;
 
+import ileinterdite.Observe;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,20 +21,21 @@ import javax.swing.JTextField;
  *
  * @author yannic
  */
-public class IHM extends JFrame {
+public class IHM extends Observe {
     private JFrame window;
     private JButton bDepl, bAss, bPioch, bGagner, bSpecial, bAnnuler, bFinir;
     private JLabel instructions;
-/*    
+    
     private ImagePanel tresor1, tresor2, tresor3, tresor4, niveauEau;
     private ImagePanel carte1, carte2, carte3, carte4, carte5, carte6, carte7, carte8, carte9;
     private ImagePanel cartesOranges, cartesBleues, defausseO, defausseB;
-*/
+    private JPanel grille;
+/*
     private JPanel tresor1, tresor2, tresor3, tresor4, niveauEau;
     private JPanel carte1, carte2, carte3, carte4, carte5, carte6, carte7, carte8, carte9;
     private JPanel cartesOranges, cartesBleues, defausseO, defausseB;
     private JPanel grille;
-    
+*/    
     private final int lfenetre = 1280;
     private final int hfenetre = 720;
     
@@ -51,28 +53,32 @@ public class IHM extends JFrame {
         bFinir = new JButton("Finir de jouer");
         
         instructions = new JLabel("Instructions");
+      
+        tresor1 = new ImagePanel(60,90, System.getProperty("user.dir") + "/src/images/tresors/calice.png");
+        tresor2 = new ImagePanel(60,90, System.getProperty("user.dir") + "/src/images/tresors/cristal.png");;
+        tresor3 = new ImagePanel(60,90, System.getProperty("user.dir") + "/src/images/tresors/pierre.png");
+        tresor4 = new ImagePanel(60,90, System.getProperty("user.dir") + "/src/images/tresors/zephyr.png");
+        niveauEau = new ImagePanel(70,240, System.getProperty("user.dir") + "/src/images/autre/Niveau.png");
+        
+        carte1 = new ImagePanel(67,100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
+        carte2 = new ImagePanel(67,100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
+        carte3 = new ImagePanel(67,100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
+        carte4 = new ImagePanel(67,100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
+        carte5 = new ImagePanel(67,100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
+        carte6 = new ImagePanel(67,100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
+        carte7 = new ImagePanel(67,100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
+        carte8 = new ImagePanel(67,100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
+        carte9 = new ImagePanel(67,100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
+        
+        cartesOranges = new ImagePanel(100,150, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png");
+        cartesBleues = new ImagePanel(100,150, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png");
+        defausseO = new ImagePanel(100,150, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png");
+        defausseB = new ImagePanel(100,150, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png");
+        
+        grille = new JPanel();
+        grille.setPreferredSize(new Dimension(500,500));
+        grille.setBackground(Color.black);
 /*       
-        tresor1 = new ImagePanel();
-        tresor2 = new ImagePanel();
-        tresor3 = new ImagePanel();
-        tresor4 = new ImagePanel();
-        niveauEau = new ImagePanel();
-        
-        carte1 = new ImagePanel();
-        carte2 = new ImagePanel();
-        carte3 = new ImagePanel();
-        carte4 = new ImagePanel();
-        carte5 = new ImagePanel();
-        carte6 = new ImagePanel();
-        carte7 = new ImagePanel();
-        carte8 = new ImagePanel();
-        carte9 = new ImagePanel();
-        
-        cartesOranges = new ImagePanel();
-        cartesBleues = new ImagePanel();
-        defausseO = new ImagePanel();
-        defausseB = new ImagePanel();
-*/        
 
         tresor1 = new JPanel();
         tresor1.setPreferredSize(new Dimension(60,90));
@@ -138,6 +144,7 @@ public class IHM extends JFrame {
         grille = new JPanel();
         grille.setPreferredSize(new Dimension(500,500));
         grille.setBackground(Color.black);
+*/
 
         // INSTANCIATION DES JPANEL DE DISPOSITION
         JPanel layer0 = new JPanel();

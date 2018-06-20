@@ -60,7 +60,7 @@ public class VueAccueil extends Observe {
         JPanel letitre = new JPanel();
 
         //lehaut.add(new JLabel(""));
-        titre = new ImagePanel(0, 0, 0.45, System.getProperty("user.dir") + "/src/images/ile-interdite-logo.png");
+        titre = new ImagePanel(0.45, System.getProperty("user.dir") + "/src/images/ile-interdite-logo.png");
         titre.replacer((accueil.getWidth() / 2) - (titre.getPreferredSize().width / 2), 0);
         System.out.println(Integer.toString(titre.getPreferredSize().width));
         JLabel ti = new JLabel("L'Île Interdite");
@@ -249,7 +249,7 @@ public class VueAccueil extends Observe {
 //Regles :
         regles = new JFrame("Regles du jeu");
         
-        imageregles = new ImagePanel(0, 0, 1, System.getProperty("user.dir") + "/src/images/ile-interdite-logo.png");
+        imageregles = new ImagePanel(1, System.getProperty("user.dir") + "/src/images/ile-interdite-logo.png");
         lesregles = new JScrollPane(imageregles, verticalp, horizontalp);
         
 
