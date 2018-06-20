@@ -227,7 +227,9 @@ public class Controleur implements Observateur {
         } else {
             if (joueur.getTuile().getPossede().size() > 0) {
                 for(Aventurier a : joueur.getTuile().getPossede()){
-                    jDispo.add(a);
+                    if (a.getMain().size() < 9) {
+                        jDispo.add(a);
+                    }
                 }
             }
         }
@@ -693,10 +695,24 @@ public class Controleur implements Observateur {
     private void debutJeu() {
         //méthode qui :
         /*
+            - initialise : trésors / grille / cartes
+            - demande aux utilisateur : nombre joueur / les aventuriers / les noms / la difficulté
             - tire les premieres cartes innondations
             - place les aventuriers
             - distribue les cartes Trésor
          */
+        
+        //initialisations
+        iniTrésor();
+        iniGrille();
+        iniCartes();
+        
+        //Paramètres joueurs
+        choixNbJoueurs();
+        choixAventuriers();
+        choixNomJoueurs();
+        choixDifficulté();
+        
         Grille g = getGrille();
         //tout ceci dépendant du parametres.ALEAS
         if (!Parameters.ALEAS) {
@@ -1034,17 +1050,6 @@ public class Controleur implements Observateur {
         defausseOranges = new ArrayList<CarteOrange>();
         piocheBleues = new Stack<CarteBleue>();
         defausseBleues = new ArrayList<CarteBleue>();
-
-        //initialisations
-        iniTrésor();
-        iniGrille();
-        iniCartes();
-        
-        //Paramètres joueurs
-        choixNbJoueurs();
-        choixAventuriers();
-        choixNomJoueurs();
-        choixDifficulté();
         
         //Declaration de variable utiles pour l'interface texte
         Scanner sc = new Scanner(System.in);
