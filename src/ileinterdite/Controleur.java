@@ -138,7 +138,7 @@ public class Controleur implements Observateur {
         }
         tuilesDispo.addAll(joueur.calculTuileDispo(g));
         tuilesPilote.removeAll(tuilesDispo);
-        getIHM().afficherTuileDispo(tuilesDispo);
+        getIHM().afficherTuilesDispo(tuilesDispo);
         getIHM().afficherTuilesPilote(tuilesPilote);
     }
 
@@ -159,7 +159,7 @@ public class Controleur implements Observateur {
         }
         //à compléter avec l'ihm en fonction du nombre d'assèchement possible.
         for (int i = 0; i < nbAssechement ; i++) {
-            getIHM().afficherTuileAsse(tuilesDispo);
+            getIHM().afficherTuilesAsse(tuilesDispo);
         }
     }
 

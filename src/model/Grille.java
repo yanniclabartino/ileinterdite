@@ -219,7 +219,6 @@ public class Grille extends JPanel {
                     BufferedImage image = null;
                     
                     if (this.getTuile(c, l).getEtat() != Utils.EtatTuile.COULEE) {
-                        System.out.println(this.getTuile(c, l).getNom().toString()+this.getTuile(c, l).getEtat().toString());
                         try {
                             File input = new File(System.getProperty("user.dir") + "/src/images/tuiles/"+this.getTuile(c, l).getNom().toString()+this.getTuile(c, l).getEtat().toString()+".png");
                             image = ImageIO.read(input);
