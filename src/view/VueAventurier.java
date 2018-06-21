@@ -120,9 +120,9 @@ public class VueAventurier extends Observe {
         for (int i = 1; i < 25; i++) {
             tuiles.add(new Tuile(NomTuile.getFromNb(i)));
         }
-        grille = new Grille(tuiles);
-        grille.setPreferredSize(new Dimension(500, 500));
-        grille.setBackground(new Color(50, 50, 230));
+        this.grille = grille;
+        this.grille.setPreferredSize(new Dimension(500, 500));
+        this.grille.setBackground(new Color(50, 50, 230));
 
         // INSTANCIATION DES JPANEL DE DISPOSITION
         JPanel layer0 = new JPanel();
@@ -323,7 +323,6 @@ public class VueAventurier extends Observe {
         for (int i = 0; i < cartes.size(); i++) {
 
             lesCartes.get(i).setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(i).getRole() + ((cartes.get(i).getRole() == "Trésor") ? cartesTresors.get(i).getNomTresor() : "") + ".png");
-
         }
     }
 
