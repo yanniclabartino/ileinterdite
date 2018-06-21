@@ -194,6 +194,9 @@ public class Grille extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         Dimension size = getSize();
+        
+        g.setColor(new Color(0, 64, 255));
+        g.fillOval(-25, -25, size.width+50, size.height+50);
 
         double largeurTuile = (size.width / 6) * 0.89;
         double hauteurTuile = (size.height / 6) * 0.89;
@@ -261,4 +264,7 @@ public class Grille extends JPanel {
             }
         }
     }
+    
+    
+    
 }

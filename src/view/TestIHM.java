@@ -10,7 +10,10 @@ import model.CarteHelicoptere;
 import model.CarteOrange;
 import model.CarteSacDeSable;
 import model.CarteTrésor;
+import model.Grille;
+import model.Tuile;
 import util.NomTresor;
+import util.NomTuile;
 
 /**
  *
@@ -22,7 +25,15 @@ public class TestIHM {
     
     public static void main(String[] args) {
         // TODO code application logic here
-        VueAventurier v = new VueAventurier();
+        //Génération des 24 tuiles
+        ArrayList<Tuile> Tuiles = new ArrayList<Tuile>();
+        for (int i = 1; i < 25; i++) {
+            Tuiles.add(new Tuile(NomTuile.getFromNb(i)));
+        }
+        
+        Grille g = new Grille(Tuiles);
+        
+        VueAventurier v = new VueAventurier(g);
         ArrayList<CarteOrange> main = new ArrayList<>();
         main.add(new CarteHelicoptere());
         main.add(new CarteSacDeSable());
