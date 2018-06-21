@@ -36,7 +36,7 @@ public class IHM extends Observe {
     private ImagePanel tresor1, tresor2, tresor3, tresor4, niveauEau;
     private ImagePanel carte1, carte2, carte3, carte4, carte5, carte6, carte7, carte8, carte9;
     private ImagePanel cartesOranges, cartesBleues, defausseO, defausseB;
-    private JPanel grille;
+    private Grille grille;
     private ArrayList<Tuile> tuiles;
     /*
     private JPanel tresor1, tresor2, tresor3, tresor4, niveauEau;

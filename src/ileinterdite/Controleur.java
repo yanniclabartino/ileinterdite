@@ -505,6 +505,9 @@ public class Controleur implements Observateur {
         iniTrésor();
         iniGrille();
         iniCartes();
+        
+        ihm = new VueAventurier(getGrille());
+        ihm.addObservateur(this);
     }
     
     //FAIRE LA BOUCLE DU JEU
@@ -771,9 +774,7 @@ public class Controleur implements Observateur {
     //CONSTUCTEUR
     public Controleur() { 
         accueil = new VueAccueil();
-        ihm = new VueAventurier();
         accueil.addObservateur(this);
-        ihm.addObservateur(this);
     }
     
     //MAIN
