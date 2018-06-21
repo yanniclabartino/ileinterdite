@@ -368,6 +368,7 @@ public class VueAventurier extends Observe {
                 instructions.setText("Joueur " + joueur + " c'est à vous de jouer. Il vous reste " + nbaction + " action(s)");
                 break;
             case ETAT_ANNULER:
+                instructions.setText("L'action a été annulée. Il vous reste "+nbaction+" actions");
                 break;
 
         }
