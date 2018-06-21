@@ -68,16 +68,16 @@ public class VueAventurier extends Observe {
         tresor4 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/zephyr.png");
         niveauEau = new ImagePanel(70, 240, System.getProperty("user.dir") + "/src/images/autre/Niveau.png");
 
-        carte1 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
-        carte2 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
-        carte3 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
-        carte4 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
-        carte5 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
-        carte6 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
-        carte7 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
-        carte8 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
-        carte9 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
-        
+        carte1 = new ImagePanel(67, 100, "");
+        carte2 = new ImagePanel(67, 100, "");
+        carte3 = new ImagePanel(67, 100, "");
+        carte4 = new ImagePanel(67, 100, "");
+        carte5 = new ImagePanel(67, 100, "");
+        carte6 = new ImagePanel(67, 100, "");
+        carte7 = new ImagePanel(67, 100, "");
+        carte8 = new ImagePanel(67, 100, "");
+        carte9 = new ImagePanel(67, 100, "");
+
         lesCartes = new ArrayList<>();
         lesCartes.add(carte1);
         lesCartes.add(carte2);
@@ -304,8 +304,6 @@ public class VueAventurier extends Observe {
             lesCartes.get(i).setImage(System.getProperty("user.dir") + "/src/images/cartes/"+cartes.get(i).getRole()+((cartes.get(i).getRole()=="Trésor")?cartesTresors.get(i).getNomTresor():"")+".png");
             
         }
-        
-        //carte1.setImage(System.getProperty("user.dir") + "/src/images/cartes/LaTourDeGuet.png");
     }
 
 }
