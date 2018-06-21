@@ -10,11 +10,15 @@ public class Tuile {
     private int ligne;
     private int colonne;
     private NomTuile nom;
+    private int selected; //0 => tuile non-sélectionné, 
+                          //1 => sélectionnée pour le déplacement, 
+                          //2 => selectionnée pour le déplacmeent du pilote.
 
     public Tuile(NomTuile nom) {
         possede = new ArrayList<Aventurier>();
         this.nom = nom;
         this.etat = EtatTuile.ASSECHEE;
+        this.selected = 0;
     }
         
     public int getLigne() {
@@ -53,6 +57,14 @@ public class Tuile {
 
     public void setEtat(EtatTuile nouvelEtat) {
             this.etat = nouvelEtat;
+    }
+
+    public int getSelected() {
+        return selected;
+    }
+    
+    public void setSelected(int selected) {
+        this.selected = selected;
     }
 
     //interface texte
