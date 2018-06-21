@@ -11,7 +11,7 @@ public class Tuile {
     private int colonne;
     private NomTuile nom;
     private int selected; //0 => tuile non-sélectionné, 
-                          //1 => sélectionnée pour le déplacement, 
+                          //1 => sélectionnée pour le déplacement ou l'assèchement, 
                           //2 => selectionnée pour le déplacmeent du pilote.
 
     public Tuile(NomTuile nom) {
