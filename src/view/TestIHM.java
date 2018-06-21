@@ -15,7 +15,7 @@ public class TestIHM {
     
     public static void main(String[] args) {
         // TODO code application logic here
-        new IHM();
+        new VueAventurier();
             
     }
     
