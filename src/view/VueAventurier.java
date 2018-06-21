@@ -39,7 +39,7 @@ public class VueAventurier extends Observe {
     private ImagePanel carte1, carte2, carte3, carte4, carte5, carte6, carte7, carte8, carte9;
     private ArrayList<ImagePanel> lesCartes;
     private ImagePanel cartesOranges, cartesBleues, defausseO, defausseB, perso;
-    private JPanel grille;
+    private Grille grille;
 
     private final int lfenetre = 1280;
     private final int hfenetre = 720;
@@ -113,11 +113,11 @@ public class VueAventurier extends Observe {
         JPanel layer2east = new JPanel();
         JPanel layer2west = new JPanel();
 
-        JPanel layer3westCenter = new JPanel();
-        JPanel layer3eastCenter = new JPanel();
+        JPanel layer3west = new JPanel();
+        JPanel layer3east = new JPanel();
 
-        JPanel layer4eastCenterCenter = new JPanel();
-        JPanel layer4eastCenterNorth = new JPanel();
+        JPanel layer4center = new JPanel();
+        JPanel layer4north = new JPanel();
 
         // AFFECTATION DE TYPES AUX PANELS
         layer0.setLayout(new BorderLayout());
@@ -130,12 +130,12 @@ public class VueAventurier extends Observe {
         layer2east.setLayout(new BorderLayout());
         layer2west.setLayout(new BorderLayout());
 
-        layer3westCenter.setLayout(new GridLayout(3, 2));
-        layer3westCenter.setPreferredSize(new Dimension(200, 300));
-        layer3eastCenter.setLayout(new BorderLayout());
+        layer3west.setLayout(new GridLayout(3, 2));
+        layer3west.setPreferredSize(new Dimension(200, 300));
+        layer3east.setLayout(new BorderLayout());
 
-        layer4eastCenterCenter.setLayout(new GridLayout(7, 1));
-        layer4eastCenterNorth.setLayout(new GridLayout(1, 4));
+        layer4center.setLayout(new GridLayout(7, 1));
+        layer4north.setLayout(new GridLayout(1, 4));
 
         // PLACEMENT DES PANELS
         layer1north.add(layer2north, BorderLayout.NORTH);
@@ -144,11 +144,11 @@ public class VueAventurier extends Observe {
 
         layer1south.add(layer2south, BorderLayout.CENTER);
 
-        layer2west.add(layer3westCenter, BorderLayout.CENTER);
-        layer2east.add(layer3eastCenter, BorderLayout.CENTER);
+        layer2west.add(layer3west, BorderLayout.CENTER);
+        layer2east.add(layer3east, BorderLayout.CENTER);
 
-        layer3eastCenter.add(layer4eastCenterCenter, BorderLayout.CENTER);
-        layer3eastCenter.add(layer4eastCenterNorth, BorderLayout.NORTH);
+        layer3east.add(layer4center, BorderLayout.CENTER);
+        layer3east.add(layer4north, BorderLayout.NORTH);
 
         layer0.add(layer1north, BorderLayout.NORTH);
         layer0.add(layer1south, BorderLayout.SOUTH);
@@ -189,27 +189,27 @@ public class VueAventurier extends Observe {
         layer2south.add(carte8);
         layer2south.add(carte9);
 
-        layer3eastCenter.add(niveauEau, BorderLayout.WEST);
+        layer3east.add(niveauEau, BorderLayout.WEST);
 
-        layer3westCenter.add(defausseO);
-        layer3westCenter.add(cartesOranges);
-        layer3westCenter.add(defausseB);
-        layer3westCenter.add(cartesBleues);
-        layer3westCenter.add(perso);
-        layer3westCenter.add(bPerso);
+        layer3west.add(defausseO);
+        layer3west.add(cartesOranges);
+        layer3west.add(defausseB);
+        layer3west.add(cartesBleues);
+        layer3west.add(perso);
+        layer3west.add(bPerso);
 
-        layer4eastCenterCenter.add(bDepl);
-        layer4eastCenterCenter.add(bAss);
-        layer4eastCenterCenter.add(bPioch);
-        layer4eastCenterCenter.add(bGagner);
-        layer4eastCenterCenter.add(bSpecial);
-        layer4eastCenterCenter.add(bAnnuler);
-        layer4eastCenterCenter.add(bFinir);
+        layer4center.add(bDepl);
+        layer4center.add(bAss);
+        layer4center.add(bPioch);
+        layer4center.add(bGagner);
+        layer4center.add(bSpecial);
+        layer4center.add(bAnnuler);
+        layer4center.add(bFinir);
 
-        layer4eastCenterNorth.add(tresor1);
-        layer4eastCenterNorth.add(tresor2);
-        layer4eastCenterNorth.add(tresor3);
-        layer4eastCenterNorth.add(tresor4);
+        layer4north.add(tresor1);
+        layer4north.add(tresor2);
+        layer4north.add(tresor3);
+        layer4north.add(tresor4);
 
         window.add(layer0);
 
