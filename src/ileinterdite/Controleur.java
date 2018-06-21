@@ -1,6 +1,5 @@
 package ileinterdite;
 
-import java.awt.Color;
 import model.*;
 import util.*;
 import util.Utils.Pion;
@@ -8,7 +7,6 @@ import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import view.IHM;
 import view.VueAccueil;
 import view.VueAventurier;
 /*
@@ -25,7 +23,6 @@ public class Controleur implements Observateur {
     private VueAventurier ihm;
     
     private Grille grille;
-    private int niveauEau;
     private Trésor[] trésors;
     private HashMap<Aventurier, String> joueurs;
     private Aventurier joueurCourant;
@@ -34,7 +31,7 @@ public class Controleur implements Observateur {
     private Stack<CarteOrange> piocheOranges;
     private ArrayList<CarteOrange> defausseOranges;
     private boolean pouvoirPiloteDispo, jeuEnCours;
-    private int nbJoueurs;
+    private int niveauEau, nbJoueurs, nbActions;
 
     @Override
     public void traiterMessage(Message m) {
@@ -47,7 +44,6 @@ public class Controleur implements Observateur {
                 Parameters.setLogs(m.logs);
                 Parameters.setAleas(m.aleas);
                 debutJeu();
-                //à compléter avce les méthodes de l'ihm.
                 break;
             case SOUHAITE_DEPLACEMENT:
                 if (deplacementPossible(getJoueurCourant())) {
@@ -102,11 +98,11 @@ public class Controleur implements Observateur {
                 }
                 break;
             case FINIR_TOUR:
-                //à compléter.
+                this.nbActions = 0;
                 break;
             case ANNULER:
-                //à compléter avec les méthodes de l'ihm pour :
-                //  - annuler une action en cours (remettre l'ihm en état comme si l'action n'avait pas était demandée)
+                getIHM().annulerAction();
+                //  - annule une action en cours (remettre l'ihm en état comme si l'action n'avait pas était demandée)
                 break;
         }
         
@@ -510,7 +506,7 @@ public class Controleur implements Observateur {
         ihm.addObservateur(this);
     }
     
-    //FAIRE LA BOUCLE DU JEU
+    //à compléter avec l'ihm
     private void debutJeu() {
         //méthode qui :
         /*
@@ -568,24 +564,20 @@ public class Controleur implements Observateur {
                 } while (!randomCorrect);
             }
         }
-        this.joueurCourant = (Aventurier) getJoueurs().keySet().toArray()[0];
         
         //FAIRE LA BOUCLE DU JEU.
-        /*
-        //Tours de jeu
-        boolean actionEffectuée;
         while (!this.estTerminé()) {
-            for (Aventurier a : joueurs.keySet()) {
-                pouvoirPiloteDispo = true;
+            for (Aventurier a : getJoueurs().keySet()) {
+                this.joueurCourant = a;
+                this.pouvoirPiloteDispo = true;
                 if (!this.estTerminé()) {
-                    int nbActions;
                     if (a.getCouleur()==Pion.JAUNE) {
-                        nbActions = 4;
+                        this.nbActions = 4;
                     } else {
-                        nbActions = 3;
+                        this.nbActions = 3;
                     }
-                    while (nbActions > 0) {
-                        
+                    while (this.nbActions > 0) {
+                        getIHM().afficerEtat(EtatCourant, getJoueurCourant(), getNbAction());
                     }
                     gererCarteOrange();
                     gererCarteBleue();
@@ -611,7 +603,7 @@ public class Controleur implements Observateur {
             }
         } else {
             //Partie gagnée, WP !
-        } */
+        }
     }
     
     private void iniCartes(){
@@ -692,6 +684,9 @@ public class Controleur implements Observateur {
     
     //METHODES UTILES
     
+    private int getNbAction() {
+        return this.nbActions;
+    }
     private VueAventurier getIHM() {
         return this.ihm;
     }
