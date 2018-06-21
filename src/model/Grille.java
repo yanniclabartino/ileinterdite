@@ -186,37 +186,40 @@ public class Grille extends JPanel {
         }
         System.out.println("                +-------+-------+");
     }
-    
+
+    @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         Dimension size = getSize();
-        
-        g.setColor(Color.white);
-        g.fillRect(0, 0, size.width, size.height);
+
+        double largeurTuile = (size.width / 6) * 0.8;
+        double hauteurTuile = (size.height / 6) * 0.8;
+        double ecartTuilesL = (size.width / 6) * 0.1;
+        double ecartTuilesH = (size.height / 6) * 0.1;
+
+        int dc = 1;
+        int dl = 1;
+
         g.setColor(Color.black);
-        g.drawRect(0, 0, size.width - 1, size.height - 1);
-        
-        //////// A COMPLETER : Exercice 2 question 2
-        
-        for (int i = 0; i < size.width; i+=size.width/6){
-            //boucle d'itération pour dessiner les ligne verticales
-            g.drawLine(i, 0, i, size.width);
-        }
-        for (int j = 0; j < size.height-1; j+=size.height/6){
-            //boucle d'itération pour dessiner les ligne horizontales
-            g.drawLine(0, j, size.width, j);
-        }
-        
-        for (int i = 0; i < 6; i++){
-            for (int j = 0; j < 6; j++){
-                
-                /*if (tuile[i][j]==1||tuile[i][j]==0){
-                    g.setColor((tuile[i][j]==1)?Color.blue:Color.red);
-                    g.fillOval(j*size.width/6, i*size.height/6, size.width/6, size.height/6);
-                }*/
+        g.fillRect(0, 0, size.width, size.height);
+
+        for (int l = 0; l < 6; l++) {
+            for (int c = 0; c < 6; c++) {
+                if (c > 0) { dc = 2; }
+                if (l > 0) { dl = 2; }
+                if (this.getTuile(c, l) != null) {
+                    if (this.getTuile(c, l).getEtat()==Utils.EtatTuile.ASSECHEE) {
+                        g.setColor(Color.GREEN);
+                    } else if (this.getTuile(c, l).getEtat()==Utils.EtatTuile.COULEE) {
+                        g.setColor(Color.CYAN);
+                    } else {
+                        g.setColor(Color.BLACK);
+                    }
+                    g.fillRect((int)(((ecartTuilesL * c) + (ecartTuilesL * dc)) + (largeurTuile * c)), (int) (((ecartTuilesH * l) + (ecartTuilesH * dl)) + (hauteurTuile * l)), (int)largeurTuile, (int)hauteurTuile);
+                }
             }
         }
-        
+
     }
-    
+
 }
