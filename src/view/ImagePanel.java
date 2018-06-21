@@ -89,4 +89,16 @@ public class ImagePanel extends JPanel {
         this.repaint();
     }
     
+    public void setImage(String chemin/*, int height, int width*/){
+        //this.height = height;
+        //this.width = width;
+        try {
+            File input = new File(chemin);
+            image = ImageIO.read(input);
+        } catch (IOException ie) {
+            System.out.println("Error:" + ie.getMessage());
+        }
+        this.repaint();
+    }
+    
 }

@@ -15,12 +15,12 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import model.CarteOrange;
+import model.CarteTrésor;
 import model.Grille;
 import model.Tuile;
 import util.NomTuile;
@@ -37,6 +37,7 @@ public class VueAventurier extends Observe {
 
     private ImagePanel tresor1, tresor2, tresor3, tresor4, niveauEau;
     private ImagePanel carte1, carte2, carte3, carte4, carte5, carte6, carte7, carte8, carte9;
+    private ArrayList<ImagePanel> lesCartes;
     private ImagePanel cartesOranges, cartesBleues, defausseO, defausseB, perso;
     private JPanel grille;
 
@@ -75,6 +76,17 @@ public class VueAventurier extends Observe {
         carte7 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
         carte8 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
         carte9 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
+        
+        lesCartes = new ArrayList<>();
+        lesCartes.add(carte1);
+        lesCartes.add(carte2);
+        lesCartes.add(carte3);
+        lesCartes.add(carte4);
+        lesCartes.add(carte5);
+        lesCartes.add(carte6);
+        lesCartes.add(carte7);
+        lesCartes.add(carte8);
+        lesCartes.add(carte9);
 
         cartesOranges = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png");
         cartesBleues = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png");
@@ -273,6 +285,26 @@ public class VueAventurier extends Observe {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
         window.setResizable(false);
+    }
+    
+    public void dessinCartes(ArrayList<CarteOrange> cartes){
+        
+        ArrayList<CarteTrésor> cartesTresors = new ArrayList<CarteTrésor>();
+        for (CarteOrange c : cartes) {
+            if (c.getRole().equals("Trésor")) {
+                cartesTresors.add((CarteTrésor)c);
+            }else {
+                cartesTresors.add(null);
+            }
+        }
+        
+        for(int i = 0; i < cartes.size(); i++){
+            
+            lesCartes.get(i).setImage(System.getProperty("user.dir") + "/src/images/cartes/"+cartes.get(i).getRole()+((cartes.get(i).getRole()=="Trésor")?cartesTresors.get(i).getNomTresor():"")+".png");
+            
+        }
+        
+        //carte1.setImage(System.getProperty("user.dir") + "/src/images/cartes/LaTourDeGuet.png");
     }
 
 }
