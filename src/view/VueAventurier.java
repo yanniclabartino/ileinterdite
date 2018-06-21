@@ -107,7 +107,7 @@ public class VueAventurier extends Observe {
         JPanel layer4center = new JPanel();
         JPanel layer4north = new JPanel();
 
-        // AFFECTATION DE TYPES AUX PANELS
+        // AFFECTATION DE TYPES AUX PANELS DE DISPOSITION
         layer0.setLayout(new BorderLayout());
 
         layer1north.setLayout(new BorderLayout());
@@ -125,7 +125,7 @@ public class VueAventurier extends Observe {
         layer4center.setLayout(new GridLayout(7, 1));
         layer4north.setLayout(new GridLayout(1, 4));
 
-        // PLACEMENT DES PANELS
+        // PLACEMENT DES PANELS DE DISPOSITION
         layer1north.add(layer2north, BorderLayout.NORTH);
         layer1north.add(layer2east, BorderLayout.EAST);
         layer1north.add(layer2west, BorderLayout.WEST);
@@ -162,7 +162,7 @@ public class VueAventurier extends Observe {
         layer2west.add(new VidePanel(80, 400), BorderLayout.WEST);
         layer2west.add(new VidePanel(300, 60), BorderLayout.SOUTH);
 
-        // AJOUT DES ÉLÉMENTS    
+        // AJOUT DES ÉLÉMENTS AUX PANELS DE DISPOSITION
         layer1north.add(grille, BorderLayout.CENTER);
 
         layer2north.add(instructions, BorderLayout.CENTER);
