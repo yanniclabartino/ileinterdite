@@ -10,6 +10,7 @@ public class Tuile {
     private int ligne;
     private int colonne;
     private NomTuile nom;
+    private boolean isDipo = false; //affichage des tuiles dipos;
 
     public Tuile(NomTuile nom) {
         possede = new ArrayList<Aventurier>();
@@ -53,6 +54,14 @@ public class Tuile {
 
     public void setEtat(EtatTuile nouvelEtat) {
             this.etat = nouvelEtat;
+    }
+    
+    public boolean isDipo(){
+        return isDipo;
+    }
+    
+    public void setDispo(boolean b){
+        this.isDipo = b;
     }
 
     //interface texte
