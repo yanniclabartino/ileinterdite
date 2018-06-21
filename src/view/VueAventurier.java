@@ -58,6 +58,7 @@ public class VueAventurier extends Observe {
         bFinir = new JButton("Finir de jouer");
         bPerso = new JButton("Autres joueurs");
         bPerso.setPreferredSize(new Dimension(87,130));
+        bPerso.setText("<html><center>"+"Autres"+"<br>"+"joueurs"+"</center></html>");
 
         instructions = new JLabel("Instructions");
 
