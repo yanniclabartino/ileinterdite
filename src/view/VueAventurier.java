@@ -11,6 +11,7 @@ import ileinterdite.TypesMessages;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import static javax.swing.SwingConstants.CENTER;
 import model.CarteOrange;
 import model.CarteTrésor;
 import model.Grille;
@@ -30,6 +32,22 @@ import util.NomTuile;
  * @author yannic
  */
 public class VueAventurier extends Observe {
+
+    public static final int ETAT_COMMENCER = 1;
+    public static final int ETAT_SOUHAITE_DEPLACEMENT = 2;
+    public static final int ETAT_DEPLACEMENT = 3;
+    public static final int ETAT_SOUHAITE_ASSECHER = 4;
+    public static final int ETAT_ASSECHER = 5;
+    public static final int ETAT_SOUHAITE_DONNER = 6;
+    public static final int ETAT_DONNER = 7;
+    public static final int ETAT_GAGNER_TRESOR = 8;
+    public static final int ETAT_TROP_CARTES = 9;
+    public static final int ETAT_DEFAUSSE_CARTE = 10;
+    public static final int ETAT_DONNER_CARTE = 11;
+    public static final int ETAT_SOUHAITE_JOUER_SPECIALE = 12;
+    public static final int ETAT_JOUER_SPECIALE = 13;
+    public static final int ETAT_FINIR_TOUR = 14;
+    public static final int ETAT_ANNULER = 15;
 
     private JFrame window;
     private JButton bDepl, bAss, bPioch, bGagner, bSpecial, bAnnuler, bFinir, bPerso;
@@ -57,10 +75,13 @@ public class VueAventurier extends Observe {
         bAnnuler = new JButton("Annuler");
         bFinir = new JButton("Finir de jouer");
         bPerso = new JButton("Autres joueurs");
-        bPerso.setPreferredSize(new Dimension(87,130));
-        bPerso.setText("<html><center>"+"Autres"+"<br>"+"joueurs"+"</center></html>");
+        bPerso.setPreferredSize(new Dimension(87, 130));
+        bPerso.setText("<html><center>" + "Autres" + "<br>" + "joueurs" + "</center></html>");
 
-        instructions = new JLabel("Instructions");
+        instructions = new JLabel();
+        instructions.setHorizontalAlignment(CENTER);
+        Font font = new Font("Arial", Font.BOLD, 15);
+        instructions.setFont(font);
 
         tresor1 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/calice.png");
         tresor2 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/cristal.png");;
@@ -77,7 +98,7 @@ public class VueAventurier extends Observe {
         carte7 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
         carte8 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
         carte9 = new ImagePanel(67, 100, System.getProperty("user.dir") + "/src/images/cartes/LaPorteDeFer.png");
-        
+
         lesCartes = new ArrayList<>();
         lesCartes.add(carte1);
         lesCartes.add(carte2);
@@ -287,25 +308,72 @@ public class VueAventurier extends Observe {
         window.setVisible(true);
         window.setResizable(false);
     }
-    
-    public void dessinCartes(ArrayList<CarteOrange> cartes){
-        
+
+    public void dessinCartes(ArrayList<CarteOrange> cartes) {
+
         ArrayList<CarteTrésor> cartesTresors = new ArrayList<CarteTrésor>();
         for (CarteOrange c : cartes) {
             if (c.getRole().equals("Trésor")) {
-                cartesTresors.add((CarteTrésor)c);
-            }else {
+                cartesTresors.add((CarteTrésor) c);
+            } else {
                 cartesTresors.add(null);
             }
         }
-        
-        for(int i = 0; i < cartes.size(); i++){
-            
-            lesCartes.get(i).setImage(System.getProperty("user.dir") + "/src/images/cartes/"+cartes.get(i).getRole()+((cartes.get(i).getRole()=="Trésor")?cartesTresors.get(i).getNomTresor():"")+".png");
-            
+
+        for (int i = 0; i < cartes.size(); i++) {
+
+            lesCartes.get(i).setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(i).getRole() + ((cartes.get(i).getRole() == "Trésor") ? cartesTresors.get(i).getNomTresor() : "") + ".png");
+
         }
-        
+
         //carte1.setImage(System.getProperty("user.dir") + "/src/images/cartes/LaTourDeGuet.png");
     }
 
+    public void afficherEtatAction(int etat, String joueur, Integer nbaction, String tuile, String carte) {
+        switch (etat) {
+            case ETAT_COMMENCER:
+                instructions.setText("Bienvenue " + joueur + ". Il vous reste " + nbaction + " action(s)");
+                break;
+            case ETAT_SOUHAITE_DEPLACEMENT:
+                instructions.setText("Choissisez une tuile :");
+                break;
+            case ETAT_DEPLACEMENT:
+                instructions.setText("Le déplacement vers la tuile " + tuile + " a été effectué. Il vous reste " + nbaction + " action(s)");
+                break;
+            case ETAT_SOUHAITE_ASSECHER:
+                instructions.setText("Choissisez une tuile :");
+                break;
+            case ETAT_ASSECHER:
+                instructions.setText("La tuile " + tuile + " a été asséchée. Il vous reste " + nbaction + " action(s)");
+                break;
+            case ETAT_SOUHAITE_DONNER:
+                instructions.setText("Choissisez une carte à donner :");
+                break;
+            case ETAT_DONNER:
+                instructions.setText("La carte " + carte + " a été donnée au joueur " + joueur + " . Il vous reste " + nbaction + " action(s)");
+                break;
+            case ETAT_GAGNER_TRESOR:
+                instructions.setText("Vous avez gagnez un trésor");
+                break;
+            case ETAT_TROP_CARTES:
+                instructions.setText("Vous avez trop de cartes dans votre main, vous devez en défausser une");
+                break;
+            case ETAT_DEFAUSSE_CARTE:
+                instructions.setText("La carte " + carte + " a été défaussée. Il vous reste " + nbaction + " action(s)");
+                break;
+            case ETAT_SOUHAITE_JOUER_SPECIALE:
+                instructions.setText("Choissisez une carte :");
+                break;
+            case ETAT_JOUER_SPECIALE:
+                instructions.setText("La carte spéciale " + carte + " est utilisée. Il vous reste " + nbaction + " action(s)");
+                break;
+            case ETAT_FINIR_TOUR:
+                instructions.setText("Joueur " + joueur + " c'est à vous de jouer. Il vous reste " + nbaction + " action(s)");
+                break;
+            case ETAT_ANNULER:
+                break;
+
+        }
+
+    }
 }
