@@ -2,6 +2,7 @@ package view;
 
 import ileinterdite.Message;
 import ileinterdite.Observe;
+import ileinterdite.TypesMessages;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -257,7 +258,7 @@ public class VueAccueil extends Observe {
                     messageErreur.setText("Plusieurs joueurs ont le même aventurier");
                 } else {
                     //création du message de début de partie
-                    //m.type = TypesMessages.DEMARRER_PARTIE;
+                    m.type = TypesMessages.COMMENCER;
                     m.difficulté = choixDiff.getSelectedIndex();
                     m.logs = ouiL.isSelected();
                     m.nbJoueurs = (int)choixNbJoueurs.getSelectedItem();

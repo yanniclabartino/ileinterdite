@@ -14,12 +14,14 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import model.Grille;
+import model.Tuile;
+import util.NomTuile;
 
 /**
  *
@@ -35,6 +37,7 @@ public class IHM extends Observe {
     private ImagePanel carte1, carte2, carte3, carte4, carte5, carte6, carte7, carte8, carte9;
     private ImagePanel cartesOranges, cartesBleues, defausseO, defausseB;
     private JPanel grille;
+    private ArrayList<Tuile> tuiles;
     /*
     private JPanel tresor1, tresor2, tresor3, tresor4, niveauEau;
     private JPanel carte1, carte2, carte3, carte4, carte5, carte6, carte7, carte8, carte9;
@@ -80,9 +83,13 @@ public class IHM extends Observe {
         defausseO = new ImagePanel(100, 150, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png");
         defausseB = new ImagePanel(100, 150, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png");
 
-        grille = new JPanel();
+        ArrayList<Tuile> tuiles = new ArrayList<Tuile>();
+        for (int i = 1; i < 25; i++) {
+            tuiles.add(new Tuile(NomTuile.getFromNb(i)));
+        }
+        grille = new Grille(tuiles);
         grille.setPreferredSize(new Dimension(500, 500));
-        grille.setBackground(Color.black);
+        grille.setBackground(new Color(50, 50, 230));
         /*       
 
         tresor1 = new JPanel();

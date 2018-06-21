@@ -1,10 +1,15 @@
 package model;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
+import javax.swing.*;
 import util.NomTuile;
 import util.Utils;
 
-public class Grille {
+public class Grille extends JPanel {
 
     private Tuile tuile[][];
 
@@ -181,4 +186,37 @@ public class Grille {
         }
         System.out.println("                +-------+-------+");
     }
+    
+    public void paintComponent(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        Dimension size = getSize();
+        
+        g.setColor(Color.white);
+        g.fillRect(0, 0, size.width, size.height);
+        g.setColor(Color.black);
+        g.drawRect(0, 0, size.width - 1, size.height - 1);
+        
+        //////// A COMPLETER : Exercice 2 question 2
+        
+        for (int i = 0; i < size.width; i+=size.width/6){
+            //boucle d'itération pour dessiner les ligne verticales
+            g.drawLine(i, 0, i, size.width);
+        }
+        for (int j = 0; j < size.height-1; j+=size.height/6){
+            //boucle d'itération pour dessiner les ligne horizontales
+            g.drawLine(0, j, size.width, j);
+        }
+        
+        for (int i = 0; i < 6; i++){
+            for (int j = 0; j < 6; j++){
+                
+                /*if (tuile[i][j]==1||tuile[i][j]==0){
+                    g.setColor((tuile[i][j]==1)?Color.blue:Color.red);
+                    g.fillOval(j*size.width/6, i*size.height/6, size.width/6, size.height/6);
+                }*/
+            }
+        }
+        
+    }
+    
 }
