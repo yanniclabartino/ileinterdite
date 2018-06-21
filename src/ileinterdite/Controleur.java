@@ -33,7 +33,6 @@ public class Controleur implements Observateur {
     private ArrayList<CarteOrange> defausseOranges;
     private boolean pouvoirPiloteDispo, jeuEnCours;
     private int niveauEau, nbJoueurs, nbActions;
-    private int nbActionJ;
 
     @Override
     public void traiterMessage(Message m) {
@@ -46,39 +45,39 @@ public class Controleur implements Observateur {
                 Parameters.setLogs(m.logs);
                 Parameters.setAleas(m.aleas);
                 debutJeu();
-                getIHM().afficherEtatAction(ihm.ETAT_COMMENCER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, null, null);
+                getIHM().afficherEtatAction(ihm.ETAT_COMMENCER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
                 break;
             case SOUHAITE_DEPLACEMENT:
                 if (deplacementPossible(getJoueurCourant())) {
                     gererDeplacement(getJoueurCourant());
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DEPLACEMENT, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, null, null);
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DEPLACEMENT, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
                 }
                 break;
             case ACTION_DEPLACEMENT:
                 getJoueurCourant().seDeplace(m.tuile);
-                getIHM().afficherEtatAction(ihm.ETAT_DEPLACEMENT, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, m.tuile.getNom(), null);
+                getIHM().afficherEtatAction(ihm.ETAT_DEPLACEMENT, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, m.tuile.getNom().toString(), null);
                 break;
             case SOUHAITE_ASSECHER:
                 if (assechementPossible()) {
                     gererAssechement();
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_ASSECHER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, null, null);
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_ASSECHER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
 
                 }
                 break;
             case ACTION_ASSECHER:
                 m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
-                getIHM().afficherEtatAction(ihm.ETAT_ASSECHER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, m.tuile.getNom(), null);
+                getIHM().afficherEtatAction(ihm.ETAT_ASSECHER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, m.tuile.getNom().toString(), null);
                 break;
             case SOUHAITE_DONNER:
                 if (donationPossible()) {
                     gererDonation();
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DONNER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, m.tuile.getNom(), null);
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DONNER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, m.tuile.getNom().toString(), null);
                 }
                 break;
             case ACTION_DONNER:
                 getJoueurCourant().defausseCarte(m.carte);
                 m.receveur.piocheCarte(m.carte);
-                getIHM().afficherEtatAction(ihm.ETAT_DONNER, nomJoueurCourant(joueurs, m.receveur), nbActionJ, m.tuile.getNom(), null);
+                getIHM().afficherEtatAction(ihm.ETAT_DONNER, nomJoueurCourant(joueurs, m.receveur), nbActions, m.tuile.getNom().toString(), null);
                 break;
             case ACTION_GAGNER_TRESOR:
                 if (gererGainTresor()) {
@@ -90,12 +89,12 @@ public class Controleur implements Observateur {
             case DEFAUSSE_CARTE:
                 getJoueurCourant().defausseCarte(m.carte);
                 addDefausseOranges(m.carte);
-                getIHM().afficherEtatAction(ihm.ETAT_DEFAUSSE_CARTE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, null, m.carte.getRole());
+                getIHM().afficherEtatAction(ihm.ETAT_DEFAUSSE_CARTE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, m.carte.getRole());
                 break;
             case SOUHAITE_JOUER_SPECIALE:
                 if (specialePossible() != 0) {
                     gererCarteSpecial();
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_JOUER_SPECIALE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, null, null);
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_JOUER_SPECIALE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
                 }
                 break;
             case JOUER_SPECIALE:
@@ -103,21 +102,21 @@ public class Controleur implements Observateur {
                     getJoueurCourant().defausseCarte(m.carte);
                     addDefausseOranges(m.carte);
                     this.jeuEnCours = false;
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, null, m.carte.getRole());
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, m.carte.getRole());
                 } else {
                     m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
                     getJoueurCourant().defausseCarte(m.carte);
                     addDefausseOranges(m.carte);
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, m.tuile.getNom(), m.carte.getRole());
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, m.tuile.getNom().toString(), m.carte.getRole());
                 }
                 break;
             case FINIR_TOUR:
                 this.nbActions = 0;
-                getIHM().afficherEtatAction(ihm.ETAT_FINIR_TOUR, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, null, null);
+                getIHM().afficherEtatAction(ihm.ETAT_FINIR_TOUR, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
                 break;
             case ANNULER:
                 getIHM().annulerAction();
-                getIHM().afficherEtatAction(ihm.ETAT_ANNULER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActionJ, null, null);
+                getIHM().afficherEtatAction(ihm.ETAT_ANNULER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
                 //  - annule une action en cours (remettre l'ihm en état comme si l'action n'avait pas était demandée)
                 break;
         }

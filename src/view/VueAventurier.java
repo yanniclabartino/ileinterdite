@@ -62,7 +62,7 @@ public class VueAventurier extends Observe {
     private final int lfenetre = 1280;
     private final int hfenetre = 720;
 
-    public VueAventurier() {
+    public VueAventurier(Grille grille) {
 
         // INSTANCIATIONS DES ÉLÉMENTS DE L'IHM
         window = new JFrame();
