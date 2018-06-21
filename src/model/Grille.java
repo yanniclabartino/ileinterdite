@@ -191,7 +191,6 @@ public class Grille extends JPanel {
         System.out.println("                +-------+-------+");
     }
 
-    //méthode graphique à compléter
     @Override
     public void paintComponent(Graphics g) {
         Dimension size = getSize();
@@ -213,20 +212,36 @@ public class Grille extends JPanel {
                     BufferedImage image = null;
                     
                     if (this.getTuile(c, l).getEtat() != Utils.EtatTuile.COULEE) {
-                        if (this.getTuile(c, l).getSelected() != 0) {
-                            if (this.getTuile(c, l).getSelected()==1) {
+                        switch (this.getTuile(c, l).getSelected()) {
+                            case 1:
                                 //illustrer la tuile pour déplacement.
-                            } else if (this.getTuile(c, l).getSelected()==2) {
+                                try {
+                                    File input = new File(System.getProperty("user.dir") + "/src/images/tuiles/"+this.getTuile(c, l).getNom().toString()+"Dispo.png");
+                                    image = ImageIO.read(input);
+                                } catch (IOException ie) {
+                                    System.out.println("Error:" + ie.getMessage());
+                                }
+                                g.drawImage(image, coordX, coordY, (int) largeurTuile,(int)  hauteurTuile, this);
+                                break;
+                            case 2:
                                 //illustrer la tuile pour le déplacement pilote.
-                            }
-                        } else {
-                            try {
-                                File input = new File(System.getProperty("user.dir") + "/src/images/tuiles/"+this.getTuile(c, l).getNom().toString()+this.getTuile(c, l).getEtat().toString()+".png");
-                                image = ImageIO.read(input);
-                            } catch (IOException ie) {
-                                System.out.println("Error:" + ie.getMessage());
-                            }
-                            g.drawImage(image, coordX, coordY, (int) largeurTuile,(int)  hauteurTuile, this);
+                                try {
+                                    File input = new File(System.getProperty("user.dir") + "/src/images/tuiles/"+this.getTuile(c, l).getNom().toString()+"Spe.png");
+                                    image = ImageIO.read(input);
+                                } catch (IOException ie) {
+                                    System.out.println("Error:" + ie.getMessage());
+                                }
+                                g.drawImage(image, coordX, coordY, (int) largeurTuile,(int)  hauteurTuile, this);
+                                break;
+                            case 0:
+                                try {
+                                    File input = new File(System.getProperty("user.dir") + "/src/images/tuiles/"+this.getTuile(c, l).getNom().toString()+this.getTuile(c, l).getEtat().toString()+".png");
+                                    image = ImageIO.read(input);
+                                } catch (IOException ie) {
+                                    System.out.println("Error:" + ie.getMessage());
+                                }
+                                g.drawImage(image, coordX, coordY, (int) largeurTuile,(int)  hauteurTuile, this);
+                                break;
                         }
                     } else {
                         g.fillRect(coordX, coordY, (int) largeurTuile, (int) hauteurTuile);

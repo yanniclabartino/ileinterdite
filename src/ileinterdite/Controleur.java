@@ -148,8 +148,9 @@ public class Controleur implements Observateur {
         }
         tuilesDispo.addAll(joueur.calculTuileDispo(g));
         tuilesPilote.removeAll(tuilesDispo);
-        getIHM().afficherTuilesDispo(tuilesDispo);
-        getIHM().afficherTuilesPilote(tuilesPilote);
+        
+        //getIHM().afficherTuilesDispo(tuilesDispo);
+        //getIHM().afficherTuilesPilote(tuilesPilote);
     }
 
     private boolean assechementPossible() {
