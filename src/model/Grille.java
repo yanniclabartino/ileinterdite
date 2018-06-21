@@ -4,7 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import util.NomTuile;
 import util.Utils;
@@ -187,35 +191,45 @@ public class Grille extends JPanel {
         System.out.println("                +-------+-------+");
     }
 
+    //méthodes graphiques
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         Dimension size = getSize();
 
-        double largeurTuile = (size.width / 6) * 0.8;
-        double hauteurTuile = (size.height / 6) * 0.8;
+        double largeurTuile = (size.width / 6) * 0.89;
+        double hauteurTuile = (size.height / 6) * 0.89;
         double ecartTuilesL = (size.width / 6) * 0.1;
         double ecartTuilesH = (size.height / 6) * 0.1;
 
-        int dc = 1;
-        int dl = 1;
+        int coordX, coordY;
+
+        String nomTuile, nomTuileP1, nomTuileP2, nomTuileP3, tmpStr;
 
         g.setColor(Color.black);
         g.fillRect(0, 0, size.width, size.height);
 
         for (int l = 0; l < 6; l++) {
             for (int c = 0; c < 6; c++) {
-                if (c > 0) { dc = 2; }
-                if (l > 0) { dl = 2; }
                 if (this.getTuile(c, l) != null) {
-                    if (this.getTuile(c, l).getEtat()==Utils.EtatTuile.ASSECHEE) {
-                        g.setColor(Color.GREEN);
-                    } else if (this.getTuile(c, l).getEtat()==Utils.EtatTuile.COULEE) {
-                        g.setColor(Color.CYAN);
+                    
+                    coordX = (int) (ecartTuilesL * (c + 1) + largeurTuile * c);
+                    coordY = (int) (ecartTuilesH * (l + 1) + hauteurTuile * l);
+                    
+                    BufferedImage image = null;
+                    
+                    if (this.getTuile(c, l).getEtat() != Utils.EtatTuile.COULEE) {
+                        System.out.println(this.getTuile(c, l).getNom().toString()+this.getTuile(c, l).getEtat().toString());
+                        try {
+                            File input = new File(System.getProperty("user.dir") + "/src/images/tuiles/"+this.getTuile(c, l).getNom().toString()+this.getTuile(c, l).getEtat().toString()+".png");
+                            image = ImageIO.read(input);
+                        } catch (IOException ie) {
+                            System.out.println("Error:" + ie.getMessage());
+                        }
+                        g.drawImage(image, coordX, coordY, (int) largeurTuile,(int)  hauteurTuile, this);
                     } else {
-                        g.setColor(Color.BLACK);
+                        g.fillRect(coordX, coordY, (int) largeurTuile, (int) hauteurTuile);
                     }
-                    g.fillRect((int)(((ecartTuilesL * c) + (ecartTuilesL * dc)) + (largeurTuile * c)), (int) (((ecartTuilesH * l) + (ecartTuilesH * dl)) + (hauteurTuile * l)), (int)largeurTuile, (int)hauteurTuile);
                 }
             }
         }
