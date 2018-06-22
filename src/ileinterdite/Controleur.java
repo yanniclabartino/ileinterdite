@@ -38,6 +38,7 @@ public class Controleur implements Observateur {
     public void traiterMessage(Message m) {
         switch (m.type) {
             case COMMENCER:
+                /*
                 iniJeu();
                 this.niveauEau = m.difficulté;
                 this.nbJoueurs = m.nbJoueurs;
@@ -45,6 +46,7 @@ public class Controleur implements Observateur {
                 Parameters.setLogs(m.logs);
                 Parameters.setAleas(m.aleas);
                 debutJeu();
+                */
                 getIHM().afficherEtatAction(ihm.ETAT_COMMENCER, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 break;
             case SOUHAITE_DEPLACEMENT:
@@ -522,9 +524,6 @@ public class Controleur implements Observateur {
         iniTrésor();
         iniGrille();
         iniCartes();
-
-        ihm = new VueAventurier(getGrille());
-        ihm.addObservateur(this);
     }
 
     //à compléter avec l'ihm
@@ -585,7 +584,10 @@ public class Controleur implements Observateur {
                 } while (!randomCorrect);
             }
         }
-
+        /*
+        ihm = new VueAventurier(g);
+        ihm.addObservateur(this);
+        */
         while (!this.estTerminé()) {
             for (Aventurier a : getJoueurs().keySet()) {
                 this.joueurCourant = a;
@@ -793,8 +795,22 @@ public class Controleur implements Observateur {
 
     //CONSTUCTEUR
     public Controleur() {
+        /*
         accueil = new VueAccueil();
         accueil.addObservateur(this);
+        */
+                iniJeu();
+                this.niveauEau = 4;
+                this.nbJoueurs = 4;
+                this.joueurs.put(new Pilote(),"j1");
+                this.joueurs.put(new Messager(),"j2");
+                this.joueurs.put(new Ingénieur(),"j3");
+                this.joueurs.put(new Plongeur(),"j4");
+                Parameters.setLogs(false);
+                Parameters.setAleas(true);
+        ihm = new VueAventurier(getGrille());
+        ihm.addObservateur(this);
+                debutJeu();
     }
 
     //MAIN

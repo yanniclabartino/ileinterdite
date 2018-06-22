@@ -426,7 +426,14 @@ public class VueAventurier extends Observe {
         -remet l'IHM en état comme au début d'un tour (ne modifie pas l'état courant)
         */
         this.grille.repaint();
-        //à compléter
+        bDepl.setEnabled(true);
+        bAss.setEnabled(true);
+        bPioch.setEnabled(true);
+        bGagner.setEnabled(true);
+        bSpecial.setEnabled(true);
+        bAnnuler.setEnabled(true);
+        bFinir.setEnabled(true);
+        bPerso.setEnabled(true);
     }
 
     public void afficheCartesHelico() {

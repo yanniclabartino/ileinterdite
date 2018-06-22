@@ -7,6 +7,10 @@ import model.Tuile;
 
 public class Message {
 
+    public Message() {
+        
+    }
+    
     public TypesMessages type; //Type de message
     
     public int nbJoueurs, difficulté;           //Champ utilisé pour COMMENCER
