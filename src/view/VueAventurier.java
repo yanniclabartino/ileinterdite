@@ -353,7 +353,7 @@ public class VueAventurier extends Observe {
             }
         });
 
-        // CLIC SUR LA GRILLE (à compléter)
+        // CLIC SUR LA GRILLE
         this.grille.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -397,6 +397,34 @@ public class VueAventurier extends Observe {
             }
         });
 
+        // CLIC SUR LES CARTES
+        MouseListener l = new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Message m = new Message();
+                m.carte = lesCartes.indexOf(e.getX());
+                
+                notifierObservateur(m);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        };
+        this.carte1.addMouseListener(l);
+        this.carte2.addMouseListener(l);
+        this.carte3.addMouseListener(l);
+        this.carte4.addMouseListener(l);
+        this.carte5.addMouseListener(l);
+        this.carte6.addMouseListener(l);
+        this.carte7.addMouseListener(l);
+        this.carte8.addMouseListener(l);
+        this.carte9.addMouseListener(l);
+        
         // PROPRIÉTÉS DU JFRAME
         window.setTitle("L'Île Interdite");
         window.setSize(lfenetre, hfenetre); // équivalent 16:9
@@ -495,22 +523,39 @@ public class VueAventurier extends Observe {
         bPerso.setEnabled(true);
     }
 
-    public void afficheCartesHelico() {
+    public void afficheCartesHelico(ArrayList<CarteOrange> cartes) {
         /*
         -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
         -met en valeur les cartes hélico de la main du joueur, elle deviennent utilisable
          */
-        this.grille.repaint();
-        //à compléter
+        bDepl.setEnabled(false);
+        bAss.setEnabled(false);
+        bPioch.setEnabled(false);
+        bGagner.setEnabled(false);
+        bSpecial.setEnabled(false);
+        for (CarteOrange c : cartes) {
+            if (c.getRole().equals("Helicoptere")) {
+                lesCartes.get(cartes.indexOf(c)).setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(cartes.indexOf(c)).getRole() + "Dispo.png");
+            }
+        }
     }
 
-    public void afficheCartesSac() {
+    public void afficheCartesSac(ArrayList<CarteOrange> cartes) {
         /*
         -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
         -met en valeur les cartes sac de sable de la main du joueur, elle deviennent utilisable
          */
         this.grille.repaint();
-        //à compléter
+        bDepl.setEnabled(false);
+        bAss.setEnabled(false);
+        bPioch.setEnabled(false);
+        bGagner.setEnabled(false);
+        bSpecial.setEnabled(false);
+        for (CarteOrange c : cartes) {
+            if (c.getRole().equals("Sac de sable")) {
+                lesCartes.get(cartes.indexOf(c)).setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(cartes.indexOf(c)).getRole() + "Dispo.png");
+            }
+        }
     }
 
     public void afficherTuilesDispo() {
