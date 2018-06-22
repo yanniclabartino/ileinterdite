@@ -565,5 +565,9 @@ public class VueAventurier extends Observe {
             tresor4.setVisible(true);
         }
     }
+    
+    public void majNiveauEau(int nivo){
+        niveauEau.setImage(System.getProperty("user.dir") + "/src/images/autre/n"+nivo+".png");
+    }
 
 }

@@ -423,6 +423,7 @@ public class Controleur implements Observateur {
         Aventurier joueur = getJoueurCourant();
         boolean carteMDEpiochée = false;
         ArrayList<CarteOrange> cartesPiochées = new ArrayList<CarteOrange>();
+        VueAventurier vue = getIHM();
         //On picohe deux cartes et on vérifie a chaque fois si la pioche est vide
         for (int i = 0; i < 2; i++) {
             cartesPiochées.add(piocheCarteOrange());
@@ -460,6 +461,7 @@ public class Controleur implements Observateur {
                 //appeler une méthode de l'ihm pour défausser une carte.
             }
         }
+        vue.majNiveauEau(niveauEau);
     }
 
     private void gererCarteBleue() {
