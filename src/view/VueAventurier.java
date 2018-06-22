@@ -99,7 +99,7 @@ public class VueAventurier extends Observe {
         tresor2 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/cristal.png");;
         tresor3 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/pierre.png");
         tresor4 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/zephyr.png");
-        niveauEau = new ImagePanel(70, 240, System.getProperty("user.dir") + "/src/images/autre/Niveau.png");
+        niveauEau = new ImagePanel(130, 395, System.getProperty("user.dir") + "/src/images/autre/Niveau.png");
 
         carte1 = new ImagePanel(67, 100, "", 14);
         carte2 = new ImagePanel(67, 100, "", 14);
