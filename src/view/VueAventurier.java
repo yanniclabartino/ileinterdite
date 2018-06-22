@@ -101,15 +101,15 @@ public class VueAventurier extends Observe {
         tresor4 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/zephyr.png");
         niveauEau = new ImagePanel(70, 240, System.getProperty("user.dir") + "/src/images/autre/Niveau.png");
 
-        carte1 = new ImagePanel(67, 100, "");
-        carte2 = new ImagePanel(67, 100, "");
-        carte3 = new ImagePanel(67, 100, "");
-        carte4 = new ImagePanel(67, 100, "");
-        carte5 = new ImagePanel(67, 100, "");
-        carte6 = new ImagePanel(67, 100, "");
-        carte7 = new ImagePanel(67, 100, "");
-        carte8 = new ImagePanel(67, 100, "");
-        carte9 = new ImagePanel(67, 100, "");
+        carte1 = new ImagePanel(67, 100, "", 14);
+        carte2 = new ImagePanel(67, 100, "", 14);
+        carte3 = new ImagePanel(67, 100, "", 14);
+        carte4 = new ImagePanel(67, 100, "", 14);
+        carte5 = new ImagePanel(67, 100, "", 14);
+        carte6 = new ImagePanel(67, 100, "", 14);
+        carte7 = new ImagePanel(67, 100, "", 14);
+        carte8 = new ImagePanel(67, 100, "", 14);
+        carte9 = new ImagePanel(67, 100, "", 14);
 
         lesCartes = new ArrayList<>();
         lesCartes.add(carte1);
@@ -122,11 +122,11 @@ public class VueAventurier extends Observe {
         lesCartes.add(carte8);
         lesCartes.add(carte9);
 
-        cartesOranges = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png");
-        cartesBleues = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png");
-        defausseO = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png");
-        defausseB = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png");
-        perso = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/personnages/explorateur.png");
+        cartesOranges = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png", 6);
+        cartesBleues = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png", 6);
+        defausseO = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png", 6);
+        defausseB = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png", 6);
+        perso = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/personnages/explorateur.png", 6);
 
         this.MESSAGE_PRECEDENT = null;
 
@@ -242,12 +242,18 @@ public class VueAventurier extends Observe {
         layer4center.add(bFinir);
 
         layer4north.add(tresor1);
+
         layer4north.add(tresor2);
         layer4north.add(tresor3);
         layer4north.add(tresor4);
 
         window.add(imageFond);
         imageFond.add(layer0);
+        
+        tresor1.setVisible(false);
+        tresor2.setVisible(false);
+        tresor3.setVisible(false);
+        tresor4.setVisible(false);
         
         // MISE EN TRANSPARENCE DE TOUS LES PANELS POUR VOIR L'ARRIÈRE PLAN
         layer0.setOpaque(false);
@@ -268,12 +274,7 @@ public class VueAventurier extends Observe {
             
         layer2east.setOpaque(false);
         layer2west.setOpaque(false);
-            cartesOranges.setBackground(new Color(255, 242, 230, 40));
-            cartesBleues.setBackground(new Color(255, 242, 230, 40));
-            defausseO.setBackground(new Color(255, 242, 230, 40));
-            defausseB.setBackground(new Color(255, 242, 230, 40));
-            perso.setBackground(new Color(255, 242, 230, 40));
-        layer3west.setOpaque(false);
+        layer3west.setBackground(new Color(255, 242, 230, 90));
         layer3east.setOpaque(false);
         layer4center.setOpaque(false);
         layer4north.setBackground(new Color(255, 229, 204, 90));
@@ -474,7 +475,6 @@ public class VueAventurier extends Observe {
                 margeHaut.setPreferredSize(new Dimension(400, 9));
                 instructions.setText("<html><center>" + "L'action a été annulée." + "<br>" + " Il vous reste " + nbaction + " actions" + "<html><center>");
                 break;
-
         }
 
     }
@@ -539,7 +539,15 @@ public class VueAventurier extends Observe {
         //[1] = LA_STATUE_DU_ZEPHYR
         //[2] = LE_CRISTAL_ARDENT
         //[3] = LE_CALICE_DE_L_ONDE
-
+        if (trésors[1].isGagne()) {
+            tresor1.setVisible(true);
+        } else if (trésors[2].isGagne()) {
+            tresor2.setVisible(true);
+        } else if (trésors[3].isGagne()) {
+            tresor3.setVisible(true);
+        } else if (trésors[4].isGagne()) {
+            tresor4.setVisible(true);
+        }
     }
 
 }
