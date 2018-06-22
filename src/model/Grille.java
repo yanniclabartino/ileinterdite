@@ -255,7 +255,7 @@ public class Grille extends JPanel {
 
     }
 
-    public void afficherTuileDispo(ArrayList<Tuile> tuilesDispo, int typeSelection) {
+    public void selectionTuileDispo(ArrayList<Tuile> tuilesDispo, int typeSelection) {
         for (Tuile t1 : this.getGrille()) {
             for (Tuile t2 : tuilesDispo) {
                 if (t1==t2) {

@@ -374,4 +374,48 @@ public class VueAventurier extends Observe {
         }
 
     }
+
+    public void annulerAction() {
+        /*
+        -actualise la grille
+        -remet l'IHM en état comme au début d'un tour
+        */
+        this.grille.repaint();
+        //à compléter
+    }
+
+    public void afficheCartesHelico() {
+        /*
+        -actualise la main du joueur
+        -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
+        -met en valeur les cartes hélico de la main du joeur, elle deviennent utilisable
+        */
+        this.grille.repaint();
+        //à compléter
+    }
+
+    public void afficheCartesSac() {
+        /*
+        -actualise la main du joueur
+        -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
+        -met en valeur les cartes sac de sable de la main du joeur, elle deviennent utilisable
+        */
+        this.grille.repaint();
+        //à compléter
+    }
+
+    public void afficherTuilesDispo() {
+        /*
+        -actualise la grille
+        -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
+        */
+        this.grille.repaint();
+        //à compléter
+    }
+
+    public void afficherTuilesPilote() {
+        // actualise la grille
+        this.grille.repaint();
+    }
+    
 }
