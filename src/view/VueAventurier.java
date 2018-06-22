@@ -91,7 +91,7 @@ public class VueAventurier extends Observe {
         bPerso.setPreferredSize(new Dimension(87, 130));
         bPerso.setText("<html><center>" + "Autres" + "<br>" + "joueurs" + "</center></html>");
 
-        instructions = new JLabel();
+        instructions = new JLabel("Bienvenue");
         Font font = new Font("Arial", Font.BOLD, 15);
         instructions.setFont(font);
 
@@ -261,7 +261,7 @@ public class VueAventurier extends Observe {
         layer1south.setOpaque(false);
         layer2north.setOpaque(false);
             instructions.setBackground(new Color(255, 242, 230, 40));
-        layer2south.setOpaque(false);
+        layer2south.setBackground(new Color(255, 229, 204, 90));
             carte1.setBackground(new Color(255, 229, 204));
             carte2.setBackground(new Color(255, 229, 204));
             carte3.setBackground(new Color(255, 229, 204));
