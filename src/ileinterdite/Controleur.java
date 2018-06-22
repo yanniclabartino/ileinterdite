@@ -460,7 +460,9 @@ public class Controleur implements Observateur {
                 //appeler une méthode de l'ihm pour défausser une carte.
             }
         }
-        vue.majNiveauEau(niveauEau);
+        if (getIHM() != null){
+            vue.majNiveauEau(niveauEau);
+        }
     }
 
     private void gererCarteBleue() {
