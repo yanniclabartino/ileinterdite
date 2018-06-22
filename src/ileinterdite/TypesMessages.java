@@ -24,7 +24,6 @@ public enum TypesMessages {
     SOUHAITE_DONNER, /* type de message quand un joueur veut donner une carte. */
     ACTION_DONNER, /*
     type de message quand un joueur donne une carte, accompagné de :
-            - la carte donnée
             - le destinataire de cette carte
     */
     ACTION_GAGNER_TRESOR, /* type de message quand un joueur veut gagner un trésor. */
@@ -35,5 +34,6 @@ public enum TypesMessages {
             - la carte concernée
     */
     FINIR_TOUR, /* type de message quand un joueur termine son tour. */
-    ANNULER; /* type de message quand un joueur veut annuler son intéraction en cours. */
+    ANNULER, /* type de message quand un joueur veut annuler son intéraction en cours. */
+    SELECTIONNER_CARTE; /* type de message quand un joueur doit sélectionner une carte à utiliser ou donner */
 }

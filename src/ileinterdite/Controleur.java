@@ -640,7 +640,6 @@ public class Controleur implements Observateur {
             piocheBleues.push(c);
         }
     }
-
     private void iniGrille() {
         //Génération des 24 tuiles
         ArrayList<Tuile> Tuiles = new ArrayList<Tuile>();
@@ -655,7 +654,6 @@ public class Controleur implements Observateur {
         grille = new Grille(Tuiles);
 
     }
-
     private void iniTrésor() {
         //Création des Trésors
         trésors[0] = new Trésor(NomTresor.LA_PIERRE_SACREE);
@@ -667,7 +665,6 @@ public class Controleur implements Observateur {
     private boolean estTerminé() {
         return (estPerdu() || !jeuEnCours);
     }
-
     private boolean estPerdu() {
         Grille g = getGrille();
         Utils.EtatTuile coulee = Utils.EtatTuile.COULEE;
@@ -685,7 +682,7 @@ public class Controleur implements Observateur {
                 || (g.getTuile(NomTuile.LE_PALAIS_DE_CORAIL).getEtat() == coulee && g.getTuile(NomTuile.LE_PALAIS_DES_MAREES).getEtat() == coulee && !getTrésors()[3].isGagne())
                 || joueurVivant < nbJoueurs);
     }
-
+    
     private void actualiserJeu() {
 
         Aventurier jCourant = getJoueurCourant();
@@ -735,31 +732,24 @@ public class Controleur implements Observateur {
     private int getNbAction() {
         return this.nbActions;
     }
-
     private VueAventurier getIHM() {
         return this.ihm;
     }
-
     private Aventurier getJoueurCourant() {
         return this.joueurCourant;
     }
-
     private Trésor[] getTrésors() {
         return trésors;
     }
-
     private int getNbJoueur() {
         return this.nbJoueurs;
     }
-
     private Grille getGrille() {
         return grille;
     }
-
     private int getNiveau() {
         return niveauEau;
     }
-
     private ArrayList<Tuile> calculTouteTuileDispo(Grille g) {
         ArrayList<Tuile> touteTuileDispo = new ArrayList<Tuile>();
         for (int i = 0; i < 6; i++) {
@@ -773,11 +763,9 @@ public class Controleur implements Observateur {
         }
         return touteTuileDispo;
     }
-
     public HashMap<Aventurier, String> getNomJoueurs() {
         return nomJoueurs;
     }
-
     public ArrayList<Aventurier> getJoueurs() {
         return this.joueurs;
     }
@@ -787,24 +775,19 @@ public class Controleur implements Observateur {
     private Stack<CarteBleue> getPiocheBleues() {
         return piocheBleues;
     }
-
     private CarteBleue piocheCarteBleue() {
         return this.piocheBleues.pop();
     }
-
     private void addPiocheBleue(CarteBleue c) {
         this.piocheBleues.push(c);
     }
-
     //défausse
     private ArrayList<CarteBleue> getDefausseBleues() {
         return this.defausseBleues;
     }
-
     private void addDefausseBleues(CarteBleue carte) {
         this.defausseBleues.add(carte);
     }
-
     private void viderDefausseBleues() {
         this.defausseBleues.removeAll(this.defausseBleues);
     }
@@ -814,24 +797,19 @@ public class Controleur implements Observateur {
     private Stack<CarteOrange> getPiocheOranges() {
         return piocheOranges;
     }
-
     private CarteOrange piocheCarteOrange() {
         return this.piocheOranges.pop();
     }
-
     private void addPiocheOrange(CarteOrange c) {
         this.piocheOranges.push(c);
     }
-
     //défausse
     private ArrayList<CarteOrange> getDefausseOranges() {
         return this.defausseOranges;
     }
-
     private void addDefausseOranges(CarteOrange carte) {
         this.defausseOranges.add(carte);
     }
-
     private void viderDefausseOranges() {
         this.defausseOranges.removeAll(this.defausseOranges);
     }
