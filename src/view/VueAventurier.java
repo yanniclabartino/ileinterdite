@@ -392,21 +392,21 @@ public class VueAventurier extends Observe {
                 instructions.setText("<html><center>" + "Bienvenue " + joueur + "<br>" + ". Il vous reste " + nbaction + " action(s)" + "</center></html>");
                 break;
             case ETAT_SOUHAITE_DEPLACEMENT:
-                instructions.setText("Choissisez une tuile :");
+                instructions.setText("<html>" + "Choissisez une tuile :" + "<br>" + "<br>" + "<html>");
                 break;
             case ETAT_DEPLACEMENT:
                 margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("<html><center>" + "Le déplacement vers la tuile " + tuile + " a été effectué." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
+                instructions.setText("<html><center>" + "Le déplacement vers la tuile " + tuile + " a été " + "<br>" + "effectué. Il vous reste " + nbaction + " action(s)" + "<html><center>");
                 break;
             case ETAT_SOUHAITE_ASSECHER:
-                instructions.setText("Choissisez une tuile :");
+                instructions.setText("<html>" + "Choissisez une tuile :" + "<br>" + "<br>" + "<html>");
                 break;
             case ETAT_ASSECHER:
                 margeHaut.setPreferredSize(new Dimension(400, 9));
                 instructions.setText("<html><center>" + "La tuile " + tuile + " a été asséchée." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
                 break;
             case ETAT_SOUHAITE_DONNER:
-                instructions.setText("Choissisez une carte à donner :");
+                instructions.setText("<html>" + "Choissisez une carte à donner :" + "<br>" + "<br>" + "<html>");
                 break;
             case ETAT_DONNER:
                 margeHaut.setPreferredSize(new Dimension(400, 9));
@@ -425,7 +425,7 @@ public class VueAventurier extends Observe {
                 instructions.setText("<html><center>" + "La carte " + carte + " a été défaussée." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
                 break;
             case ETAT_SOUHAITE_JOUER_SPECIALE:
-                instructions.setText("Choissisez une carte :");
+                instructions.setText("<html>" + "Choissisez une carte :" + "<br>" + "<br>" + "<html>");
                 break;
             case ETAT_JOUER_SPECIALE:
                 margeHaut.setPreferredSize(new Dimension(400, 9));
