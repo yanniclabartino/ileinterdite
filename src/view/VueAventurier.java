@@ -51,7 +51,7 @@ public class VueAventurier extends Observe {
     public static final int ETAT_ANNULER = 15;
 
     private TypesMessages MESSAGE_PRECEDENT;
-    
+
     private JFrame window;
     private JButton bDepl, bAss, bPioch, bGagner, bSpecial, bAnnuler, bFinir, bPerso;
     private JLabel instructions;
@@ -61,6 +61,7 @@ public class VueAventurier extends Observe {
     private ArrayList<ImagePanel> lesCartes;
     private ImagePanel cartesOranges, cartesBleues, defausseO, defausseB, perso;
     private Grille grille;
+    private VidePanel margeHaut;
 
     private final int lfenetre = 1280;
     private final int hfenetre = 720;
@@ -82,7 +83,6 @@ public class VueAventurier extends Observe {
         bPerso.setText("<html><center>" + "Autres" + "<br>" + "joueurs" + "</center></html>");
 
         instructions = new JLabel();
-        instructions.setHorizontalAlignment(CENTER);
         Font font = new Font("Arial", Font.BOLD, 15);
         instructions.setFont(font);
 
@@ -118,12 +118,14 @@ public class VueAventurier extends Observe {
         defausseO = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png");
         defausseB = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png");
         perso = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/personnages/explorateur.png");
-        
+
         this.MESSAGE_PRECEDENT = null;
-        
+
         this.grille = grille;
         this.grille.setPreferredSize(new Dimension(500, 500));
         this.grille.setBackground(new Color(50, 50, 230));
+
+        margeHaut = new VidePanel(400, 25);
 
         // INSTANCIATION DES JPANEL DE DISPOSITION
         JPanel layer0 = new JPanel();
@@ -182,7 +184,7 @@ public class VueAventurier extends Observe {
         layer1south.add(new VidePanel(190, 1), BorderLayout.WEST);
         layer1south.add(new VidePanel(1, 20), BorderLayout.SOUTH);
 
-        layer2north.add(new VidePanel(400, 25), BorderLayout.NORTH);
+        layer2north.add(margeHaut, BorderLayout.NORTH);
         layer2north.add(new VidePanel(400, 0), BorderLayout.EAST);
         layer2north.add(new VidePanel(400, 0), BorderLayout.WEST);
         layer2north.add(new VidePanel(400, 10), BorderLayout.SOUTH);
@@ -253,7 +255,7 @@ public class VueAventurier extends Observe {
                 Message m = new Message();
                 m.type = TypesMessages.ANNULER;
                 MESSAGE_PRECEDENT = m.type;
-                
+
                 notifierObservateur(m);
             }
         });
@@ -309,7 +311,7 @@ public class VueAventurier extends Observe {
                 notifierObservateur(m);
             }
         });
-        
+
         //CLIQUE SUR LA GRILLE (à compléter)
         this.grille.addMouseListener(new MouseListener() {
             @Override
@@ -331,21 +333,29 @@ public class VueAventurier extends Observe {
                         break;
                 }
                 if (m.type != MESSAGE_PRECEDENT) {
-                    m.tuile = grille.getTuile(e.getX()*6/grille.getWidth(), e.getY()*6/grille.getHeight());
+                    m.tuile = grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight());
                     MESSAGE_PRECEDENT = m.type;
                     notifierObservateur(m);
                 }
             }
+
             @Override
-            public void mousePressed(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {
+            }
+
             @Override
-            public void mouseReleased(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {
+            }
+
             @Override
-            public void mouseEntered(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {
+            }
+
             @Override
-            public void mouseExited(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {
+            }
         });
-        
+
         // PROPRIÉTÉS DU JFRAME
         window.setTitle("L'Île Interdite");
         window.setSize(lfenetre, hfenetre); // équivalent 16:9
@@ -374,46 +384,56 @@ public class VueAventurier extends Observe {
     public void afficherEtatAction(int etat, String joueur, Integer nbaction, String tuile, String carte) {
         switch (etat) {
             case ETAT_COMMENCER:
-                instructions.setText("Bienvenue " + joueur + ". Il vous reste " + nbaction + " action(s)");
+                margeHaut.setPreferredSize(new Dimension(400, 9));
+                instructions.setText("<html><center>" + "Bienvenue " + joueur + "<br>" + ". Il vous reste " + nbaction + " action(s)" + "</center></html>");
                 break;
             case ETAT_SOUHAITE_DEPLACEMENT:
                 instructions.setText("Choissisez une tuile :");
                 break;
             case ETAT_DEPLACEMENT:
-                instructions.setText("Le déplacement vers la tuile " + tuile + " a été effectué. Il vous reste " + nbaction + " action(s)");
+                margeHaut.setPreferredSize(new Dimension(400, 9));
+                instructions.setText("<html><center>" + "Le déplacement vers la tuile " + tuile + " a été effectué." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
                 break;
             case ETAT_SOUHAITE_ASSECHER:
                 instructions.setText("Choissisez une tuile :");
                 break;
             case ETAT_ASSECHER:
-                instructions.setText("La tuile " + tuile + " a été asséchée. Il vous reste " + nbaction + " action(s)");
+                margeHaut.setPreferredSize(new Dimension(400, 9));
+                instructions.setText("<html><center>" + "La tuile " + tuile + " a été asséchée." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
                 break;
             case ETAT_SOUHAITE_DONNER:
                 instructions.setText("Choissisez une carte à donner :");
                 break;
             case ETAT_DONNER:
-                instructions.setText("La carte " + carte + " a été donnée au joueur " + joueur + " . Il vous reste " + nbaction + " action(s)");
+                margeHaut.setPreferredSize(new Dimension(400, 9));
+                instructions.setText("<html><center>" + "La carte " + carte + " a été donnée au joueur " + joueur + " ." + "<br>" + "Il vous reste " + nbaction + " action(s)" + "<html><center>");
                 break;
             case ETAT_GAGNER_TRESOR:
-                instructions.setText(joueur + "a gagné un trésor, il vous reste " + nbaction + " action(s)");
+                margeHaut.setPreferredSize(new Dimension(400, 9));
+                instructions.setText("<html><center>" + joueur + "a gagné un trésor." + "<br>" + "Il vous reste " + nbaction + " action(s)" + "<html><center>");
                 break;
             case ETAT_TROP_CARTES:
-                instructions.setText("Vous avez trop de cartes dans votre main, vous devez en défausser une");
+                margeHaut.setPreferredSize(new Dimension(400, 9));
+                instructions.setText("<html><center>" + "Vous avez trop de cartes dans votre main, vous devez en défausser une" + "<html><center>");
                 break;
             case ETAT_DEFAUSSE_CARTE:
-                instructions.setText("La carte " + carte + " a été défaussée. Il vous reste " + nbaction + " action(s)");
+                margeHaut.setPreferredSize(new Dimension(400, 9));
+                instructions.setText("<html><center>" + "La carte " + carte + " a été défaussée." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
                 break;
             case ETAT_SOUHAITE_JOUER_SPECIALE:
                 instructions.setText("Choissisez une carte :");
                 break;
             case ETAT_JOUER_SPECIALE:
-                instructions.setText("La carte spéciale " + carte + " est utilisée. Il vous reste " + nbaction + " action(s)");
+                margeHaut.setPreferredSize(new Dimension(400, 9));
+                instructions.setText("<html><center>" + "La carte spéciale " + carte + " est utilisée." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
                 break;
             case ETAT_FINIR_TOUR:
-                instructions.setText("Joueur " + joueur + " c'est à vous de jouer. Il vous reste " + nbaction + " action(s)");
+                margeHaut.setPreferredSize(new Dimension(400, 9));
+                instructions.setText("<html><center>" + "Joueur " + joueur + " c'est à vous de jouer." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
                 break;
             case ETAT_ANNULER:
-                instructions.setText("L'action a été annulée. Il vous reste "+nbaction+" actions");
+                margeHaut.setPreferredSize(new Dimension(400, 9));
+                instructions.setText("<html><center>" + "L'action a été annulée." + "<br>" + " Il vous reste " + nbaction + " actions" + "<html><center>");
                 break;
 
         }
@@ -424,7 +444,7 @@ public class VueAventurier extends Observe {
         /*
         -actualise la grille
         -remet l'IHM en état comme au début d'un tour (ne modifie pas l'état courant)
-        */
+         */
         this.grille.repaint();
         bDepl.setEnabled(true);
         bAss.setEnabled(true);
@@ -439,8 +459,8 @@ public class VueAventurier extends Observe {
     public void afficheCartesHelico() {
         /*
         -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
-        -met en valeur les cartes hélico de la main du joeur, elle deviennent utilisable
-        */
+        -met en valeur les cartes hélico de la main du joueur, elle deviennent utilisable
+         */
         this.grille.repaint();
         //à compléter
     }
@@ -448,8 +468,8 @@ public class VueAventurier extends Observe {
     public void afficheCartesSac() {
         /*
         -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
-        -met en valeur les cartes sac de sable de la main du joeur, elle deviennent utilisable
-        */
+        -met en valeur les cartes sac de sable de la main du joueur, elle deviennent utilisable
+         */
         this.grille.repaint();
         //à compléter
     }
@@ -458,7 +478,7 @@ public class VueAventurier extends Observe {
         /*
         -actualise la grille
         -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
-        */
+         */
         this.grille.repaint();
         //à compléter
     }
@@ -467,16 +487,16 @@ public class VueAventurier extends Observe {
         // actualise la grille
         this.grille.repaint();
     }
-    
+
     public void actualiserTrésor(Trésor[] trésors) {
         /*
         en fonction des trésors gagnés, l'IHM change.
-        */
+         */
         //[0] = LA_PIERRE_SACREE
         //[1] = LA_STATUE_DU_ZEPHYR
         //[2] = LE_CRISTAL_ARDENT
         //[3] = LE_CALICE_DE_L_ONDE
-        
+
     }
-    
+
 }
