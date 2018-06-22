@@ -41,6 +41,8 @@ public class TestIHM {
         main.add(new CarteTrésor(NomTresor.LE_CRISTAL_ARDENT));
         main.add(new CarteTrésor(NomTresor.LA_STATUE_DU_ZEPHYR));
         v.dessinCartes(main);
+        
+        v.repaint();
             
     }
     

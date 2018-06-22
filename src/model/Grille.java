@@ -195,7 +195,7 @@ public class Grille extends JPanel {
     public void paintComponent(Graphics g) {
         Dimension size = getSize();
         
-        g.setColor(new Color(0, 0, 0));
+        g.setColor(new Color(255, 242, 230, 90));
         g.fillOval(-25, -25, size.width+50, size.height+50);
 
         double largeurTuile = (size.width / 6) * 0.89;

@@ -22,13 +22,16 @@ import model.Pilote;
 import model.Plongeur;
 
 public class VueAccueil extends Observe {
+    
+    // Image de fond:
+    private ImageFond image;
 
-    //les trois "écran" de l'accueil
+    // Les trois "écrans" de l'accueil
     private JFrame accueil;
     private JFrame parametres;
     private JFrame regles;
 
-    //accueil :
+    // Accueil :
     private JButton valider, boutregles, boutparam;
     private JLabel messageErreur;
     private ImagePanel titre;
@@ -39,28 +42,33 @@ public class VueAccueil extends Observe {
     private JComboBox choixDiff;
     private JButton randomize;
 
-    //parametres :
+    // Parametres :
     private JButton retourPar;
     private ButtonGroup alea;
     private JRadioButton ouiA, nonA;
     private ButtonGroup logs;
     private JRadioButton ouiL, nonL;
     
-    //regles :
+    // Regles :
     private JScrollPane lesregles;
     private JButton retourReg;
     private ImagePanel imageregles;
 
     public VueAccueil() {
-//Accueil :
+    //Accueil :
         accueil = new JFrame();
-        accueil.setLayout(new BorderLayout());
         accueil.setTitle("L'Île Interdite");
         accueil.setSize(720, 480);
         accueil.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         accueil.setResizable(false);
         accueil.setLocation((int)((Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2) - (accueil.getWidth() / 2)), (int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2) - (accueil.getHeight() / 2)));
-
+        
+        
+        image = new ImageFond(720, 480, "/src/images/autre/fondAccueil.jpg");
+        accueil.add(image);
+        
+        image.setLayout(new BorderLayout());
+        
         choixNbJoueurs = new JComboBox(nbJ);
 
         JPanel lehaut = new JPanel(new GridLayout(2, 1, 0, 5));
@@ -75,7 +83,7 @@ public class VueAccueil extends Observe {
         choixNb.add(choixNbJoueurs);
         lehaut.add(choixNb);
 
-        accueil.add(lehaut, BorderLayout.NORTH);
+        image.add(lehaut, BorderLayout.NORTH);
 
         JPanel lesjoueurs = new JPanel();
         saisiJoueurs = new ArrayList();
@@ -117,7 +125,7 @@ public class VueAccueil extends Observe {
         messageserreur.add(messageErreur, BorderLayout.EAST);
         lecentre.add(messageserreur, BorderLayout.SOUTH);
         
-        accueil.add(lecentre, BorderLayout.CENTER);
+        image.add(lecentre, BorderLayout.CENTER);
 
         JPanel basgauche1 = new JPanel();
         JPanel basgauche2 = new JPanel();
@@ -132,7 +140,7 @@ public class VueAccueil extends Observe {
         valider.setPreferredSize(new Dimension(80, 30));
         basdroit.add(valider);
         lebas.add(basdroit);
-        accueil.add(lebas, BorderLayout.SOUTH);
+        image.add(lebas, BorderLayout.SOUTH);
 
         accueil.setVisible(true);
 

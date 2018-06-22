@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -35,6 +36,7 @@ public class ImagePanel extends JPanel {
         construction = 0;
         this.setPreferredSize(new Dimension(image.getWidth(this), image.getHeight(this)));
     }
+    
     ImagePanel(int width, int height, String cheminImage) {//création de l'image en choisissant la taille
         this.x = 0;
         this.y = 0;
@@ -48,7 +50,25 @@ public class ImagePanel extends JPanel {
         }
         construction = 1;
         this.setPreferredSize(new Dimension(width, height));
+        this.setBackground(new Color(255, 242, 230, 40));
     }
+    
+    ImagePanel(int width, int height, String cheminImage, int x) {//création de l'image en choisissant la taille et le décalage de x
+        this.x = x;
+        this.y = 0;
+        this.width = width;
+        this.height = height;
+        try {
+            File input = new File(cheminImage);
+            image = ImageIO.read(input);
+        } catch (IOException ie) {
+            System.out.println("Error:" + ie.getMessage());
+        }
+        construction = 1;
+        this.setPreferredSize(new Dimension(width, height));
+        this.setBackground(new Color(255, 242, 230, 40));
+    }
+    
     ImagePanel(double scale, String cheminImage) {//création de l'image en choisissant la position et le ratio d'echelle
         this.x = 0;
         this.y = 0;
@@ -66,6 +86,7 @@ public class ImagePanel extends JPanel {
     
     protected void paintComponent(Graphics g) {
         //super.paintComponent(g);
+        g.setColor(new Color(255, 242, 230, 90));
         switch (construction){
             case 0:
                 g.drawImage(image, x, y, this);
