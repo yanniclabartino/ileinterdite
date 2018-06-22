@@ -376,7 +376,6 @@ public class VueAventurier extends Observe {
         }
 
         for (int i = 0; i < cartes.size(); i++) {
-
             lesCartes.get(i).setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(i).getRole() + ((cartes.get(i).getRole() == "Trésor") ? cartesTresors.get(i).getNomTresor() : "") + ".png");
         }
     }
@@ -480,7 +479,11 @@ public class VueAventurier extends Observe {
         -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
          */
         this.grille.repaint();
-        //à compléter
+        bDepl.setEnabled(false);
+        bAss.setEnabled(false);
+        bPioch.setEnabled(false);
+        bGagner.setEnabled(false);
+        bSpecial.setEnabled(false);
     }
 
     public void afficherTuilesPilote() {
