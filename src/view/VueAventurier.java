@@ -391,12 +391,12 @@ public class VueAventurier extends Observe {
         });
 
         // CLIC SUR LES CARTES
-        MouseListener l = new MouseListener() {
+        this.carte1.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Message m = new Message();
-                m.carte = lesCartes.indexOf(e.getX());
-                
+                m.type = TypesMessages.JOUER_SPECIALE;
+                m.numCarte = 0;
                 notifierObservateur(m);
             }
             @Override
@@ -407,16 +407,143 @@ public class VueAventurier extends Observe {
             public void mouseEntered(MouseEvent e) {}
             @Override
             public void mouseExited(MouseEvent e) {}
-        };
-        this.carte1.addMouseListener(l);
-        this.carte2.addMouseListener(l);
-        this.carte3.addMouseListener(l);
-        this.carte4.addMouseListener(l);
-        this.carte5.addMouseListener(l);
-        this.carte6.addMouseListener(l);
-        this.carte7.addMouseListener(l);
-        this.carte8.addMouseListener(l);
-        this.carte9.addMouseListener(l);
+        });
+        this.carte2.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Message m = new Message();
+                m.type = TypesMessages.JOUER_SPECIALE;
+                m.numCarte = 1;
+                notifierObservateur(m);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        this.carte3.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Message m = new Message();
+                m.type = TypesMessages.JOUER_SPECIALE;
+                m.numCarte = 2;
+                notifierObservateur(m);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        this.carte4.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Message m = new Message();
+                m.type = TypesMessages.JOUER_SPECIALE;
+                m.numCarte = 3;
+                notifierObservateur(m);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        this.carte5.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Message m = new Message();
+                m.type = TypesMessages.JOUER_SPECIALE;
+                m.numCarte = 4;
+                notifierObservateur(m);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        this.carte6.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Message m = new Message();
+                m.type = TypesMessages.JOUER_SPECIALE;
+                m.numCarte = 5;
+                notifierObservateur(m);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        this.carte7.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Message m = new Message();
+                m.type = TypesMessages.JOUER_SPECIALE;
+                m.numCarte = 6;
+                notifierObservateur(m);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        this.carte8.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Message m = new Message();
+                m.type = TypesMessages.JOUER_SPECIALE;
+                m.numCarte = 7;
+                notifierObservateur(m);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        this.carte9.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Message m = new Message();
+                m.type = TypesMessages.JOUER_SPECIALE;
+                m.numCarte = 8;
+                notifierObservateur(m);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
         
         // PROPRIÉTÉS DU JFRAME
         window.setTitle("L'Île Interdite");
@@ -442,7 +569,7 @@ public class VueAventurier extends Observe {
         }
     }
 
-    public void afficherEtatAction(int etat, String joueur, Integer nbaction, String tuile, String carte) {
+    public void afficherEtatAction(int etat, String joueur, Integer nbaction) {
         switch (etat) {
             case ETAT_COMMENCER:
                 margeHaut.setPreferredSize(new Dimension(400, 9));
@@ -478,12 +605,9 @@ public class VueAventurier extends Observe {
 
     }
 
-    public void interfaceParDefaut() {
-        /*
-        -actualise la grille
-        -remet l'IHM en état comme au début d'un tour (ne modifie pas l'état courant)
-         */
-        this.grille.repaint();
+    public void interfaceParDefaut(ArrayList<CarteOrange> cartes) {
+        grille.repaint();
+        dessinCartes(cartes);
         bDepl.setEnabled(true);
         bAss.setEnabled(true);
         bPioch.setEnabled(true);
@@ -495,10 +619,6 @@ public class VueAventurier extends Observe {
     }
 
     public void afficheCartesHelico(ArrayList<CarteOrange> cartes) {
-        /*
-        -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
-        -met en valeur les cartes hélico de la main du joueur, elle deviennent utilisable
-         */
         bDepl.setEnabled(false);
         bAss.setEnabled(false);
         bPioch.setEnabled(false);
@@ -512,10 +632,6 @@ public class VueAventurier extends Observe {
     }
 
     public void afficheCartesSac(ArrayList<CarteOrange> cartes) {
-        /*
-        -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
-        -met en valeur les cartes sac de sable de la main du joueur, elle deviennent utilisable
-         */
         this.grille.repaint();
         bDepl.setEnabled(false);
         bAss.setEnabled(false);
@@ -530,10 +646,6 @@ public class VueAventurier extends Observe {
     }
 
     public void afficherTuilesDispo() {
-        /*
-        -actualise la grille
-        -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
-         */
         this.grille.repaint();
         bDepl.setEnabled(false);
         bAss.setEnabled(false);
@@ -543,18 +655,10 @@ public class VueAventurier extends Observe {
     }
 
     public void afficherTuilesPilote() {
-        // actualise la grille
         this.grille.repaint();
     }
 
     public void actualiserTrésor(Trésor[] trésors) {
-        /*
-        en fonction des trésors gagnés, l'IHM change.
-         */
-        //[0] = LA_PIERRE_SACREE
-        //[1] = LA_STATUE_DU_ZEPHYR
-        //[2] = LE_CRISTAL_ARDENT
-        //[3] = LE_CALICE_DE_L_ONDE
         if (trésors[1].isGagne()) {
             tresor1.setVisible(true);
         } else if (trésors[2].isGagne()) {
