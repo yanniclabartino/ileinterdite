@@ -15,6 +15,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,8 +26,7 @@ import static javax.swing.SwingConstants.CENTER;
 import model.CarteOrange;
 import model.CarteTrésor;
 import model.Grille;
-import model.Tuile;
-import util.NomTuile;
+import model.Trésor;
 
 /**
  *
@@ -49,6 +50,8 @@ public class VueAventurier extends Observe {
     public static final int ETAT_FINIR_TOUR = 14;
     public static final int ETAT_ANNULER = 15;
 
+    private TypesMessages MESSAGE_PRECEDENT;
+    
     private JFrame window;
     private JButton bDepl, bAss, bPioch, bGagner, bSpecial, bAnnuler, bFinir, bPerso;
     private JLabel instructions;
@@ -115,11 +118,9 @@ public class VueAventurier extends Observe {
         defausseO = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png");
         defausseB = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png");
         perso = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/personnages/explorateur.png");
-
-        ArrayList<Tuile> tuiles = new ArrayList<Tuile>();
-        for (int i = 1; i < 25; i++) {
-            tuiles.add(new Tuile(NomTuile.getFromNb(i)));
-        }
+        
+        this.MESSAGE_PRECEDENT = null;
+        
         this.grille = grille;
         this.grille.setPreferredSize(new Dimension(500, 500));
         this.grille.setBackground(new Color(50, 50, 230));
@@ -241,6 +242,7 @@ public class VueAventurier extends Observe {
             public void actionPerformed(ActionEvent e) {
                 Message m = new Message();
                 m.type = TypesMessages.SOUHAITE_DEPLACEMENT;
+                MESSAGE_PRECEDENT = m.type;
 
                 notifierObservateur(m);
             }
@@ -250,7 +252,8 @@ public class VueAventurier extends Observe {
             public void actionPerformed(ActionEvent e) {
                 Message m = new Message();
                 m.type = TypesMessages.ANNULER;
-
+                MESSAGE_PRECEDENT = m.type;
+                
                 notifierObservateur(m);
             }
         });
@@ -259,6 +262,7 @@ public class VueAventurier extends Observe {
             public void actionPerformed(ActionEvent e) {
                 Message m = new Message();
                 m.type = TypesMessages.SOUHAITE_ASSECHER;
+                MESSAGE_PRECEDENT = m.type;
 
                 notifierObservateur(m);
             }
@@ -268,6 +272,7 @@ public class VueAventurier extends Observe {
             public void actionPerformed(ActionEvent e) {
                 Message m = new Message();
                 m.type = TypesMessages.FINIR_TOUR;
+                MESSAGE_PRECEDENT = m.type;
 
                 notifierObservateur(m);
             }
@@ -278,6 +283,7 @@ public class VueAventurier extends Observe {
             public void actionPerformed(ActionEvent e) {
                 Message m = new Message();
                 m.type = TypesMessages.ACTION_GAGNER_TRESOR;
+                MESSAGE_PRECEDENT = m.type;
 
                 notifierObservateur(m);
             }
@@ -288,6 +294,7 @@ public class VueAventurier extends Observe {
             public void actionPerformed(ActionEvent e) {
                 Message m = new Message();
                 m.type = TypesMessages.SOUHAITE_DONNER;
+                MESSAGE_PRECEDENT = m.type;
 
                 notifierObservateur(m);
             }
@@ -297,10 +304,48 @@ public class VueAventurier extends Observe {
             public void actionPerformed(ActionEvent e) {
                 Message m = new Message();
                 m.type = TypesMessages.SOUHAITE_JOUER_SPECIALE;
+                MESSAGE_PRECEDENT = m.type;
 
                 notifierObservateur(m);
             }
         });
+        
+        //CLIQUE SUR LA GRILLE (à compléter)
+        this.grille.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Message m = new Message();
+                switch (MESSAGE_PRECEDENT) {
+                    case SOUHAITE_DEPLACEMENT:
+                        m.type = TypesMessages.ACTION_DEPLACEMENT;
+                        break;
+                    case SOUHAITE_ASSECHER:
+                        m.type = TypesMessages.ACTION_ASSECHER;
+                        break;
+                    /*case SOUHAITE_DONNER:
+                        m.type = TypesMessages.ACTION_DONNER;
+                        
+                        break;*/
+                    case SOUHAITE_JOUER_SPECIALE:
+                        m.type = TypesMessages.JOUER_SPECIALE;
+                        break;
+                }
+                if (m.type != MESSAGE_PRECEDENT) {
+                    m.tuile = grille.getTuile(e.getX()*6/grille.getWidth(), e.getY()*6/grille.getHeight());
+                    MESSAGE_PRECEDENT = m.type;
+                    notifierObservateur(m);
+                }
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+        
         // PROPRIÉTÉS DU JFRAME
         window.setTitle("L'Île Interdite");
         window.setSize(lfenetre, hfenetre); // équivalent 16:9
@@ -350,7 +395,7 @@ public class VueAventurier extends Observe {
                 instructions.setText("La carte " + carte + " a été donnée au joueur " + joueur + " . Il vous reste " + nbaction + " action(s)");
                 break;
             case ETAT_GAGNER_TRESOR:
-                instructions.setText("Vous avez gagnez un trésor");
+                instructions.setText(joueur + "a gagné un trésor, il vous reste " + nbaction + " action(s)");
                 break;
             case ETAT_TROP_CARTES:
                 instructions.setText("Vous avez trop de cartes dans votre main, vous devez en défausser une");
@@ -374,4 +419,57 @@ public class VueAventurier extends Observe {
         }
 
     }
+
+    public void interfaceParDefaut() {
+        /*
+        -actualise la grille
+        -remet l'IHM en état comme au début d'un tour (ne modifie pas l'état courant)
+        */
+        this.grille.repaint();
+        //à compléter
+    }
+
+    public void afficheCartesHelico() {
+        /*
+        -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
+        -met en valeur les cartes hélico de la main du joeur, elle deviennent utilisable
+        */
+        this.grille.repaint();
+        //à compléter
+    }
+
+    public void afficheCartesSac() {
+        /*
+        -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
+        -met en valeur les cartes sac de sable de la main du joeur, elle deviennent utilisable
+        */
+        this.grille.repaint();
+        //à compléter
+    }
+
+    public void afficherTuilesDispo() {
+        /*
+        -actualise la grille
+        -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
+        */
+        this.grille.repaint();
+        //à compléter
+    }
+
+    public void afficherTuilesPilote() {
+        // actualise la grille
+        this.grille.repaint();
+    }
+    
+    public void actualiserTrésor(Trésor[] trésors) {
+        /*
+        en fonction des trésors gagnés, l'IHM change.
+        */
+        //[0] = LA_PIERRE_SACREE
+        //[1] = LA_STATUE_DU_ZEPHYR
+        //[2] = LE_CRISTAL_ARDENT
+        //[3] = LE_CALICE_DE_L_ONDE
+        
+    }
+    
 }

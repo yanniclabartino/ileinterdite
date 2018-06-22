@@ -45,56 +45,64 @@ public class Controleur implements Observateur {
                 Parameters.setLogs(m.logs);
                 Parameters.setAleas(m.aleas);
                 debutJeu();
-                getIHM().afficherEtatAction(ihm.ETAT_COMMENCER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
+                getIHM().afficherEtatAction(ihm.ETAT_COMMENCER, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 break;
             case SOUHAITE_DEPLACEMENT:
                 if (deplacementPossible(getJoueurCourant())) {
                     gererDeplacement(getJoueurCourant());
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DEPLACEMENT, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DEPLACEMENT, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 }
                 break;
             case ACTION_DEPLACEMENT:
-                getJoueurCourant().seDeplace(m.tuile);
-                getIHM().afficherEtatAction(ihm.ETAT_DEPLACEMENT, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, m.tuile.getNom().toString(), null);
+                if (m.tuile.getSelected()!=0) {
+                    getJoueurCourant().seDeplace(m.tuile);
+                    this.nbActions--;
+                    getIHM().afficherEtatAction(ihm.ETAT_DEPLACEMENT, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
+                    getGrille().deselectionnerTuiles();
+                    getIHM().interfaceParDefaut();
+                }
                 break;
             case SOUHAITE_ASSECHER:
                 if (assechementPossible()) {
                     gererAssechement();
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_ASSECHER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
-
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_ASSECHER, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 }
                 break;
             case ACTION_ASSECHER:
-                m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
-                getIHM().afficherEtatAction(ihm.ETAT_ASSECHER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, m.tuile.getNom().toString(), null);
+                if (m.tuile.getSelected()!=0) {
+                    m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
+                    this.nbActions--;
+                    getIHM().afficherEtatAction(ihm.ETAT_ASSECHER, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
+                    getGrille().deselectionnerTuiles();
+                    getIHM().interfaceParDefaut();
+                }
                 break;
             case SOUHAITE_DONNER:
                 if (donationPossible()) {
                     gererDonation();
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DONNER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, m.tuile.getNom().toString(), null);
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DONNER, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
                 }
                 break;
             case ACTION_DONNER:
                 getJoueurCourant().defausseCarte(m.carte);
                 m.receveur.piocheCarte(m.carte);
-                getIHM().afficherEtatAction(ihm.ETAT_DONNER, nomJoueurCourant(joueurs, m.receveur), nbActions, m.tuile.getNom().toString(), null);
+                getIHM().afficherEtatAction(ihm.ETAT_DONNER, getJoueurs().get(m.receveur), getNbAction(), m.tuile.getNom().toString(), null);
                 break;
             case ACTION_GAGNER_TRESOR:
                 if (gererGainTresor()) {
-                    //à completer avec l'ihm quand un trésor a été gagné
-                } else {
-                    //à completer avec l'ihm quand le gain est impossible
+                    getIHM().afficherEtatAction(ihm.ETAT_GAGNER_TRESOR, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                    getIHM().actualiserTrésor(getTrésors());
                 }
                 break;
             case DEFAUSSE_CARTE:
                 getJoueurCourant().defausseCarte(m.carte);
                 addDefausseOranges(m.carte);
-                getIHM().afficherEtatAction(ihm.ETAT_DEFAUSSE_CARTE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, m.carte.getRole());
+                getIHM().afficherEtatAction(ihm.ETAT_DEFAUSSE_CARTE, getJoueurs().get(getJoueurCourant()), getNbAction(), null, m.carte.getRole());
                 break;
             case SOUHAITE_JOUER_SPECIALE:
                 if (specialePossible() != 0) {
                     gererCarteSpecial();
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_JOUER_SPECIALE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_JOUER_SPECIALE, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 }
                 break;
             case JOUER_SPECIALE:
@@ -102,22 +110,22 @@ public class Controleur implements Observateur {
                     getJoueurCourant().defausseCarte(m.carte);
                     addDefausseOranges(m.carte);
                     this.jeuEnCours = false;
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, m.carte.getRole());
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, getJoueurs().get(getJoueurCourant()), getNbAction(), null, m.carte.getRole());
                 } else {
                     m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
                     getJoueurCourant().defausseCarte(m.carte);
                     addDefausseOranges(m.carte);
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, m.tuile.getNom().toString(), m.carte.getRole());
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), m.carte.getRole());
                 }
                 break;
             case FINIR_TOUR:
                 this.nbActions = 0;
-                getIHM().afficherEtatAction(ihm.ETAT_FINIR_TOUR, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
+                getIHM().afficherEtatAction(ihm.ETAT_FINIR_TOUR, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 break;
             case ANNULER:
-                getIHM().annulerAction();
-                getIHM().afficherEtatAction(ihm.ETAT_ANNULER, nomJoueurCourant(joueurs, getJoueurCourant()), nbActions, null, null);
-                //  - annule une action en cours (remettre l'ihm en état comme si l'action n'avait pas était demandée)
+                getIHM().afficherEtatAction(ihm.ETAT_ANNULER, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                getGrille().deselectionnerTuiles();
+                getIHM().interfaceParDefaut();
                 break;
         }
 
@@ -148,9 +156,10 @@ public class Controleur implements Observateur {
         }
         tuilesDispo.addAll(joueur.calculTuileDispo(g));
         tuilesPilote.removeAll(tuilesDispo);
-        
-        //getIHM().afficherTuilesDispo(tuilesDispo);
-        //getIHM().afficherTuilesPilote(tuilesPilote);
+        g.selectionTuileDispo(tuilesDispo, 1);
+        g.selectionTuileDispo(tuilesPilote, 2);
+        getIHM().afficherTuilesDispo();
+        getIHM().afficherTuilesPilote();
     }
 
     private boolean assechementPossible() {
@@ -170,7 +179,8 @@ public class Controleur implements Observateur {
         }
         //à compléter avec l'ihm en fonction du nombre d'assèchement possible.
         for (int i = 0; i < nbAssechement; i++) {
-            getIHM().afficherTuilesAsse(tuilesDispo);
+            g.selectionTuileDispo(tuilesDispo, 1);
+            getIHM().afficherTuilesDispo();
         }
     }
 
@@ -576,7 +586,6 @@ public class Controleur implements Observateur {
             }
         }
 
-        //FAIRE LA BOUCLE DU JEU.
         while (!this.estTerminé()) {
             for (Aventurier a : getJoueurs().keySet()) {
                 this.joueurCourant = a;
@@ -588,13 +597,14 @@ public class Controleur implements Observateur {
                         this.nbActions = 3;
                     }
                     while (this.nbActions > 0) {
-                        getIHM().afficerEtat(EtatCourant, getJoueurCourant(), getNbAction());
+                        //afficher l'état courant comme quoi un joueur doit jouer qq chose.
                     }
                     gererCarteOrange();
                     gererCarteBleue();
                 }
             }
         }
+        //à compléter avec l'ihm.
         if (estPerdu()) {
             //partie perdue (a afficher sur l'ihm)
             int joueurVivant = getNbJoueur();
@@ -700,31 +710,24 @@ public class Controleur implements Observateur {
     private int getNbAction() {
         return this.nbActions;
     }
-
     private VueAventurier getIHM() {
         return this.ihm;
     }
-
     private Aventurier getJoueurCourant() {
         return this.joueurCourant;
     }
-
     private Trésor[] getTrésors() {
         return trésors;
     }
-
     private int getNbJoueur() {
         return this.nbJoueurs;
     }
-
     private Grille getGrille() {
         return grille;
     }
-
     private int getNiveau() {
         return niveauEau;
     }
-
     private ArrayList<Tuile> calculTouteTuileDispo(Grille g) {
         ArrayList<Tuile> touteTuileDispo = new ArrayList<Tuile>();
         for (int i = 0; i < 6; i++) {
@@ -738,21 +741,18 @@ public class Controleur implements Observateur {
         }
         return touteTuileDispo;
     }
-
     public HashMap<Aventurier, String> getJoueurs() {
         return joueurs;
     }
-
+    
     //méthodes pour les cartes bleues
     //pioche
     private Stack<CarteBleue> getPiocheBleues() {
         return piocheBleues;
     }
-
     private CarteBleue piocheCarteBleue() {
         return this.piocheBleues.pop();
     }
-
     private void addPiocheBleue(CarteBleue c) {
         this.piocheBleues.push(c);
     }
@@ -761,11 +761,9 @@ public class Controleur implements Observateur {
     private ArrayList<CarteBleue> getDefausseBleues() {
         return this.defausseBleues;
     }
-
     private void addDefausseBleues(CarteBleue carte) {
         this.defausseBleues.add(carte);
     }
-
     private void viderDefausseBleues() {
         this.defausseBleues.removeAll(this.defausseBleues);
     }
@@ -775,11 +773,9 @@ public class Controleur implements Observateur {
     private Stack<CarteOrange> getPiocheOranges() {
         return piocheOranges;
     }
-
     private CarteOrange piocheCarteOrange() {
         return this.piocheOranges.pop();
     }
-
     private void addPiocheOrange(CarteOrange c) {
         this.piocheOranges.push(c);
     }
@@ -788,18 +784,11 @@ public class Controleur implements Observateur {
     private ArrayList<CarteOrange> getDefausseOranges() {
         return this.defausseOranges;
     }
-
     private void addDefausseOranges(CarteOrange carte) {
         this.defausseOranges.add(carte);
     }
-
     private void viderDefausseOranges() {
         this.defausseOranges.removeAll(this.defausseOranges);
-    }
-
-    private String nomJoueurCourant(HashMap<Aventurier, String> joueurs, Aventurier joueurCourant) {
-        String nom = joueurs.get(joueurCourant);
-        return nom;
     }
 
     //CONSTUCTEUR
