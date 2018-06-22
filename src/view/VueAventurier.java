@@ -373,7 +373,7 @@ public class VueAventurier extends Observe {
                         m.type = TypesMessages.JOUER_SPECIALE;
                         break;
                 }
-                if (m.type != MESSAGE_PRECEDENT) {
+                if (m.type != MESSAGE_PRECEDENT && grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight()).getSelected() != 0) {
                     m.tuile = grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight());
                     MESSAGE_PRECEDENT = m.type;
                     notifierObservateur(m);
