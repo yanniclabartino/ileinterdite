@@ -31,21 +31,21 @@ public class Plongeur extends Aventurier {
         if (g.getTuile(x, y - 1) != null) {
             ((g.getTuile(x , y - 1).getEtat() != Utils.EtatTuile.ASSECHEE)? tuilesNonTraite : tuilesDispo).add(g.getTuile(x , y - 1));
             if (g.getTuile(x , y - 1).getEtat() == Utils.EtatTuile.INONDEE){
-                tuilesDispo.add(g.getTuile(x - 1, y));
+                tuilesDispo.add(g.getTuile(x , y - 1));
             }
         }
 
         if (g.getTuile(x + 1, y) != null) {
             ((g.getTuile(x + 1, y).getEtat() != Utils.EtatTuile.ASSECHEE)? tuilesNonTraite : tuilesDispo).add(g.getTuile(x + 1, y));
             if (g.getTuile(x + 1, y).getEtat() == Utils.EtatTuile.INONDEE){
-                tuilesDispo.add(g.getTuile(x - 1, y));
+                tuilesDispo.add(g.getTuile(x + 1, y));
             }
         }
 
         if (g.getTuile(x, y + 1) != null) {
             ((g.getTuile(x , y + 1).getEtat() != Utils.EtatTuile.ASSECHEE)? tuilesNonTraite : tuilesDispo).add(g.getTuile(x , y + 1));
             if (g.getTuile(x, y + 1).getEtat() == Utils.EtatTuile.INONDEE){
-                tuilesDispo.add(g.getTuile(x - 1, y));
+                tuilesDispo.add(g.getTuile(x, y + 1));
             }
         }
 

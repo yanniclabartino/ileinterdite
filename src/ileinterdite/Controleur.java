@@ -111,7 +111,7 @@ public class Controleur implements Observateur {
                 }
                 break;
             case JOUER_SPECIALE:
-                if (specialePossible() == 1) {
+                if (m.carte.getRole().equals("Helicoptere")) {
                     getJoueurCourant().defausseCarte(m.carte);
                     addDefausseOranges(m.carte);
                     this.jeuEnCours = false;
@@ -408,9 +408,9 @@ public class Controleur implements Observateur {
 
     private void gererCarteSpecial() {
         if (specialePossible() == 1) {
-            getIHM().afficheCartesHelico();
+            getIHM().afficheCartesHelico(getJoueurCourant().getMain());
         } else { //specialePossible() == 2
-            getIHM().afficheCartesSac();
+            getIHM().afficheCartesSac(getJoueurCourant().getMain());
         }
     }
 

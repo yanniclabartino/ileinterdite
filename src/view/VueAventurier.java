@@ -66,7 +66,7 @@ public class VueAventurier extends Observe {
     private final int hfenetre = 720;
 
     public VueAventurier(Grille grille) {
-
+        
         // INSTANCIATION DE L'IMAGE DE FOND
         imageFond = new ImageFond(lfenetre, hfenetre, "/src/images/autre/fondJeu.jpg");
 
@@ -132,7 +132,7 @@ public class VueAventurier extends Observe {
 
         // INSTANCIATION DES JPANEL DE DISPOSITION      
         JPanel layer0 = new JPanel();
-
+        
         JPanel layer1north = new JPanel();
         JPanel layer1south = new JPanel();
 
@@ -150,10 +150,10 @@ public class VueAventurier extends Observe {
         // AFFECTATION DE TYPES AUX PANELS DE DISPOSITION
         layer0.setLayout(new BorderLayout());
         layer0.setBackground(Color.RED);
-
+        
         layer1north.setLayout(new BorderLayout());
         layer1south.setLayout(new BorderLayout());
-
+        
         layer2north.setLayout(new BorderLayout());
         layer2south.setLayout(new GridLayout(1, 9));
         layer2east.setLayout(new BorderLayout());
@@ -187,7 +187,7 @@ public class VueAventurier extends Observe {
         layer1south.add(new VidePanel(190, 1), BorderLayout.EAST);
         layer1south.add(new VidePanel(190, 1), BorderLayout.WEST);
         layer1south.add(new VidePanel(1, 20), BorderLayout.SOUTH);
-
+        
         layer2north.add(margeHaut, BorderLayout.NORTH);
         layer2north.add(new VidePanel(400, 0), BorderLayout.EAST);
         layer2north.add(new VidePanel(400, 0), BorderLayout.WEST);
@@ -243,28 +243,28 @@ public class VueAventurier extends Observe {
 
         window.add(imageFond);
         imageFond.add(layer0);
-
+        
         tresor1.setVisible(false);
         tresor2.setVisible(false);
         tresor3.setVisible(false);
         tresor4.setVisible(false);
-
+        
         // MISE EN TRANSPARENCE DE TOUS LES PANELS POUR VOIR L'ARRIÈRE PLAN
         layer0.setOpaque(false);
         layer1north.setOpaque(false);
         layer1south.setOpaque(false);
         layer2north.setOpaque(false);
         layer2south.setBackground(new Color(255, 229, 204, 100));
-        carte1.setBackground(new Color(255, 229, 204));
-        carte2.setBackground(new Color(255, 229, 204));
-        carte3.setBackground(new Color(255, 229, 204));
-        carte4.setBackground(new Color(255, 229, 204));
-        carte5.setBackground(new Color(255, 229, 204));
-        carte6.setBackground(new Color(255, 229, 204));
-        carte7.setBackground(new Color(255, 229, 204));
-        carte8.setBackground(new Color(255, 229, 204));
-        carte9.setBackground(new Color(255, 229, 204));
-
+            carte1.setBackground(new Color(255, 229, 204));
+            carte2.setBackground(new Color(255, 229, 204));
+            carte3.setBackground(new Color(255, 229, 204));
+            carte4.setBackground(new Color(255, 229, 204));
+            carte5.setBackground(new Color(255, 229, 204));
+            carte6.setBackground(new Color(255, 229, 204));
+            carte7.setBackground(new Color(255, 229, 204));
+            carte8.setBackground(new Color(255, 229, 204));
+            carte9.setBackground(new Color(255, 229, 204));
+            
         layer2east.setOpaque(false);
         layer2west.setOpaque(false);
         layer3west.setBackground(new Color(255, 242, 230, 100));
@@ -346,7 +346,7 @@ public class VueAventurier extends Observe {
             }
         });
 
-        // CLIC SUR LA GRILLE (à compléter)
+        // CLIC SUR LA GRILLE
         this.grille.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -366,7 +366,7 @@ public class VueAventurier extends Observe {
                         m.type = TypesMessages.JOUER_SPECIALE;
                         break;
                 }
-                if (m.type != MESSAGE_PRECEDENT) {
+                if (m.type != MESSAGE_PRECEDENT && grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight()).getSelected() != 0) {
                     m.tuile = grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight());
                     MESSAGE_PRECEDENT = m.type;
                     notifierObservateur(m);
@@ -390,6 +390,34 @@ public class VueAventurier extends Observe {
             }
         });
 
+        // CLIC SUR LES CARTES
+        MouseListener l = new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Message m = new Message();
+                m.carte = lesCartes.indexOf(e.getX());
+                
+                notifierObservateur(m);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        };
+        this.carte1.addMouseListener(l);
+        this.carte2.addMouseListener(l);
+        this.carte3.addMouseListener(l);
+        this.carte4.addMouseListener(l);
+        this.carte5.addMouseListener(l);
+        this.carte6.addMouseListener(l);
+        this.carte7.addMouseListener(l);
+        this.carte8.addMouseListener(l);
+        this.carte9.addMouseListener(l);
+        
         // PROPRIÉTÉS DU JFRAME
         window.setTitle("L'Île Interdite");
         window.setSize(lfenetre, hfenetre); // équivalent 16:9
@@ -466,22 +494,39 @@ public class VueAventurier extends Observe {
         bPerso.setEnabled(true);
     }
 
-    public void afficheCartesHelico() {
+    public void afficheCartesHelico(ArrayList<CarteOrange> cartes) {
         /*
         -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
         -met en valeur les cartes hélico de la main du joueur, elle deviennent utilisable
          */
-        this.grille.repaint();
-        //à compléter
+        bDepl.setEnabled(false);
+        bAss.setEnabled(false);
+        bPioch.setEnabled(false);
+        bGagner.setEnabled(false);
+        bSpecial.setEnabled(false);
+        for (CarteOrange c : cartes) {
+            if (c.getRole().equals("Helicoptere")) {
+                lesCartes.get(cartes.indexOf(c)).setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(cartes.indexOf(c)).getRole() + "Dispo.png");
+            }
+        }
     }
 
-    public void afficheCartesSac() {
+    public void afficheCartesSac(ArrayList<CarteOrange> cartes) {
         /*
         -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
         -met en valeur les cartes sac de sable de la main du joueur, elle deviennent utilisable
          */
         this.grille.repaint();
-        //à compléter
+        bDepl.setEnabled(false);
+        bAss.setEnabled(false);
+        bPioch.setEnabled(false);
+        bGagner.setEnabled(false);
+        bSpecial.setEnabled(false);
+        for (CarteOrange c : cartes) {
+            if (c.getRole().equals("Sac de sable")) {
+                lesCartes.get(cartes.indexOf(c)).setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(cartes.indexOf(c)).getRole() + "Dispo.png");
+            }
+        }
     }
 
     public void afficherTuilesDispo() {
