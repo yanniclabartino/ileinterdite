@@ -26,8 +26,7 @@ import static javax.swing.SwingConstants.CENTER;
 import model.CarteOrange;
 import model.CarteTrésor;
 import model.Grille;
-import model.Tuile;
-import util.NomTuile;
+import model.Trésor;
 
 /**
  *
@@ -396,7 +395,7 @@ public class VueAventurier extends Observe {
                 instructions.setText("La carte " + carte + " a été donnée au joueur " + joueur + " . Il vous reste " + nbaction + " action(s)");
                 break;
             case ETAT_GAGNER_TRESOR:
-                instructions.setText("Vous avez gagnez un trésor");
+                instructions.setText(joueur + "a gagné un trésor, il vous reste " + nbaction + " action(s)");
                 break;
             case ETAT_TROP_CARTES:
                 instructions.setText("Vous avez trop de cartes dans votre main, vous devez en défausser une");
@@ -432,7 +431,6 @@ public class VueAventurier extends Observe {
 
     public void afficheCartesHelico() {
         /*
-        -actualise la main du joueur
         -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
         -met en valeur les cartes hélico de la main du joeur, elle deviennent utilisable
         */
@@ -442,7 +440,6 @@ public class VueAventurier extends Observe {
 
     public void afficheCartesSac() {
         /*
-        -actualise la main du joueur
         -désactive toutes intéractions sauf : annuler (et le bouton d'aide)
         -met en valeur les cartes sac de sable de la main du joeur, elle deviennent utilisable
         */
@@ -462,6 +459,17 @@ public class VueAventurier extends Observe {
     public void afficherTuilesPilote() {
         // actualise la grille
         this.grille.repaint();
+    }
+    
+    public void actualiserTrésor(Trésor[] trésors) {
+        /*
+        en fonction des trésors gagnés, l'IHM change.
+        */
+        //[0] = LA_PIERRE_SACREE
+        //[1] = LA_STATUE_DU_ZEPHYR
+        //[2] = LE_CRISTAL_ARDENT
+        //[3] = LE_CALICE_DE_L_ONDE
+        
     }
     
 }

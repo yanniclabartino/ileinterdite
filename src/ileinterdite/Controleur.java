@@ -90,9 +90,8 @@ public class Controleur implements Observateur {
                 break;
             case ACTION_GAGNER_TRESOR:
                 if (gererGainTresor()) {
-                    //à completer avec l'ihm quand un trésor a été gagné
-                } else {
-                    //à completer avec l'ihm quand le gain est impossible
+                    getIHM().afficherEtatAction(ihm.ETAT_GAGNER_TRESOR, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                    getIHM().actualiserTrésor(getTrésors());
                 }
                 break;
             case DEFAUSSE_CARTE:
