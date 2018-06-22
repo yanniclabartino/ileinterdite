@@ -195,7 +195,7 @@ public class Grille extends JPanel {
     public void paintComponent(Graphics g) {
         Dimension size = getSize();
         
-        g.setColor(new Color(0, 64, 255));
+        g.setColor(new Color(0, 0, 0));
         g.fillOval(-25, -25, size.width+50, size.height+50);
 
         double largeurTuile = (size.width / 6) * 0.89;
@@ -248,6 +248,18 @@ public class Grille extends JPanel {
                         }
                     } else {
                         g.fillRect(coordX, coordY, (int) largeurTuile, (int) hauteurTuile);
+                    }
+                    
+                    int décalage = 2;
+                    
+                    if (!this.getTuile(c, l).getPossede().isEmpty()) {
+                        for (Aventurier a : this.getTuile(c, l).getPossede()) {
+                            g.setColor(Color.WHITE);
+                            g.fillOval(coordX+décalage, coordY+18, (int) (largeurTuile/5+4), (int)  (hauteurTuile/5+4));
+                            g.setColor(a.getCouleur().getCouleur());
+                            g.fillOval(coordX+décalage+2, coordY+20, (int) largeurTuile/5, (int)  hauteurTuile/5);
+                            décalage = décalage + 20;
+                        }
                     }
                 }
             }

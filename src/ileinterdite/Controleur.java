@@ -25,7 +25,8 @@ public class Controleur implements Observateur {
 
     private Grille grille;
     private Trésor[] trésors;
-    private HashMap<Aventurier, String> joueurs;
+    private HashMap<Aventurier, String> nomJoueurs;
+    private ArrayList<Aventurier> joueurs;
     private Aventurier joueurCourant;
     private Stack<CarteBleue> piocheBleues;
     private ArrayList<CarteBleue> defausseBleues;
@@ -47,19 +48,20 @@ public class Controleur implements Observateur {
                 Parameters.setAleas(m.aleas);
                 debutJeu();
                 */
-                getIHM().afficherEtatAction(ihm.ETAT_COMMENCER, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                getIHM().afficherEtatAction(ihm.ETAT_COMMENCER, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 break;
             case SOUHAITE_DEPLACEMENT:
                 if (deplacementPossible(getJoueurCourant())) {
                     gererDeplacement(getJoueurCourant());
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DEPLACEMENT, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DEPLACEMENT, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 }
                 break;
             case ACTION_DEPLACEMENT:
                 if (m.tuile.getSelected()!=0) {
                     getJoueurCourant().seDeplace(m.tuile);
                     this.nbActions--;
-                    getIHM().afficherEtatAction(ihm.ETAT_DEPLACEMENT, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
+                    actualiserJeu();
+                    getIHM().afficherEtatAction(ihm.ETAT_DEPLACEMENT, getNomJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
                     getGrille().deselectionnerTuiles();
                     getIHM().interfaceParDefaut();
                 }
@@ -67,14 +69,15 @@ public class Controleur implements Observateur {
             case SOUHAITE_ASSECHER:
                 if (assechementPossible()) {
                     gererAssechement();
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_ASSECHER, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_ASSECHER, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 }
                 break;
             case ACTION_ASSECHER:
                 if (m.tuile.getSelected()!=0) {
                     m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
                     this.nbActions--;
-                    getIHM().afficherEtatAction(ihm.ETAT_ASSECHER, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
+                    actualiserJeu();
+                    getIHM().afficherEtatAction(ihm.ETAT_ASSECHER, getNomJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
                     getGrille().deselectionnerTuiles();
                     getIHM().interfaceParDefaut();
                 }
@@ -82,29 +85,29 @@ public class Controleur implements Observateur {
             case SOUHAITE_DONNER:
                 if (donationPossible()) {
                     gererDonation();
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DONNER, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_DONNER, getNomJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
                 }
                 break;
             case ACTION_DONNER:
                 getJoueurCourant().defausseCarte(m.carte);
                 m.receveur.piocheCarte(m.carte);
-                getIHM().afficherEtatAction(ihm.ETAT_DONNER, getJoueurs().get(m.receveur), getNbAction(), m.tuile.getNom().toString(), null);
+                getIHM().afficherEtatAction(ihm.ETAT_DONNER, getNomJoueurs().get(m.receveur), getNbAction(), m.tuile.getNom().toString(), null);
                 break;
             case ACTION_GAGNER_TRESOR:
                 if (gererGainTresor()) {
-                    getIHM().afficherEtatAction(ihm.ETAT_GAGNER_TRESOR, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                    getIHM().afficherEtatAction(ihm.ETAT_GAGNER_TRESOR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                     getIHM().actualiserTrésor(getTrésors());
                 }
                 break;
             case DEFAUSSE_CARTE:
                 getJoueurCourant().defausseCarte(m.carte);
                 addDefausseOranges(m.carte);
-                getIHM().afficherEtatAction(ihm.ETAT_DEFAUSSE_CARTE, getJoueurs().get(getJoueurCourant()), getNbAction(), null, m.carte.getRole());
+                getIHM().afficherEtatAction(ihm.ETAT_DEFAUSSE_CARTE, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, m.carte.getRole());
                 break;
             case SOUHAITE_JOUER_SPECIALE:
                 if (specialePossible() != 0) {
                     gererCarteSpecial();
-                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_JOUER_SPECIALE, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_JOUER_SPECIALE, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 }
                 break;
             case JOUER_SPECIALE:
@@ -112,20 +115,20 @@ public class Controleur implements Observateur {
                     getJoueurCourant().defausseCarte(m.carte);
                     addDefausseOranges(m.carte);
                     this.jeuEnCours = false;
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, getJoueurs().get(getJoueurCourant()), getNbAction(), null, m.carte.getRole());
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, m.carte.getRole());
                 } else {
                     m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
                     getJoueurCourant().defausseCarte(m.carte);
                     addDefausseOranges(m.carte);
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), m.carte.getRole());
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, getNomJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), m.carte.getRole());
                 }
                 break;
             case FINIR_TOUR:
                 this.nbActions = 0;
-                getIHM().afficherEtatAction(ihm.ETAT_FINIR_TOUR, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                getIHM().afficherEtatAction(ihm.ETAT_FINIR_TOUR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 break;
             case ANNULER:
-                getIHM().afficherEtatAction(ihm.ETAT_ANNULER, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                getIHM().afficherEtatAction(ihm.ETAT_ANNULER, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 getGrille().deselectionnerTuiles();
                 getIHM().interfaceParDefaut();
                 break;
@@ -155,13 +158,13 @@ public class Controleur implements Observateur {
         ArrayList<Tuile> tuilesPilote = new ArrayList<Tuile>();
         if (joueur.getCouleur() == Utils.Pion.BLEU && pouvoirPiloteDispo) {
             tuilesPilote.addAll(calculTouteTuileDispo(g));
+            g.selectionTuileDispo(tuilesPilote, 2);
+            getIHM().afficherTuilesPilote();
         }
         tuilesDispo.addAll(joueur.calculTuileDispo(g));
         tuilesPilote.removeAll(tuilesDispo);
         g.selectionTuileDispo(tuilesDispo, 1);
-        g.selectionTuileDispo(tuilesPilote, 2);
         getIHM().afficherTuilesDispo();
-        getIHM().afficherTuilesPilote();
     }
 
     private boolean assechementPossible() {
@@ -513,13 +516,15 @@ public class Controleur implements Observateur {
 
     private void iniJeu() {
         //initialisations des tableaux/vecteurs
-        joueurs = new HashMap<Aventurier, String>();
+        nomJoueurs = new HashMap<Aventurier, String>();
         trésors = new Trésor[4];
         piocheOranges = new Stack<CarteOrange>();
         defausseOranges = new ArrayList<CarteOrange>();
         piocheBleues = new Stack<CarteBleue>();
         defausseBleues = new ArrayList<CarteBleue>();
-
+        joueurs = new ArrayList<Aventurier>();
+        
+        
         //initialisations
         iniTrésor();
         iniGrille();
@@ -534,9 +539,12 @@ public class Controleur implements Observateur {
             - tire les premieres cartes innondations
             - place les aventuriers
             - distribue les cartes Trésor
-        
-            - lance la boucle de jeu jusqu'à une fin
          */
+        
+        for (Aventurier a : getNomJoueurs().keySet()) {
+            getJoueurs().add(a);
+        }
+        
         this.jeuEnCours = true;
         Grille g = getGrille();
         //tout ceci dépendant du parametres.ALEAS
@@ -551,7 +559,7 @@ public class Controleur implements Observateur {
             g.getTuile(2, 4).setEtat(Utils.EtatTuile.COULEE);
             g.getTuile(4, 3).setEtat(Utils.EtatTuile.COULEE);
 
-            for (Aventurier a : getJoueurs().keySet()) {
+            for (Aventurier a : getJoueurs()) {
                 if (a.getCouleur() == Pion.BLANC) {
                     g.getTuile(1, 2).addAventurier(a);
                 } else if (a.getCouleur() == Pion.BLEU) {
@@ -570,7 +578,7 @@ public class Controleur implements Observateur {
             }
         } else { // ALEAS == true
             gererCarteBleue();
-            for (Aventurier a : getJoueurs().keySet()) {
+            for (Aventurier a : getJoueurs()) {
                 boolean randomCorrect = false;
                 do {
                     int x = (int) (Math.random() * 5);
@@ -584,49 +592,14 @@ public class Controleur implements Observateur {
                 } while (!randomCorrect);
             }
         }
-        /*
-        ihm = new VueAventurier(g);
-        ihm.addObservateur(this);
-        */
-        while (!this.estTerminé()) {
-            for (Aventurier a : getJoueurs().keySet()) {
-                this.joueurCourant = a;
-                this.pouvoirPiloteDispo = true;
-                if (!this.estTerminé()) {
-                    if (a.getCouleur() == Pion.JAUNE) {
-                        this.nbActions = 4;
-                    } else {
-                        this.nbActions = 3;
-                    }
-                    while (this.nbActions > 0) {
-                        //afficher l'état courant comme quoi un joueur doit jouer qq chose.
-                    }
-                    gererCarteOrange();
-                    gererCarteBleue();
-                }
-            }
-        }
-        //à compléter avec l'ihm.
-        if (estPerdu()) {
-            //partie perdue (a afficher sur l'ihm)
-            int joueurVivant = getNbJoueur();
-            for (Aventurier a : getJoueurs().keySet()) {
-                if (a.getTuile() == null) {
-                    joueurVivant--;
-                }
-            }
-            if (grille.getTuile(NomTuile.HELIPORT).getEtat() == Utils.EtatTuile.COULEE) {
-                //L'héliport à sombré.
-            } else if (getNiveau() >= 10) {
-                //Le niveau d'eau vous a submergé.
-            } else if (joueurVivant < getNbJoueur()) {
-                //Un de vos coéquipier à sombré.
-            } else {
-                //Les tuiles de trésor ont sombrées.
-            }
+        this.joueurCourant = getJoueurs().get(0);
+        if (getJoueurCourant().getCouleur() == Pion.JAUNE) {
+            this.nbActions = 4;
         } else {
-            //Partie gagnée, WP !
+            this.nbActions = 3;
         }
+        ihm = new VueAventurier(getGrille());
+        ihm.addObservateur(this);
     }
 
     private void iniCartes() {
@@ -694,7 +667,7 @@ public class Controleur implements Observateur {
         Grille g = getGrille();
         Utils.EtatTuile coulee = Utils.EtatTuile.COULEE;
         int joueurVivant = getNbJoueur();
-        for (Aventurier a : getJoueurs().keySet()) {
+        for (Aventurier a : getNomJoueurs().keySet()) {
             if (a.getTuile() == null) {
                 joueurVivant--;
             }
@@ -708,6 +681,51 @@ public class Controleur implements Observateur {
                 || joueurVivant < nbJoueurs);
     }
 
+    private void actualiserJeu() {
+        
+        Aventurier jCourant = getJoueurCourant();
+        
+        if (getNbAction() == 0) {
+            int indexJNext;
+            if (getJoueurs().indexOf(jCourant)+1 >= getNbJoueur()) {
+                indexJNext = 0;
+            } else {
+                indexJNext = getJoueurs().indexOf(jCourant)+1;
+            }
+            gererCarteOrange();
+            gererCarteBleue();
+            this.joueurCourant=getJoueurs().get(indexJNext);
+            if (getJoueurCourant().getCouleur() == Pion.JAUNE) {
+                this.nbActions = 4;
+            } else {
+                this.nbActions = 3;
+            }
+        }
+        
+        /*while (!this.estTerminé()) {}
+        //à compléter avec l'ihm.
+        if (estPerdu()) {
+            //partie perdue (a afficher sur l'ihm)
+            int joueurVivant = getNbJoueur();
+            for (Aventurier a : getNomJoueurs().keySet()) {
+                if (a.getTuile() == null) {
+                    joueurVivant--;
+                }
+            }
+            if (grille.getTuile(NomTuile.HELIPORT).getEtat() == Utils.EtatTuile.COULEE) {
+                //L'héliport à sombré.
+            } else if (getNiveau() >= 10) {
+                //Le niveau d'eau vous a submergé.
+            } else if (joueurVivant < getNbJoueur()) {
+                //Un de vos coéquipier à sombré.
+            } else {
+                //Les tuiles de trésor ont sombrées.
+            }
+        } else {
+            //Partie gagnée, WP !
+        }*/
+    }
+    
     //METHODES UTILES
     private int getNbAction() {
         return this.nbActions;
@@ -743,8 +761,11 @@ public class Controleur implements Observateur {
         }
         return touteTuileDispo;
     }
-    public HashMap<Aventurier, String> getJoueurs() {
-        return joueurs;
+    public HashMap<Aventurier, String> getNomJoueurs() {
+        return nomJoueurs;
+    }
+    public ArrayList<Aventurier> getJoueurs() {
+        return this.joueurs;
     }
     
     //méthodes pour les cartes bleues
@@ -758,7 +779,6 @@ public class Controleur implements Observateur {
     private void addPiocheBleue(CarteBleue c) {
         this.piocheBleues.push(c);
     }
-
     //défausse
     private ArrayList<CarteBleue> getDefausseBleues() {
         return this.defausseBleues;
@@ -781,7 +801,6 @@ public class Controleur implements Observateur {
     private void addPiocheOrange(CarteOrange c) {
         this.piocheOranges.push(c);
     }
-
     //défausse
     private ArrayList<CarteOrange> getDefausseOranges() {
         return this.defausseOranges;
@@ -802,14 +821,12 @@ public class Controleur implements Observateur {
                 iniJeu();
                 this.niveauEau = 4;
                 this.nbJoueurs = 4;
-                this.joueurs.put(new Pilote(),"j1");
-                this.joueurs.put(new Messager(),"j2");
-                this.joueurs.put(new Ingénieur(),"j3");
-                this.joueurs.put(new Plongeur(),"j4");
+                this.nomJoueurs.put(new Pilote(),"j1");
+                this.nomJoueurs.put(new Messager(),"j2");
+                this.nomJoueurs.put(new Ingénieur(),"j3");
+                this.nomJoueurs.put(new Plongeur(),"j4");
                 Parameters.setLogs(false);
                 Parameters.setAleas(true);
-        ihm = new VueAventurier(getGrille());
-        ihm.addObservateur(this);
                 debutJeu();
     }
 
