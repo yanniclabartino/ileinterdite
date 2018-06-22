@@ -41,19 +41,12 @@ public class VueAventurier extends Observe {
 
     public static final int ETAT_COMMENCER = 1;
     public static final int ETAT_SOUHAITE_DEPLACEMENT = 2;
-    public static final int ETAT_DEPLACEMENT = 3;
-    public static final int ETAT_SOUHAITE_ASSECHER = 4;
-    public static final int ETAT_ASSECHER = 5;
-    public static final int ETAT_SOUHAITE_DONNER = 6;
-    public static final int ETAT_DONNER = 7;
-    public static final int ETAT_GAGNER_TRESOR = 8;
-    public static final int ETAT_TROP_CARTES = 9;
-    public static final int ETAT_DEFAUSSE_CARTE = 10;
-    public static final int ETAT_DONNER_CARTE = 11;
-    public static final int ETAT_SOUHAITE_JOUER_SPECIALE = 12;
-    public static final int ETAT_JOUER_SPECIALE = 13;
-    public static final int ETAT_FINIR_TOUR = 14;
-    public static final int ETAT_ANNULER = 15;
+    public static final int ETAT_SOUHAITE_ASSECHER = 3;
+    public static final int ETAT_SOUHAITE_DONNER = 4;
+    public static final int ETAT_GAGNER_TRESOR = 5;
+    public static final int ETAT_TROP_CARTES = 6;
+    public static final int ETAT_SOUHAITE_JOUER_SPECIALE = 7;
+    public static final int ETAT_JOUEUR = 8;
 
     private TypesMessages MESSAGE_PRECEDENT;
 
@@ -73,7 +66,7 @@ public class VueAventurier extends Observe {
     private final int hfenetre = 720;
 
     public VueAventurier(Grille grille) {
-        
+
         // INSTANCIATION DE L'IMAGE DE FOND
         imageFond = new ImageFond(lfenetre, hfenetre, "/src/images/autre/fondJeu.jpg");
 
@@ -92,6 +85,7 @@ public class VueAventurier extends Observe {
         bPerso.setText("<html><center>" + "Autres" + "<br>" + "joueurs" + "</center></html>");
 
         instructions = new JLabel();
+        instructions.setForeground(Color.WHITE);
         Font font = new Font("Arial", Font.BOLD, 15);
         instructions.setFont(font);
 
@@ -99,7 +93,7 @@ public class VueAventurier extends Observe {
         tresor2 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/cristal.png");;
         tresor3 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/pierre.png");
         tresor4 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/zephyr.png");
-        niveauEau = new ImagePanel(70, 240, System.getProperty("user.dir") + "/src/images/autre/Niveau.png");
+        niveauEau = new ImagePanel(130, 395, System.getProperty("user.dir") + "/src/images/autre/Niveau.png");
 
         carte1 = new ImagePanel(67, 100, "", 14);
         carte2 = new ImagePanel(67, 100, "", 14);
@@ -138,7 +132,7 @@ public class VueAventurier extends Observe {
 
         // INSTANCIATION DES JPANEL DE DISPOSITION      
         JPanel layer0 = new JPanel();
-        
+
         JPanel layer1north = new JPanel();
         JPanel layer1south = new JPanel();
 
@@ -156,10 +150,10 @@ public class VueAventurier extends Observe {
         // AFFECTATION DE TYPES AUX PANELS DE DISPOSITION
         layer0.setLayout(new BorderLayout());
         layer0.setBackground(Color.RED);
-        
+
         layer1north.setLayout(new BorderLayout());
         layer1south.setLayout(new BorderLayout());
-        
+
         layer2north.setLayout(new BorderLayout());
         layer2south.setLayout(new GridLayout(1, 9));
         layer2east.setLayout(new BorderLayout());
@@ -193,7 +187,7 @@ public class VueAventurier extends Observe {
         layer1south.add(new VidePanel(190, 1), BorderLayout.EAST);
         layer1south.add(new VidePanel(190, 1), BorderLayout.WEST);
         layer1south.add(new VidePanel(1, 20), BorderLayout.SOUTH);
-        
+
         layer2north.add(margeHaut, BorderLayout.NORTH);
         layer2north.add(new VidePanel(400, 0), BorderLayout.EAST);
         layer2north.add(new VidePanel(400, 0), BorderLayout.WEST);
@@ -249,35 +243,34 @@ public class VueAventurier extends Observe {
 
         window.add(imageFond);
         imageFond.add(layer0);
-        
+
         tresor1.setVisible(false);
         tresor2.setVisible(false);
         tresor3.setVisible(false);
         tresor4.setVisible(false);
-        
+
         // MISE EN TRANSPARENCE DE TOUS LES PANELS POUR VOIR L'ARRIÈRE PLAN
         layer0.setOpaque(false);
         layer1north.setOpaque(false);
         layer1south.setOpaque(false);
         layer2north.setOpaque(false);
-            instructions.setBackground(new Color(255, 242, 230, 40));
-        layer2south.setOpaque(false);
-            carte1.setBackground(new Color(255, 229, 204));
-            carte2.setBackground(new Color(255, 229, 204));
-            carte3.setBackground(new Color(255, 229, 204));
-            carte4.setBackground(new Color(255, 229, 204));
-            carte5.setBackground(new Color(255, 229, 204));
-            carte6.setBackground(new Color(255, 229, 204));
-            carte7.setBackground(new Color(255, 229, 204));
-            carte8.setBackground(new Color(255, 229, 204));
-            carte9.setBackground(new Color(255, 229, 204));
-            
+        layer2south.setBackground(new Color(255, 229, 204, 100));
+        carte1.setBackground(new Color(255, 229, 204));
+        carte2.setBackground(new Color(255, 229, 204));
+        carte3.setBackground(new Color(255, 229, 204));
+        carte4.setBackground(new Color(255, 229, 204));
+        carte5.setBackground(new Color(255, 229, 204));
+        carte6.setBackground(new Color(255, 229, 204));
+        carte7.setBackground(new Color(255, 229, 204));
+        carte8.setBackground(new Color(255, 229, 204));
+        carte9.setBackground(new Color(255, 229, 204));
+
         layer2east.setOpaque(false);
         layer2west.setOpaque(false);
-        layer3west.setBackground(new Color(255, 242, 230, 90));
+        layer3west.setBackground(new Color(255, 242, 230, 100));
         layer3east.setOpaque(false);
         layer4center.setOpaque(false);
-        layer4north.setBackground(new Color(255, 229, 204, 90));
+        layer4north.setBackground(new Color(255, 229, 204, 100));
 
         // ACTIONLISTENER DES BOUTONS
         bDepl.addActionListener(new ActionListener() {
@@ -425,56 +418,34 @@ public class VueAventurier extends Observe {
         switch (etat) {
             case ETAT_COMMENCER:
                 margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("<html><center>" + "Bienvenue " + joueur + "<br>" + ". Il vous reste " + nbaction + " action(s)" + "</center></html>");
+                instructions.setText("Bienvenue " + joueur + ". Il vous reste " + nbaction + " actions");
                 break;
             case ETAT_SOUHAITE_DEPLACEMENT:
                 instructions.setText("Choissisez une tuile :");
                 break;
-            case ETAT_DEPLACEMENT:
-                margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("<html><center>" + "Le déplacement vers la tuile " + tuile + " a été effectué." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
-                break;
+
             case ETAT_SOUHAITE_ASSECHER:
                 instructions.setText("Choissisez une tuile :");
                 break;
-            case ETAT_ASSECHER:
-                margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("<html><center>" + "La tuile " + tuile + " a été asséchée." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
-                break;
+
             case ETAT_SOUHAITE_DONNER:
                 instructions.setText("Choissisez une carte à donner :");
                 break;
-            case ETAT_DONNER:
-                margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("<html><center>" + "La carte " + carte + " a été donnée au joueur " + joueur + " ." + "<br>" + "Il vous reste " + nbaction + " action(s)" + "<html><center>");
-                break;
-            case ETAT_GAGNER_TRESOR:
-                margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("<html><center>" + joueur + "a gagné un trésor." + "<br>" + "Il vous reste " + nbaction + " action(s)" + "<html><center>");
-                break;
+
             case ETAT_TROP_CARTES:
                 margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("<html><center>" + "Vous avez trop de cartes dans votre main, vous devez en défausser une" + "<html><center>");
+                instructions.setText("Vous avez trop de cartes dans votre main, vous devez en défausser une");
                 break;
-            case ETAT_DEFAUSSE_CARTE:
-                margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("<html><center>" + "La carte " + carte + " a été défaussée." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
-                break;
+
             case ETAT_SOUHAITE_JOUER_SPECIALE:
                 instructions.setText("Choissisez une carte :");
                 break;
-            case ETAT_JOUER_SPECIALE:
+
+            case ETAT_JOUEUR:
                 margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("<html><center>" + "La carte spéciale " + carte + " est utilisée." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
+                instructions.setText("Joueur " + joueur + " c'est à vous de jouer. Il vous reste " + nbaction + ((nbaction < 2) ? " action" : " actions"));
                 break;
-            case ETAT_FINIR_TOUR:
-                margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("<html><center>" + "Joueur " + joueur + " c'est à vous de jouer." + "<br>" + " Il vous reste " + nbaction + " action(s)" + "<html><center>");
-                break;
-            case ETAT_ANNULER:
-                margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("<html><center>" + "L'action a été annulée." + "<br>" + " Il vous reste " + nbaction + " actions" + "<html><center>");
-                break;
+
         }
 
     }
