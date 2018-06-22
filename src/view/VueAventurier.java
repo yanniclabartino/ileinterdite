@@ -260,8 +260,7 @@ public class VueAventurier extends Observe {
         layer1north.setOpaque(false);
         layer1south.setOpaque(false);
         layer2north.setOpaque(false);
-            instructions.setBackground(new Color(255, 242, 230, 40));
-        layer2south.setBackground(new Color(255, 229, 204, 90));
+        layer2south.setBackground(new Color(255, 229, 204, 100));
             carte1.setBackground(new Color(255, 229, 204));
             carte2.setBackground(new Color(255, 229, 204));
             carte3.setBackground(new Color(255, 229, 204));
@@ -274,10 +273,10 @@ public class VueAventurier extends Observe {
             
         layer2east.setOpaque(false);
         layer2west.setOpaque(false);
-        layer3west.setBackground(new Color(255, 242, 230, 90));
+        layer3west.setBackground(new Color(255, 242, 230, 100));
         layer3east.setOpaque(false);
         layer4center.setOpaque(false);
-        layer4north.setBackground(new Color(255, 229, 204, 90));
+        layer4north.setBackground(new Color(255, 229, 204, 100));
 
         // ACTIONLISTENER DES BOUTONS
         bDepl.addActionListener(new ActionListener() {

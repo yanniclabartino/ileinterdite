@@ -4,6 +4,7 @@ import ileinterdite.Message;
 import ileinterdite.Observe;
 import ileinterdite.TypesMessages;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -72,20 +73,25 @@ public class VueAccueil extends Observe {
         choixNbJoueurs = new JComboBox(nbJ);
 
         JPanel lehaut = new JPanel(new GridLayout(2, 1, 0, 5));
-
+        lehaut.setOpaque(false);
+        
         titre = new ImagePanel(0.45, System.getProperty("user.dir") + "/src/images/ile-interdite-logo.png");
         titre.replacer((accueil.getWidth() / 2) - (titre.getPreferredSize().width / 2), 0);
         lehaut.add(titre);
 
         JPanel choixNb = new JPanel();
-        choixNb.add(new JLabel("Nombre de joueurs :"));
+        JLabel leNombreDeJoueurs = new JLabel("Nombre de joueurs :");
+        leNombreDeJoueurs.setForeground(Color.WHITE);
+        choixNb.add(leNombreDeJoueurs);
         choixNbJoueurs.setPreferredSize(new Dimension(40, 20));
         choixNb.add(choixNbJoueurs);
+        choixNb.setOpaque(false);
         lehaut.add(choixNb);
 
         image.add(lehaut, BorderLayout.NORTH);
 
         JPanel lesjoueurs = new JPanel();
+        lesjoueurs.setOpaque(false);
         saisiJoueurs = new ArrayList();
         SaisiJoueur j1 = new SaisiJoueur(1);
         SaisiJoueur j2 = new SaisiJoueur(2);
@@ -105,6 +111,7 @@ public class VueAccueil extends Observe {
         lesjoueurs.add(j4);
 
         JPanel lebas = new JPanel(new GridLayout(1, 4));
+        lebas.setOpaque(false);
         valider = new JButton("Valider");
         boutparam = new JButton("Parametres");
         boutregles = new JButton("Regles du jeu");
@@ -113,9 +120,13 @@ public class VueAccueil extends Observe {
         choixDiff = new JComboBox(diff);
         
         JPanel lecentre = new JPanel(new BorderLayout());
+        lecentre.setOpaque(false);
         JPanel jouRandDiff = new JPanel(new BorderLayout());
+        jouRandDiff.setOpaque(false);
         JPanel messageserreur = new JPanel(new BorderLayout());
+        messageserreur.setOpaque(false);
         JPanel randDiff = new JPanel();
+        randDiff.setBackground(new Color(230, 247, 255, 190));
         jouRandDiff.add(lesjoueurs, BorderLayout.CENTER);
         randDiff.add(randomize);
         randDiff.add(new JLabel("  Difficulté"));
@@ -129,6 +140,8 @@ public class VueAccueil extends Observe {
 
         JPanel basgauche1 = new JPanel();
         JPanel basgauche2 = new JPanel();
+        basgauche1.setOpaque(false);
+        basgauche2.setOpaque(false);
         boutparam.setPreferredSize(new Dimension(150, 30));
         basgauche1.add(boutparam);
         boutregles.setPreferredSize(new Dimension(150, 30));
@@ -137,6 +150,7 @@ public class VueAccueil extends Observe {
         lebas.add(basgauche2);
         lebas.add(new JLabel(""));
         JPanel basdroit = new JPanel();
+        basdroit.setOpaque(false);
         valider.setPreferredSize(new Dimension(80, 30));
         basdroit.add(valider);
         lebas.add(basdroit);
