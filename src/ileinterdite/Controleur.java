@@ -125,6 +125,7 @@ public class Controleur implements Observateur {
                 break;
             case FINIR_TOUR:
                 this.nbActions = 0;
+                actualiserJeu();
                 getIHM().afficherEtatAction(ihm.ETAT_FINIR_TOUR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 break;
             case ANNULER:
@@ -133,7 +134,7 @@ public class Controleur implements Observateur {
                 getIHM().interfaceParDefaut();
                 break;
         }
-
+        getIHM().dessinCartes(getJoueurCourant().getMain());
     }
 
     //METHODES DE GESTION DU JEU
@@ -418,7 +419,7 @@ public class Controleur implements Observateur {
         /*
             ATTENTION : cette méthode influence les piles de cartes, il faudra donc rajouté des lignes pour actualiser l'IHM
          */
- /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
+        /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
         Aventurier joueur = getJoueurCourant();
         boolean carteMDEpiochée = false;
         ArrayList<CarteOrange> cartesPiochées = new ArrayList<CarteOrange>();
@@ -600,6 +601,7 @@ public class Controleur implements Observateur {
             this.nbActions = 3;
         }
         ihm = new VueAventurier(getGrille());
+        getIHM().dessinCartes(getJoueurCourant().getMain());
         ihm.addObservateur(this);
     }
 
