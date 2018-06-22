@@ -54,19 +54,28 @@ public class Controleur implements Observateur {
                 }
                 break;
             case ACTION_DEPLACEMENT:
-                getJoueurCourant().seDeplace(m.tuile);
-                getIHM().afficherEtatAction(ihm.ETAT_DEPLACEMENT, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
+                if (m.tuile.getSelected()!=0) {
+                    getJoueurCourant().seDeplace(m.tuile);
+                    this.nbActions--;
+                    getIHM().afficherEtatAction(ihm.ETAT_DEPLACEMENT, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
+                    getGrille().deselectionnerTuiles();
+                    getIHM().interfaceParDefaut();
+                }
                 break;
             case SOUHAITE_ASSECHER:
                 if (assechementPossible()) {
                     gererAssechement();
                     getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_ASSECHER, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
-
                 }
                 break;
             case ACTION_ASSECHER:
-                m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
-                getIHM().afficherEtatAction(ihm.ETAT_ASSECHER, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
+                if (m.tuile.getSelected()!=0) {
+                    m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
+                    this.nbActions--;
+                    getIHM().afficherEtatAction(ihm.ETAT_ASSECHER, getJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
+                    getGrille().deselectionnerTuiles();
+                    getIHM().interfaceParDefaut();
+                }
                 break;
             case SOUHAITE_DONNER:
                 if (donationPossible()) {
@@ -116,9 +125,8 @@ public class Controleur implements Observateur {
                 break;
             case ANNULER:
                 getIHM().afficherEtatAction(ihm.ETAT_ANNULER, getJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
-                //  - annule une action en cours (remettre l'ihm en état comme si l'action n'avait pas était demandée)
-                getGrille().selectionTuileDispo(getGrille().getGrille(), 0);
-                getIHM().annulerAction();
+                getGrille().deselectionnerTuiles();
+                getIHM().interfaceParDefaut();
                 break;
         }
 
@@ -173,7 +181,7 @@ public class Controleur implements Observateur {
         //à compléter avec l'ihm en fonction du nombre d'assèchement possible.
         for (int i = 0; i < nbAssechement; i++) {
             g.selectionTuileDispo(tuilesDispo, 1);
-            getIHM().afficherTuilesAsse();
+            getIHM().afficherTuilesDispo();
         }
     }
 

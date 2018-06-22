@@ -265,6 +265,10 @@ public class Grille extends JPanel {
         }
     }
     
-    
+    public void deselectionnerTuiles() {
+        for (Tuile t : this.getGrille()) {
+            t.setSelected(0);
+        }
+    }
     
 }
