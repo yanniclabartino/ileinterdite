@@ -31,7 +31,7 @@ public class ImagePanel extends JPanel {
             File input = new File(cheminImage);
             image = ImageIO.read(input);
         } catch (IOException ie) {
-            System.out.println("Error:" + ie.getMessage());
+            
         }
         construction = 0;
         this.setPreferredSize(new Dimension(image.getWidth(this), image.getHeight(this)));
@@ -46,7 +46,7 @@ public class ImagePanel extends JPanel {
             File input = new File(cheminImage);
             image = ImageIO.read(input);
         } catch (IOException ie) {
-            System.out.println("Error:" + ie.getMessage());
+            
         }
         construction = 1;
         this.setPreferredSize(new Dimension(width, height));
@@ -62,7 +62,7 @@ public class ImagePanel extends JPanel {
             File input = new File(cheminImage);
             image = ImageIO.read(input);
         } catch (IOException ie) {
-            System.out.println("Error:" + ie.getMessage());
+            
         }
         construction = 1;
         this.setPreferredSize(new Dimension(width, height));
@@ -78,7 +78,7 @@ public class ImagePanel extends JPanel {
             File input = new File(cheminImage);
             image = ImageIO.read(input);
         } catch (IOException ie) {
-            System.out.println("Error:" + ie.getMessage());
+            
         }
         construction = 2;
         this.setPreferredSize(new Dimension((int)(image.getWidth(this)*scale), (int)(image.getHeight(this)*scale)));
@@ -117,7 +117,7 @@ public class ImagePanel extends JPanel {
             File input = new File(chemin);
             image = ImageIO.read(input);
         } catch (IOException ie) {
-            System.out.println("Error:" + ie.getMessage());
+            
         }
         this.repaint();
     }

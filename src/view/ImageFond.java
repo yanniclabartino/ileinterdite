@@ -29,7 +29,7 @@ public class ImageFond extends JPanel {
         try {
             this.image = ImageIO.read(new File(System.getProperty("user.dir") + chemin));
         } catch (IOException ex) {
-            System.err.println("Erreur de l'image de fond");
+            
         }
     }
     

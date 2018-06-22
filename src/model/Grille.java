@@ -222,7 +222,7 @@ public class Grille extends JPanel {
                                     File input = new File(System.getProperty("user.dir") + "/src/images/tuiles/"+this.getTuile(c, l).getNom().toString()+"Dispo.png");
                                     image = ImageIO.read(input);
                                 } catch (IOException ie) {
-                                    System.out.println("Error:" + ie.getMessage());
+                                    
                                 }
                                 g.drawImage(image, coordX, coordY, (int) largeurTuile,(int)  hauteurTuile, this);
                                 break;
@@ -232,7 +232,7 @@ public class Grille extends JPanel {
                                     File input = new File(System.getProperty("user.dir") + "/src/images/tuiles/"+this.getTuile(c, l).getNom().toString()+"Spe.png");
                                     image = ImageIO.read(input);
                                 } catch (IOException ie) {
-                                    System.out.println("Error:" + ie.getMessage());
+                                    
                                 }
                                 g.drawImage(image, coordX, coordY, (int) largeurTuile,(int)  hauteurTuile, this);
                                 break;
@@ -241,7 +241,7 @@ public class Grille extends JPanel {
                                     File input = new File(System.getProperty("user.dir") + "/src/images/tuiles/"+this.getTuile(c, l).getNom().toString()+this.getTuile(c, l).getEtat().toString()+".png");
                                     image = ImageIO.read(input);
                                 } catch (IOException ie) {
-                                    System.out.println("Error:" + ie.getMessage());
+                                    
                                 }
                                 g.drawImage(image, coordX, coordY, (int) largeurTuile,(int)  hauteurTuile, this);
                                 break;
