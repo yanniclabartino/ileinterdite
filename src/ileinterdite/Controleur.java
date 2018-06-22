@@ -47,7 +47,7 @@ public class Controleur implements Observateur {
                 Parameters.setLogs(m.logs);
                 Parameters.setAleas(m.aleas);
                 debutJeu();
-                */
+                 */
                 getIHM().afficherEtatAction(ihm.ETAT_COMMENCER, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 break;
             case SOUHAITE_DEPLACEMENT:
@@ -57,11 +57,11 @@ public class Controleur implements Observateur {
                 }
                 break;
             case ACTION_DEPLACEMENT:
-                if (m.tuile.getSelected()!=0) {
+                if (m.tuile.getSelected() != 0) {
                     getJoueurCourant().seDeplace(m.tuile);
                     this.nbActions--;
                     actualiserJeu();
-                    getIHM().afficherEtatAction(ihm.ETAT_DEPLACEMENT, getNomJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
                     getGrille().deselectionnerTuiles();
                     getIHM().interfaceParDefaut();
                 }
@@ -73,11 +73,11 @@ public class Controleur implements Observateur {
                 }
                 break;
             case ACTION_ASSECHER:
-                if (m.tuile.getSelected()!=0) {
+                if (m.tuile.getSelected() != 0) {
                     m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
                     this.nbActions--;
                     actualiserJeu();
-                    getIHM().afficherEtatAction(ihm.ETAT_ASSECHER, getNomJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), null);
                     getGrille().deselectionnerTuiles();
                     getIHM().interfaceParDefaut();
                 }
@@ -91,18 +91,18 @@ public class Controleur implements Observateur {
             case ACTION_DONNER:
                 getJoueurCourant().defausseCarte(m.carte);
                 m.receveur.piocheCarte(m.carte);
-                getIHM().afficherEtatAction(ihm.ETAT_DONNER, getNomJoueurs().get(m.receveur), getNbAction(), m.tuile.getNom().toString(), null);
+                getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(m.receveur), getNbAction(), m.tuile.getNom().toString(), null);
                 break;
             case ACTION_GAGNER_TRESOR:
                 if (gererGainTresor()) {
-                    getIHM().afficherEtatAction(ihm.ETAT_GAGNER_TRESOR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                     getIHM().actualiserTrésor(getTrésors());
                 }
                 break;
             case DEFAUSSE_CARTE:
                 getJoueurCourant().defausseCarte(m.carte);
                 addDefausseOranges(m.carte);
-                getIHM().afficherEtatAction(ihm.ETAT_DEFAUSSE_CARTE, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, m.carte.getRole());
+                getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, m.carte.getRole());
                 break;
             case SOUHAITE_JOUER_SPECIALE:
                 if (specialePossible() != 0) {
@@ -115,21 +115,21 @@ public class Controleur implements Observateur {
                     getJoueurCourant().defausseCarte(m.carte);
                     addDefausseOranges(m.carte);
                     this.jeuEnCours = false;
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, m.carte.getRole());
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, m.carte.getRole());
                 } else {
                     m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
                     getJoueurCourant().defausseCarte(m.carte);
                     addDefausseOranges(m.carte);
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUER_SPECIALE, getNomJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), m.carte.getRole());
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), m.tuile.getNom().toString(), m.carte.getRole());
                 }
                 break;
             case FINIR_TOUR:
                 this.nbActions = 0;
                 actualiserJeu();
-                getIHM().afficherEtatAction(ihm.ETAT_FINIR_TOUR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 break;
             case ANNULER:
-                getIHM().afficherEtatAction(ihm.ETAT_ANNULER, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
+                getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction(), null, null);
                 getGrille().deselectionnerTuiles();
                 getIHM().interfaceParDefaut();
                 break;
@@ -419,7 +419,7 @@ public class Controleur implements Observateur {
         /*
             ATTENTION : cette méthode influence les piles de cartes, il faudra donc rajouté des lignes pour actualiser l'IHM
          */
-        /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
+ /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
         Aventurier joueur = getJoueurCourant();
         boolean carteMDEpiochée = false;
         ArrayList<CarteOrange> cartesPiochées = new ArrayList<CarteOrange>();
@@ -525,8 +525,7 @@ public class Controleur implements Observateur {
         piocheBleues = new Stack<CarteBleue>();
         defausseBleues = new ArrayList<CarteBleue>();
         joueurs = new ArrayList<Aventurier>();
-        
-        
+
         //initialisations
         iniTrésor();
         iniGrille();
@@ -542,11 +541,11 @@ public class Controleur implements Observateur {
             - place les aventuriers
             - distribue les cartes Trésor
          */
-        
+
         for (Aventurier a : getNomJoueurs().keySet()) {
             getJoueurs().add(a);
         }
-        
+
         this.jeuEnCours = true;
         Grille g = getGrille();
         //tout ceci dépendant du parametres.ALEAS
@@ -685,26 +684,26 @@ public class Controleur implements Observateur {
     }
 
     private void actualiserJeu() {
-        
+
         Aventurier jCourant = getJoueurCourant();
-        
+
         if (getNbAction() == 0) {
             int indexJNext;
-            if (getJoueurs().indexOf(jCourant)+1 >= getNbJoueur()) {
+            if (getJoueurs().indexOf(jCourant) + 1 >= getNbJoueur()) {
                 indexJNext = 0;
             } else {
-                indexJNext = getJoueurs().indexOf(jCourant)+1;
+                indexJNext = getJoueurs().indexOf(jCourant) + 1;
             }
             gererCarteOrange();
             gererCarteBleue();
-            this.joueurCourant=getJoueurs().get(indexJNext);
+            this.joueurCourant = getJoueurs().get(indexJNext);
             if (getJoueurCourant().getCouleur() == Pion.JAUNE) {
                 this.nbActions = 4;
             } else {
                 this.nbActions = 3;
             }
         }
-        
+
         /*while (!this.estTerminé()) {}
         //à compléter avec l'ihm.
         if (estPerdu()) {
@@ -728,29 +727,36 @@ public class Controleur implements Observateur {
             //Partie gagnée, WP !
         }*/
     }
-    
+
     //METHODES UTILES
     private int getNbAction() {
         return this.nbActions;
     }
+
     private VueAventurier getIHM() {
         return this.ihm;
     }
+
     private Aventurier getJoueurCourant() {
         return this.joueurCourant;
     }
+
     private Trésor[] getTrésors() {
         return trésors;
     }
+
     private int getNbJoueur() {
         return this.nbJoueurs;
     }
+
     private Grille getGrille() {
         return grille;
     }
+
     private int getNiveau() {
         return niveauEau;
     }
+
     private ArrayList<Tuile> calculTouteTuileDispo(Grille g) {
         ArrayList<Tuile> touteTuileDispo = new ArrayList<Tuile>();
         for (int i = 0; i < 6; i++) {
@@ -764,31 +770,38 @@ public class Controleur implements Observateur {
         }
         return touteTuileDispo;
     }
+
     public HashMap<Aventurier, String> getNomJoueurs() {
         return nomJoueurs;
     }
+
     public ArrayList<Aventurier> getJoueurs() {
         return this.joueurs;
     }
-    
+
     //méthodes pour les cartes bleues
     //pioche
     private Stack<CarteBleue> getPiocheBleues() {
         return piocheBleues;
     }
+
     private CarteBleue piocheCarteBleue() {
         return this.piocheBleues.pop();
     }
+
     private void addPiocheBleue(CarteBleue c) {
         this.piocheBleues.push(c);
     }
+
     //défausse
     private ArrayList<CarteBleue> getDefausseBleues() {
         return this.defausseBleues;
     }
+
     private void addDefausseBleues(CarteBleue carte) {
         this.defausseBleues.add(carte);
     }
+
     private void viderDefausseBleues() {
         this.defausseBleues.removeAll(this.defausseBleues);
     }
@@ -798,19 +811,24 @@ public class Controleur implements Observateur {
     private Stack<CarteOrange> getPiocheOranges() {
         return piocheOranges;
     }
+
     private CarteOrange piocheCarteOrange() {
         return this.piocheOranges.pop();
     }
+
     private void addPiocheOrange(CarteOrange c) {
         this.piocheOranges.push(c);
     }
+
     //défausse
     private ArrayList<CarteOrange> getDefausseOranges() {
         return this.defausseOranges;
     }
+
     private void addDefausseOranges(CarteOrange carte) {
         this.defausseOranges.add(carte);
     }
+
     private void viderDefausseOranges() {
         this.defausseOranges.removeAll(this.defausseOranges);
     }
@@ -820,17 +838,17 @@ public class Controleur implements Observateur {
         /*
         accueil = new VueAccueil();
         accueil.addObservateur(this);
-        */
-                iniJeu();
-                this.niveauEau = 4;
-                this.nbJoueurs = 4;
-                this.nomJoueurs.put(new Pilote(),"j1");
-                this.nomJoueurs.put(new Messager(),"j2");
-                this.nomJoueurs.put(new Ingénieur(),"j3");
-                this.nomJoueurs.put(new Plongeur(),"j4");
-                Parameters.setLogs(false);
-                Parameters.setAleas(true);
-                debutJeu();
+         */
+        iniJeu();
+        this.niveauEau = 4;
+        this.nbJoueurs = 4;
+        this.nomJoueurs.put(new Pilote(), "j1");
+        this.nomJoueurs.put(new Messager(), "j2");
+        this.nomJoueurs.put(new Ingénieur(), "j3");
+        this.nomJoueurs.put(new Plongeur(), "j4");
+        Parameters.setLogs(false);
+        Parameters.setAleas(true);
+        debutJeu();
     }
 
     //MAIN
