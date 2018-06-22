@@ -163,6 +163,7 @@ public class Controleur implements Observateur {
         }
         tuilesDispo.addAll(joueur.calculTuileDispo(g));
         tuilesPilote.removeAll(tuilesDispo);
+        System.out.println(tuilesDispo);
         g.selectionTuileDispo(tuilesDispo, 1);
         getIHM().afficherTuilesDispo();
     }

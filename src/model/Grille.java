@@ -247,6 +247,7 @@ public class Grille extends JPanel {
                                 break;
                         }
                     } else {
+                        g.setColor(new Color(0, 0, 0));
                         g.fillRect(coordX, coordY, (int) largeurTuile, (int) hauteurTuile);
                     }
                     
@@ -258,7 +259,7 @@ public class Grille extends JPanel {
                             g.fillOval(coordX+décalage, coordY+18, (int) (largeurTuile/5+4), (int)  (hauteurTuile/5+4));
                             g.setColor(a.getCouleur().getCouleur());
                             g.fillOval(coordX+décalage+2, coordY+20, (int) largeurTuile/5, (int)  hauteurTuile/5);
-                            décalage = décalage + 20;
+                            décalage = décalage + 18;
                         }
                     }
                 }

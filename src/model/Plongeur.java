@@ -23,6 +23,9 @@ public class Plongeur extends Aventurier {
         //on ajoute les tuiles adjacentes dans les tuiles dispo si elles sont asséché et dans les tuiles non traitées si non
         if (g.getTuile(x - 1, y) != null) {
             ((g.getTuile(x - 1, y).getEtat() != Utils.EtatTuile.ASSECHEE)? tuilesNonTraite : tuilesDispo).add(g.getTuile(x - 1, y));
+            if (g.getTuile(x - 1, y).getEtat() != Utils.EtatTuile.ASSECHEE){
+                
+            }
         }
 
         if (g.getTuile(x, y - 1) != null) {
@@ -45,7 +48,7 @@ public class Plongeur extends Aventurier {
             if (g.getTuile(tx - 1, ty) != null 
                     && !tuilesDispo.contains(g.getTuile(tx - 1, ty)) 
                     && !tuilesTraite.contains(g.getTuile(tx - 1, ty))
-                    && !tuilesNonTraite.contains(g.getTuile(tx - 1, ty))) {//on ne vérifie l'état que des tuiles qui n'ont pas était vérifié
+                    /*&& !tuilesNonTraite.contains(g.getTuile(tx - 1, ty))*/) {//on ne vérifie l'état que des tuiles qui n'ont pas était vérifié
                 
                 switch (g.getTuile(tx - 1, ty).getEtat()){
                     case ASSECHEE: 
@@ -62,7 +65,7 @@ public class Plongeur extends Aventurier {
             if (g.getTuile(tx, ty - 1) != null 
                     && !tuilesDispo.contains(g.getTuile(tx, ty - 1)) 
                     && !tuilesTraite.contains(g.getTuile(tx, ty - 1))
-                    && !tuilesNonTraite.contains(g.getTuile(tx, ty - 1))) {
+                    /*&& !tuilesNonTraite.contains(g.getTuile(tx, ty - 1))*/) {
                 switch (g.getTuile(tx, ty - 1).getEtat()){
                     case ASSECHEE: 
                         tuilesDispo.add(g.getTuile(tx, ty - 1));
@@ -78,7 +81,7 @@ public class Plongeur extends Aventurier {
             if (g.getTuile(tx + 1, ty) != null 
                     && !tuilesDispo.contains(g.getTuile(tx + 1, ty)) 
                     && !tuilesTraite.contains(g.getTuile(tx + 1, ty))
-                    && !tuilesNonTraite.contains(g.getTuile(tx + 1, ty))) {
+                    /*&& !tuilesNonTraite.contains(g.getTuile(tx + 1, ty))*/) {
                 switch (g.getTuile(tx + 1, ty).getEtat()){
                     case ASSECHEE: 
                         tuilesDispo.add(g.getTuile(tx + 1, ty));
@@ -94,7 +97,7 @@ public class Plongeur extends Aventurier {
             if (g.getTuile(tx, ty + 1) != null 
                     && !tuilesDispo.contains(g.getTuile(tx, ty + 1)) 
                     && !tuilesTraite.contains(g.getTuile(tx, ty + 1))
-                    && !tuilesNonTraite.contains(g.getTuile(tx, ty + 1))) {
+                    /*&& !tuilesNonTraite.contains(g.getTuile(tx, ty + 1))*/) {
                 switch (g.getTuile(tx, ty + 1).getEtat()){
                     case ASSECHEE: 
                         tuilesDispo.add(g.getTuile(tx, ty + 1));
