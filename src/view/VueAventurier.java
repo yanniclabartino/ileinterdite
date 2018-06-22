@@ -232,11 +232,16 @@ public class VueAventurier extends Observe {
         layer4center.add(bFinir);
 
         layer4north.add(tresor1);
+
         layer4north.add(tresor2);
         layer4north.add(tresor3);
         layer4north.add(tresor4);
 
         window.add(layer0);
+        tresor1.setVisible(false);
+        tresor2.setVisible(false);
+        tresor3.setVisible(false);
+        tresor4.setVisible(false);
 
         //ACTION BOUTON
         bDepl.addActionListener(new ActionListener() {
@@ -434,7 +439,6 @@ public class VueAventurier extends Observe {
                 margeHaut.setPreferredSize(new Dimension(400, 9));
                 instructions.setText("<html><center>" + "L'action a été annulée." + "<br>" + " Il vous reste " + nbaction + " actions" + "<html><center>");
                 break;
-
         }
 
     }
@@ -499,7 +503,15 @@ public class VueAventurier extends Observe {
         //[1] = LA_STATUE_DU_ZEPHYR
         //[2] = LE_CRISTAL_ARDENT
         //[3] = LE_CALICE_DE_L_ONDE
-
+        if (trésors[1].isGagne()) {
+            tresor1.setVisible(true);
+        } else if (trésors[2].isGagne()) {
+            tresor2.setVisible(true);
+        } else if (trésors[3].isGagne()) {
+            tresor3.setVisible(true);
+        } else if (trésors[4].isGagne()) {
+            tresor4.setVisible(true);
+        }
     }
 
 }
