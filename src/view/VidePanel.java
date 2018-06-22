@@ -5,6 +5,7 @@
  */
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 
@@ -16,5 +17,6 @@ public class VidePanel extends JPanel {
     
     VidePanel(int l, int h){
         this.setPreferredSize(new Dimension(l, h));
+        this.setBackground(new Color(255, 0, 0, 0));
     }
 }

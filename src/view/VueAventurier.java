@@ -12,12 +12,17 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -55,6 +60,7 @@ public class VueAventurier extends Observe {
     private JFrame window;
     private JButton bDepl, bAss, bPioch, bGagner, bSpecial, bAnnuler, bFinir, bPerso;
     private JLabel instructions;
+    private ImageFond imageFond;
 
     private ImagePanel tresor1, tresor2, tresor3, tresor4, niveauEau;
     private ImagePanel carte1, carte2, carte3, carte4, carte5, carte6, carte7, carte8, carte9;
@@ -67,6 +73,9 @@ public class VueAventurier extends Observe {
     private final int hfenetre = 720;
 
     public VueAventurier(Grille grille) {
+        
+        // INSTANCIATION DE L'IMAGE DE FOND
+        imageFond = new ImageFond(lfenetre, hfenetre, "/src/images/autre/fondJeu.jpg");
 
         // INSTANCIATIONS DES ÉLÉMENTS DE L'IHM
         window = new JFrame();
@@ -127,9 +136,9 @@ public class VueAventurier extends Observe {
 
         margeHaut = new VidePanel(400, 25);
 
-        // INSTANCIATION DES JPANEL DE DISPOSITION
+        // INSTANCIATION DES JPANEL DE DISPOSITION      
         JPanel layer0 = new JPanel();
-
+        
         JPanel layer1north = new JPanel();
         JPanel layer1south = new JPanel();
 
@@ -146,10 +155,11 @@ public class VueAventurier extends Observe {
 
         // AFFECTATION DE TYPES AUX PANELS DE DISPOSITION
         layer0.setLayout(new BorderLayout());
-
+        layer0.setBackground(Color.RED);
+        
         layer1north.setLayout(new BorderLayout());
         layer1south.setLayout(new BorderLayout());
-
+        
         layer2north.setLayout(new BorderLayout());
         layer2south.setLayout(new GridLayout(1, 9));
         layer2east.setLayout(new BorderLayout());
@@ -183,7 +193,7 @@ public class VueAventurier extends Observe {
         layer1south.add(new VidePanel(190, 1), BorderLayout.EAST);
         layer1south.add(new VidePanel(190, 1), BorderLayout.WEST);
         layer1south.add(new VidePanel(1, 20), BorderLayout.SOUTH);
-
+        
         layer2north.add(margeHaut, BorderLayout.NORTH);
         layer2north.add(new VidePanel(400, 0), BorderLayout.EAST);
         layer2north.add(new VidePanel(400, 0), BorderLayout.WEST);
@@ -236,9 +246,39 @@ public class VueAventurier extends Observe {
         layer4north.add(tresor3);
         layer4north.add(tresor4);
 
-        window.add(layer0);
+        window.add(imageFond);
+        imageFond.add(layer0);
+        
+        // MISE EN TRANSPARENCE DE TOUS LES PANELS POUR VOIR L'ARRIÈRE PLAN
+        layer0.setOpaque(false);
+        layer1north.setOpaque(false);
+        layer1south.setOpaque(false);
+        layer2north.setOpaque(false);
+            instructions.setBackground(new Color(255, 242, 230, 40));
+        layer2south.setOpaque(false);
+            carte1.setBackground(new Color(255, 229, 204));
+            carte2.setBackground(new Color(255, 229, 204));
+            carte3.setBackground(new Color(255, 229, 204));
+            carte4.setBackground(new Color(255, 229, 204));
+            carte5.setBackground(new Color(255, 229, 204));
+            carte6.setBackground(new Color(255, 229, 204));
+            carte7.setBackground(new Color(255, 229, 204));
+            carte8.setBackground(new Color(255, 229, 204));
+            carte9.setBackground(new Color(255, 229, 204));
+            
+        layer2east.setOpaque(false);
+        layer2west.setOpaque(false);
+            cartesOranges.setBackground(new Color(255, 242, 230, 40));
+            cartesBleues.setBackground(new Color(255, 242, 230, 40));
+            defausseO.setBackground(new Color(255, 242, 230, 40));
+            defausseB.setBackground(new Color(255, 242, 230, 40));
+            perso.setBackground(new Color(255, 242, 230, 40));
+        layer3west.setOpaque(false);
+        layer3east.setOpaque(false);
+        layer4center.setOpaque(false);
+        layer4north.setBackground(new Color(255, 229, 204, 90));
 
-        //ACTION BOUTON
+        // ACTIONLISTENER DES BOUTONS
         bDepl.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -312,7 +352,7 @@ public class VueAventurier extends Observe {
             }
         });
 
-        //CLIQUE SUR LA GRILLE (à compléter)
+        // CLIC SUR LA GRILLE (à compléter)
         this.grille.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
