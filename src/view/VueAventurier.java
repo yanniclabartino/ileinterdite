@@ -12,23 +12,18 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import static javax.swing.SwingConstants.CENTER;
 import model.Aventurier;
+import model.CarteBleue;
 import model.CarteOrange;
 import model.CarteTrésor;
 import model.Grille;
@@ -50,6 +45,7 @@ public class VueAventurier extends Observe {
     public static final int ETAT_JOUEUR = 8;
 
     private TypesMessages MESSAGE_PRECEDENT;
+    private boolean cartesCliquable;
 
     private JFrame window;
     private JButton bDepl, bAss, bPioch, bGagner, bSpecial, bAnnuler, bFinir, bPerso;
@@ -119,8 +115,8 @@ public class VueAventurier extends Observe {
 
         cartesOranges = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png", 6);
         cartesBleues = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png", 6);
-        defausseO = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png", 6);
-        defausseB = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png", 6);
+        defausseO = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Vide rouge.png", 6);
+        defausseB = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Vide bleu.png", 6);
         perso = new ImagePanel(87, 130, "", 6);
 
         this.MESSAGE_PRECEDENT = null;
@@ -393,13 +389,17 @@ public class VueAventurier extends Observe {
         });
 
         // CLIC SUR LES CARTES
+        this.cartesCliquable = false;
         this.carte1.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Message m = new Message();
-                m.type = TypesMessages.JOUER_SPECIALE;
-                m.numCarte = 0;
-                notifierObservateur(m);
+                if (cartesCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 0;
+                    notifierObservateur(m);
+                }
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -413,10 +413,13 @@ public class VueAventurier extends Observe {
         this.carte2.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Message m = new Message();
-                m.type = TypesMessages.JOUER_SPECIALE;
-                m.numCarte = 1;
-                notifierObservateur(m);
+                if (cartesCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 1;
+                    notifierObservateur(m);
+                }
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -430,10 +433,13 @@ public class VueAventurier extends Observe {
         this.carte3.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Message m = new Message();
-                m.type = TypesMessages.JOUER_SPECIALE;
-                m.numCarte = 2;
-                notifierObservateur(m);
+                if (cartesCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 2;
+                    notifierObservateur(m);
+                }
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -447,10 +453,13 @@ public class VueAventurier extends Observe {
         this.carte4.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Message m = new Message();
-                m.type = TypesMessages.JOUER_SPECIALE;
-                m.numCarte = 3;
-                notifierObservateur(m);
+                if (cartesCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 3;
+                    notifierObservateur(m);
+                }
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -464,10 +473,13 @@ public class VueAventurier extends Observe {
         this.carte5.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Message m = new Message();
-                m.type = TypesMessages.JOUER_SPECIALE;
-                m.numCarte = 4;
-                notifierObservateur(m);
+                if (cartesCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 4;
+                    notifierObservateur(m);
+                }
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -481,10 +493,13 @@ public class VueAventurier extends Observe {
         this.carte6.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Message m = new Message();
-                m.type = TypesMessages.JOUER_SPECIALE;
-                m.numCarte = 5;
-                notifierObservateur(m);
+                if (cartesCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 5;
+                    notifierObservateur(m);
+                }
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -498,10 +513,13 @@ public class VueAventurier extends Observe {
         this.carte7.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Message m = new Message();
-                m.type = TypesMessages.JOUER_SPECIALE;
-                m.numCarte = 6;
-                notifierObservateur(m);
+                if (cartesCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 6;
+                    notifierObservateur(m);
+                }
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -515,10 +533,13 @@ public class VueAventurier extends Observe {
         this.carte8.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Message m = new Message();
-                m.type = TypesMessages.JOUER_SPECIALE;
-                m.numCarte = 7;
-                notifierObservateur(m);
+                if (cartesCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 7;
+                    notifierObservateur(m);
+                }
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -532,10 +553,13 @@ public class VueAventurier extends Observe {
         this.carte9.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Message m = new Message();
-                m.type = TypesMessages.JOUER_SPECIALE;
-                m.numCarte = 8;
-                notifierObservateur(m);
+                if (cartesCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 8;
+                    notifierObservateur(m);
+                }
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -569,6 +593,9 @@ public class VueAventurier extends Observe {
         for (int i = 0; i < cartes.size(); i++) {
             lesCartes.get(i).setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(i).getRole() + ((cartes.get(i).getRole() == "Trésor") ? cartesTresors.get(i).getNomTresor() : "") + ".png");
         }
+        for (int i = cartes.size() ; i < 9 ; i++) {
+            lesCartes.get(i).setImage(System.getProperty("user.dir") + "/src/images/cartes/Vide rouge.png");
+        }
     }
 
     public void afficherEtatAction(int etat, String joueur, Integer nbaction) {
@@ -578,11 +605,11 @@ public class VueAventurier extends Observe {
                 instructions.setText("Bienvenue " + joueur + ". Il vous reste " + nbaction + " actions");
                 break;
             case ETAT_SOUHAITE_DEPLACEMENT:
-                instructions.setText("Choissisez une tuile :");
+                instructions.setText("Choissisez une tuile où vous déplacer :");
                 break;
 
             case ETAT_SOUHAITE_ASSECHER:
-                instructions.setText("Choissisez une tuile :");
+                instructions.setText("Choissisez une tuile pour l'assécher :");
                 break;
 
             case ETAT_SOUHAITE_DONNER:
@@ -591,7 +618,7 @@ public class VueAventurier extends Observe {
 
             case ETAT_TROP_CARTES:
                 margeHaut.setPreferredSize(new Dimension(400, 9));
-                instructions.setText("Vous avez trop de cartes dans votre main, vous devez en défausser une");
+                instructions.setText("Votre main est pleine, choisissez une carte à défausser/jouer");
                 break;
 
             case ETAT_SOUHAITE_JOUER_SPECIALE:
@@ -612,6 +639,7 @@ public class VueAventurier extends Observe {
     }
 
     public void interfaceParDefaut(ArrayList<CarteOrange> cartes) {
+        cartesCliquable = false;
         grille.repaint();
         dessinCartes(cartes);
         bDepl.setEnabled(true);
@@ -664,6 +692,17 @@ public class VueAventurier extends Observe {
         this.grille.repaint();
     }
 
+    public void selectionCarte() {
+        this.cartesCliquable = true;
+        bDepl.setEnabled(false);
+        bAss.setEnabled(false);
+        bPioch.setEnabled(false);
+        bGagner.setEnabled(false);
+        bSpecial.setEnabled(false);
+        bAnnuler.setEnabled(false);
+        bFinir.setEnabled(false);
+    }
+    
     public void actualiserTrésor(Tresor[] trésors) {
         if (trésors[1].isGagne()) {
             tresor1.setVisible(true);
@@ -673,6 +712,27 @@ public class VueAventurier extends Observe {
             tresor3.setVisible(true);
         } else if (trésors[4].isGagne()) {
             tresor4.setVisible(true);
+        }
+    }
+    
+    public void actualiserDefausseO(ArrayList<CarteOrange> cartes){
+        if (!cartes.isEmpty()) {
+            if (cartes.get(cartes.size() - 1).getRole().equals("Trésor")) {
+                CarteTrésor carte = (CarteTrésor) cartes.get(cartes.size() - 1);
+                defausseO.setImage(System.getProperty("user.dir") + "/src/images/cartes/Trésor" + carte.getNomTresor().toString() + ".png");
+            } else {
+                defausseO.setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(cartes.size() - 1).getRole() + ".png");
+            }
+        } else {
+            defausseO.setImage(System.getProperty("user.dir") + "/src/images/cartes/Vide rouge.png");
+        }
+    }
+    
+    public void actualiserDefausseB(ArrayList<CarteBleue> cartes){
+        if (!cartes.isEmpty()) {
+            defausseB.setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(cartes.size() - 1).getInnonde().toString() + ".png");
+        } else {
+            defausseB.setImage(System.getProperty("user.dir") + "/src/images/cartes/Vide bleu.png");
         }
     }
     

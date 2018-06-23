@@ -22,7 +22,7 @@ public enum NomTuile {
 	LE_TEMPLE_DE_LA_LUNE(20,"le temple de la lune"),
 	LE_PALAIS_DES_MAREES(21,"le palais des marées"),
 	LE_VAL_DU_CREPUSCULE(22,"le val du crepuscule"),
-	LA_TOUR_DU_GUET(23,"la tour du guet"),
+	LA_TOUR_DE_GUET(23,"la tour de guet"),
 	LE_JARDIN_DES_MURMURES(24,"le jardin des murmures");
         
         private int nbTuile;
@@ -83,8 +83,8 @@ public enum NomTuile {
                 return LE_PALAIS_DES_MAREES;
             } else if (LE_VAL_DU_CREPUSCULE.nbTuile==nb) {
                 return LE_VAL_DU_CREPUSCULE;
-            } else if (LA_TOUR_DU_GUET.nbTuile==nb) {
-                return LA_TOUR_DU_GUET;
+            } else if (LA_TOUR_DE_GUET.nbTuile==nb) {
+                return LA_TOUR_DE_GUET;
             } else if (LE_JARDIN_DES_MURMURES.nbTuile==nb) {
                 return LE_JARDIN_DES_MURMURES;
             } else {
