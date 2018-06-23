@@ -715,28 +715,29 @@ public class VueAventurier extends Observe {
         }
     }
     
-    public void actualiserDefausseO(ArrayList<CarteOrange> cartes){
-        if (!cartes.isEmpty()) {
-            if (cartes.get(cartes.size() - 1).getRole().equals("Trésor")) {
-                CarteTrésor carte = (CarteTrésor) cartes.get(cartes.size() - 1);
-                defausseO.setImage(System.getProperty("user.dir") + "/src/images/cartes/Trésor" + carte.getNomTresor().toString() + ".png");
+    public void actualiserDefausseO(CarteOrange carte){
+        if (carte != null) {
+            if (carte.getRole().equals("Trésor")) {
+                CarteTrésor c = (CarteTrésor) carte;
+                defausseO.setImage(System.getProperty("user.dir") + "/src/images/cartes/Trésor" + c.getNomTresor().toString() + ".png");
             } else {
-                defausseO.setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(cartes.size() - 1).getRole() + ".png");
+                defausseO.setImage(System.getProperty("user.dir") + "/src/images/cartes/" + carte.getRole() + ".png");
             }
         } else {
             defausseO.setImage(System.getProperty("user.dir") + "/src/images/cartes/Vide rouge.png");
         }
     }
     
-    public void actualiserDefausseB(ArrayList<CarteBleue> cartes){
-        if (!cartes.isEmpty()) {
-            defausseB.setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(cartes.size() - 1).getInnonde().toString() + ".png");
+    public void actualiserDefausseB(CarteBleue carte){
+        if (carte != null) {
+            defausseB.setImage(System.getProperty("user.dir") + "/src/images/cartes/" + carte.getInnonde().getNom().toString() + ".png");
+            System.out.println("l'image de"+ carte.getInnonde().getNom().toString() +"est ajoutée a la pioche");
         } else {
             defausseB.setImage(System.getProperty("user.dir") + "/src/images/cartes/Vide bleu.png");
         }
     }
     
-    public void majNiveauEau(int nivo){
+    public void actualiserNiveauEau(int nivo){
         niveauEau.setImage(System.getProperty("user.dir") + "/src/images/autre/n"+nivo+".png");
     }
 

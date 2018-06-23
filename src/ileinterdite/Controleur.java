@@ -489,7 +489,7 @@ public class Controleur implements Observateur {
             }
             viderDefausseBleues();
             if (vue != null){
-                vue.majNiveauEau(niveauEau);
+                vue.actualiserNiveauEau(niveauEau);
             }
         }
         //Si la main contient plus de 5 cartes
@@ -557,6 +557,97 @@ public class Controleur implements Observateur {
         }
     }
 
+    private void iniJeu() {
+        //initialisations des tableaux/vecteurs
+        nomJoueurs = new HashMap<Aventurier, String>();
+        trésors = new Tresor[4];
+        piocheOranges = new Stack<CarteOrange>();
+        defausseOranges = new ArrayList<CarteOrange>();
+        piocheBleues = new Stack<CarteBleue>();
+        defausseBleues = new ArrayList<CarteBleue>();
+        joueurs = new ArrayList<Aventurier>();
+
+        //initialisations
+        iniTrésor();
+        iniGrille();
+        ihm = new VueAventurier(getGrille());
+        ihm.addObservateur(this);
+        iniCartes();
+    }
+    private void iniCartes() {
+        //Création des cartes oranges (trésor)        
+        ArrayList<CarteOrange> tmpOranges = new ArrayList<CarteOrange>();
+        for (int i = 0; i < 3; i++) {
+            tmpOranges.add(new CarteHelicoptere());
+        }
+        for (int i = 0; i < 5; i++) {
+            tmpOranges.add(new CarteTrésor(NomTresor.LE_CRISTAL_ARDENT));
+            tmpOranges.add(new CarteTrésor(NomTresor.LA_STATUE_DU_ZEPHYR));
+            tmpOranges.add(new CarteTrésor(NomTresor.LE_CALICE_DE_L_ONDE));
+            tmpOranges.add(new CarteTrésor(NomTresor.LA_PIERRE_SACREE));
+        }
+        for (int i = 0; i < 2; i++) {
+            tmpOranges.add(new CarteMonteeDesEaux()); //2 cartes montée des eaux, modification : 18/06/2018 (m2107 consignes m.à.j.)
+            tmpOranges.add(new CarteSacDeSable());
+        }
+        Collections.shuffle(tmpOranges);
+        //Ajout de celles-ci dans la pioche orange.
+        for (CarteOrange c : tmpOranges) {
+            piocheOranges.push(c);
+        }
+
+        //Création des cartes bleues (innondation)        
+        ArrayList<CarteBleue> tmpBleues = new ArrayList<CarteBleue>();
+        for (Tuile t : getGrille().getGrille()) {
+            tmpBleues.add(new CarteBleue(t));
+        }
+        Collections.shuffle(tmpBleues);
+        //Ajout de celles-ci dans la pioche bleue.
+        for (CarteBleue c : tmpBleues) {
+            piocheBleues.push(c);
+        }
+    }
+    private void iniGrille() {
+        //Génération des 24 tuiles
+        ArrayList<Tuile> Tuiles = new ArrayList<Tuile>();
+        for (int i = 1; i < 25; i++) {
+            Tuiles.add(new Tuile(NomTuile.getFromNb(i)));
+        }
+        //Initialisation de la Grille
+        if (Parameters.ALEAS) { //ALEAS == true
+            Collections.shuffle(Tuiles);
+        }
+        grille = new Grille(Tuiles);
+    }
+    private void iniTrésor() {
+        //Création des Trésors
+        trésors[0] = new Tresor(NomTresor.LA_PIERRE_SACREE);
+        trésors[1] = new Tresor(NomTresor.LA_STATUE_DU_ZEPHYR);
+        trésors[2] = new Tresor(NomTresor.LE_CRISTAL_ARDENT);
+        trésors[3] = new Tresor(NomTresor.LE_CALICE_DE_L_ONDE);
+    }
+
+    private boolean estTerminé() {
+        return (estPerdu() || !jeuEnCours);
+    }
+    private boolean estPerdu() {
+        Grille g = getGrille();
+        Utils.EtatTuile coulee = Utils.EtatTuile.COULEE;
+        int joueurVivant = getNbJoueur();
+        for (Aventurier a : getNomJoueurs().keySet()) {
+            if (a.getTuile() == null) {
+                joueurVivant--;
+            }
+        }
+        return (g.getTuile(NomTuile.HELIPORT).getEtat() == coulee
+                || getNiveau() >= 10
+                || (g.getTuile(NomTuile.LE_TEMPLE_DU_SOLEIL).getEtat() == coulee && g.getTuile(NomTuile.LE_TEMPLE_DE_LA_LUNE).getEtat() == coulee && !getTrésors()[0].isGagne())
+                || (g.getTuile(NomTuile.LE_JARDIN_DES_HURLEMENTS).getEtat() == coulee && g.getTuile(NomTuile.LE_JARDIN_DES_MURMURES).getEtat() == coulee && !getTrésors()[1].isGagne())
+                || (g.getTuile(NomTuile.LA_CAVERNE_DES_OMBRES).getEtat() == coulee && g.getTuile(NomTuile.LA_CAVERNE_DU_BRASIER).getEtat() == coulee && !getTrésors()[2].isGagne())
+                || (g.getTuile(NomTuile.LE_PALAIS_DE_CORAIL).getEtat() == coulee && g.getTuile(NomTuile.LE_PALAIS_DES_MAREES).getEtat() == coulee && !getTrésors()[3].isGagne())
+                || joueurVivant < nbJoueurs);
+    }
+    
     //à compléter avec l'ihm
     private void debutJeu() {
         //méthode qui :
@@ -566,7 +657,7 @@ public class Controleur implements Observateur {
             - place les aventuriers
             - distribue les cartes Trésor
          */
-
+        
         for (Aventurier a : getNomJoueurs().keySet()) {
             getJoueurs().add(a);
         }
@@ -626,99 +717,9 @@ public class Controleur implements Observateur {
         } else {
             this.nbActions = 3;
         }
-        ihm = new VueAventurier(getGrille());
         getIHM().dessinCartes(getJoueurCourant().getMain());
         getIHM().dessinCarteAventurier(joueurCourant);
-        ihm.addObservateur(this);
-    }
-
-    private void iniJeu() {
-        //initialisations des tableaux/vecteurs
-        nomJoueurs = new HashMap<Aventurier, String>();
-        trésors = new Tresor[4];
-        piocheOranges = new Stack<CarteOrange>();
-        defausseOranges = new ArrayList<CarteOrange>();
-        piocheBleues = new Stack<CarteBleue>();
-        defausseBleues = new ArrayList<CarteBleue>();
-        joueurs = new ArrayList<Aventurier>();
-
-        //initialisations
-        iniTrésor();
-        iniGrille();
-        iniCartes();
-    }
-    private void iniCartes() {
-        //Création des cartes oranges (trésor)        
-        ArrayList<CarteOrange> tmpOranges = new ArrayList<CarteOrange>();
-        for (int i = 0; i < 3; i++) {
-            tmpOranges.add(new CarteHelicoptere());
-        }
-        for (int i = 0; i < 5; i++) {
-            tmpOranges.add(new CarteTrésor(NomTresor.LE_CRISTAL_ARDENT));
-            tmpOranges.add(new CarteTrésor(NomTresor.LA_STATUE_DU_ZEPHYR));
-            tmpOranges.add(new CarteTrésor(NomTresor.LE_CALICE_DE_L_ONDE));
-            tmpOranges.add(new CarteTrésor(NomTresor.LA_PIERRE_SACREE));
-        }
-        for (int i = 0; i < 2; i++) {
-            tmpOranges.add(new CarteMonteeDesEaux()); //2 cartes montée des eaux, modification : 18/06/2018 (m2107 consignes m.à.j.)
-            tmpOranges.add(new CarteSacDeSable());
-        }
-        Collections.shuffle(tmpOranges);
-        //Ajout de celles-ci dans la pioche orange.
-        for (CarteOrange c : tmpOranges) {
-            piocheOranges.push(c);
-        }
-
-        //Création des cartes bleues (innondation)        
-        ArrayList<CarteBleue> tmpBleues = new ArrayList<CarteBleue>();
-        for (Tuile t : grille.getGrille()) {
-            tmpBleues.add(new CarteBleue(t));
-        }
-        Collections.shuffle(tmpBleues);
-        //Ajout de celles-ci dans la pioche bleue.
-        for (CarteBleue c : tmpBleues) {
-            piocheBleues.push(c);
-        }
-    }
-    private void iniGrille() {
-        //Génération des 24 tuiles
-        ArrayList<Tuile> Tuiles = new ArrayList<Tuile>();
-        for (int i = 1; i < 25; i++) {
-            Tuiles.add(new Tuile(NomTuile.getFromNb(i)));
-        }
-        //Initialisation de la Grille
-        if (Parameters.ALEAS) { //ALEAS == true
-            Collections.shuffle(Tuiles);
-        }
-        grille = new Grille(Tuiles);
-    }
-    private void iniTrésor() {
-        //Création des Trésors
-        trésors[0] = new Tresor(NomTresor.LA_PIERRE_SACREE);
-        trésors[1] = new Tresor(NomTresor.LA_STATUE_DU_ZEPHYR);
-        trésors[2] = new Tresor(NomTresor.LE_CRISTAL_ARDENT);
-        trésors[3] = new Tresor(NomTresor.LE_CALICE_DE_L_ONDE);
-    }
-
-    private boolean estTerminé() {
-        return (estPerdu() || !jeuEnCours);
-    }
-    private boolean estPerdu() {
-        Grille g = getGrille();
-        Utils.EtatTuile coulee = Utils.EtatTuile.COULEE;
-        int joueurVivant = getNbJoueur();
-        for (Aventurier a : getNomJoueurs().keySet()) {
-            if (a.getTuile() == null) {
-                joueurVivant--;
-            }
-        }
-        return (g.getTuile(NomTuile.HELIPORT).getEtat() == coulee
-                || getNiveau() >= 10
-                || (g.getTuile(NomTuile.LE_TEMPLE_DU_SOLEIL).getEtat() == coulee && g.getTuile(NomTuile.LE_TEMPLE_DE_LA_LUNE).getEtat() == coulee && !getTrésors()[0].isGagne())
-                || (g.getTuile(NomTuile.LE_JARDIN_DES_HURLEMENTS).getEtat() == coulee && g.getTuile(NomTuile.LE_JARDIN_DES_MURMURES).getEtat() == coulee && !getTrésors()[1].isGagne())
-                || (g.getTuile(NomTuile.LA_CAVERNE_DES_OMBRES).getEtat() == coulee && g.getTuile(NomTuile.LA_CAVERNE_DU_BRASIER).getEtat() == coulee && !getTrésors()[2].isGagne())
-                || (g.getTuile(NomTuile.LE_PALAIS_DE_CORAIL).getEtat() == coulee && g.getTuile(NomTuile.LE_PALAIS_DES_MAREES).getEtat() == coulee && !getTrésors()[3].isGagne())
-                || joueurVivant < nbJoueurs);
+        getIHM().actualiserNiveauEau(getNiveau());
     }
     
     private void actualiserJeu() {
@@ -844,9 +845,11 @@ public class Controleur implements Observateur {
     }
     private void addDefausseBleues(CarteBleue carte) {
         this.defausseBleues.add(carte);
+        getIHM().actualiserDefausseB(carte);
     }
     private void viderDefausseBleues() {
         this.defausseBleues.removeAll(this.defausseBleues);
+        getIHM().actualiserDefausseB(null);
     }
 
     //méthodes pour les cartes oranges
@@ -866,9 +869,11 @@ public class Controleur implements Observateur {
     }
     private void addDefausseOranges(CarteOrange carte) {
         this.defausseOranges.add(carte);
+        getIHM().actualiserDefausseO(carte);
     }
     private void viderDefausseOranges() {
         this.defausseOranges.removeAll(this.defausseOranges);
+        getIHM().actualiserDefausseO(null);
     }
 
     //CONSTUCTEUR
@@ -878,10 +883,10 @@ public class Controleur implements Observateur {
         accueil.addObservateur(this);
          */
         Parameters.setLogs(false);
-        Parameters.setAleas(false);
-        iniJeu();
+        Parameters.setAleas(true);
         this.niveauEau = 1;
         this.nbJoueurs = 2;
+        iniJeu();
         //this.nomJoueurs.put(new Pilote(), "j1");
         //this.nomJoueurs.put(new Messager(), "j2");
         this.nomJoueurs.put(new Ingenieur(), "j3");
