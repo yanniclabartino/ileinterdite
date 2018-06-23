@@ -202,6 +202,9 @@ public class Grille extends JPanel {
         
         int coordX, coordY;
         
+        g.setColor(new Color(0, 0, 0, 1));
+        g.fillRect(0, 0, size.width, size.height);
+        
         for (int l = 0; l < 6; l++) {
             for (int c = 0; c < 6; c++) {
                 if (this.getTuile(c, l) != null) {
@@ -244,7 +247,8 @@ public class Grille extends JPanel {
                                 break;
                         }
                     } else {
-                        g.setColor(new Color(255, 242, 230, 0));
+                        g.clearRect(coordX, coordY, (int) largeurTuile, (int) hauteurTuile);
+                        g.setColor(new Color(0, 0, 0, 1));
                         g.fillRect(coordX, coordY, (int) largeurTuile, (int) hauteurTuile);
                     }
                     
