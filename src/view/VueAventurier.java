@@ -45,7 +45,7 @@ public class VueAventurier extends Observe {
     public static final int ETAT_JOUEUR = 8;
 
     private TypesMessages MESSAGE_PRECEDENT;
-    private boolean cartesCliquable;
+    private boolean cartesCliquable, cartesSpeCliquable;
 
     private JFrame window;
     private JButton bDepl, bAss, bPioch, bGagner, bSpecial, bAnnuler, bFinir, bPerso;
@@ -310,7 +310,6 @@ public class VueAventurier extends Observe {
                 notifierObservateur(m);
             }
         });
-
         bGagner.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -321,7 +320,6 @@ public class VueAventurier extends Observe {
                 notifierObservateur(m);
             }
         });
-
         bPioch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -360,8 +358,8 @@ public class VueAventurier extends Observe {
                         m.type = TypesMessages.ACTION_DONNER;
                         
                         break;*/
-                    case SOUHAITE_JOUER_SPECIALE:
-                        m.type = TypesMessages.JOUER_SPECIALE;
+                    case JOUER_SPECIALE:
+                        m.type = TypesMessages.ASSECHER;
                         break;
                 }
                 if (grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight()).getSelected() != 0) {
@@ -372,30 +370,30 @@ public class VueAventurier extends Observe {
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
+            public void mousePressed(MouseEvent e) {}
             @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
+            public void mouseReleased(MouseEvent e) {}
             @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
+            public void mouseEntered(MouseEvent e) {}
             @Override
-            public void mouseExited(MouseEvent e) {
-            }
+            public void mouseExited(MouseEvent e) {}
         });
 
         // CLIC SUR LES CARTES
         this.cartesCliquable = false;
+        this.cartesSpeCliquable = false;
         this.carte1.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (cartesCliquable) {
                     Message m = new Message();
                     m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 0;
+                    notifierObservateur(m);
+                } else if (cartesSpeCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.JOUER_SPECIALE;
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 0;
                     notifierObservateur(m);
@@ -419,6 +417,12 @@ public class VueAventurier extends Observe {
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 1;
                     notifierObservateur(m);
+                } else if (cartesSpeCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.JOUER_SPECIALE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 1;
+                    notifierObservateur(m);
                 }
             }
             @Override
@@ -436,6 +440,12 @@ public class VueAventurier extends Observe {
                 if (cartesCliquable) {
                     Message m = new Message();
                     m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 2;
+                    notifierObservateur(m);
+                } else if (cartesSpeCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.JOUER_SPECIALE;
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 2;
                     notifierObservateur(m);
@@ -459,6 +469,12 @@ public class VueAventurier extends Observe {
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 3;
                     notifierObservateur(m);
+                } else if (cartesSpeCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.JOUER_SPECIALE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 3;
+                    notifierObservateur(m);
                 }
             }
             @Override
@@ -476,6 +492,12 @@ public class VueAventurier extends Observe {
                 if (cartesCliquable) {
                     Message m = new Message();
                     m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 4;
+                    notifierObservateur(m);
+                } else if (cartesSpeCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.JOUER_SPECIALE;
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 4;
                     notifierObservateur(m);
@@ -499,6 +521,12 @@ public class VueAventurier extends Observe {
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 5;
                     notifierObservateur(m);
+                } else if (cartesSpeCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.JOUER_SPECIALE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 5;
+                    notifierObservateur(m);
                 }
             }
             @Override
@@ -516,6 +544,12 @@ public class VueAventurier extends Observe {
                 if (cartesCliquable) {
                     Message m = new Message();
                     m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 6;
+                    notifierObservateur(m);
+                } else if (cartesSpeCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.JOUER_SPECIALE;
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 6;
                     notifierObservateur(m);
@@ -539,6 +573,12 @@ public class VueAventurier extends Observe {
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 7;
                     notifierObservateur(m);
+                } else if (cartesSpeCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.JOUER_SPECIALE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 7;
+                    notifierObservateur(m);
                 }
             }
             @Override
@@ -556,6 +596,12 @@ public class VueAventurier extends Observe {
                 if (cartesCliquable) {
                     Message m = new Message();
                     m.type = TypesMessages.SELECTIONNER_CARTE;
+                    MESSAGE_PRECEDENT = m.type;
+                    m.numCarte = 8;
+                    notifierObservateur(m);
+                } else if (cartesSpeCliquable) {
+                    Message m = new Message();
+                    m.type = TypesMessages.JOUER_SPECIALE;
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 8;
                     notifierObservateur(m);
@@ -640,6 +686,7 @@ public class VueAventurier extends Observe {
 
     public void interfaceParDefaut(ArrayList<CarteOrange> cartes) {
         cartesCliquable = false;
+        cartesSpeCliquable = false;
         grille.repaint();
         dessinCartes(cartes);
         bDepl.setEnabled(true);
@@ -663,10 +710,10 @@ public class VueAventurier extends Observe {
                 lesCartes.get(cartes.indexOf(c)).setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(cartes.indexOf(c)).getRole() + "Dispo.png");
             }
         }
+        this.cartesSpeCliquable = true;
     }
 
     public void afficheCartesSac(ArrayList<CarteOrange> cartes) {
-        this.grille.repaint();
         bDepl.setEnabled(false);
         bAss.setEnabled(false);
         bPioch.setEnabled(false);
@@ -677,6 +724,7 @@ public class VueAventurier extends Observe {
                 lesCartes.get(cartes.indexOf(c)).setImage(System.getProperty("user.dir") + "/src/images/cartes/" + cartes.get(cartes.indexOf(c)).getRole() + "Dispo.png");
             }
         }
+        this.cartesSpeCliquable = true;
     }
 
     public void afficherTuilesDispo() {
@@ -686,6 +734,8 @@ public class VueAventurier extends Observe {
         bPioch.setEnabled(false);
         bGagner.setEnabled(false);
         bSpecial.setEnabled(false);
+        bAnnuler.setEnabled(true);
+        bFinir.setEnabled(true);
     }
 
     public void afficherTuilesPilote() {

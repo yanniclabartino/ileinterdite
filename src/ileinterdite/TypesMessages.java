@@ -32,6 +32,9 @@ public enum TypesMessages {
     type de message quand un joueur joue une carte spéciale, accompagné de :
             - la carte concernée
     */
+    ASSECHER, /* type de message quand un joueur assèche avec une carte sac de sable, accompagné de :
+            - la tuile concernée
+    */
     FINIR_TOUR, /* type de message quand un joueur termine son tour. */
     ANNULER, /* type de message quand un joueur veut annuler son intéraction en cours. */
     SELECTIONNER_CARTE; /* type de message quand un joueur doit sélectionner une carte à utiliser ou donner */

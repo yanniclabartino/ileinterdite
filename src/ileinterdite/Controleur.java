@@ -32,8 +32,10 @@ public class Controleur implements Observateur {
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
     private ArrayList<CarteOrange> defausseOranges;
+    
     private boolean pouvoirPiloteDispo, pouvoirIngénieurUsé, jeuEnCours, àPioché;
     private int niveauEau, nbJoueurs, nbActions;
+    private CarteSacDeSable carteTMP;
 
     @Override
     public void traiterMessage(Message m) {
@@ -163,10 +165,18 @@ public class Controleur implements Observateur {
                     this.jeuEnCours = false;
                     getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, nomJoueur, getNbAction());
                 } else if (getJoueurCourant().getMain().get(m.numCarte).getRole().equals("Sac de sable") && specialePossible() == 2) {
+                    carteTMP = (CarteSacDeSable) getJoueurCourant().getMain().get(m.numCarte);
+                    getGrille().selectionTuileDispo(calculTouteTuileInnon(), 1);
+                    getIHM().afficherTuilesDispo();
+                    getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_ASSECHER, nomJoueur, getNbAction());
+                }
+                break;
+            case ASSECHER:
+                if (m.tuile.getSelected() == 1) {
                     m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
-                    getJoueurCourant().defausseCarte(getJoueurCourant().getMain().get(m.numCarte));
-                    addDefausseOranges(getJoueurCourant().getMain().get(m.numCarte));
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, nomJoueur, getNbAction());
+                    getJoueurCourant().defausseCarte(carteTMP);
+                    addDefausseOranges(carteTMP);
+                    actualiserJeu();
                 }
                 break;
             case FINIR_TOUR:
@@ -204,7 +214,7 @@ public class Controleur implements Observateur {
         g.selectionTuileDispo(tuilesDispo, 1);
         getIHM().afficherTuilesDispo();
         if (joueur.getCouleur() == Utils.Pion.BLEU && pouvoirPiloteDispo) {
-            tuilesPilote.addAll(calculTouteTuileDispo(g));
+            tuilesPilote.addAll(calculTouteTuileDispo());
             tuilesPilote.removeAll(tuilesDispo);
             g.selectionTuileDispo(tuilesPilote, 2);
             getIHM().afficherTuilesPilote();
@@ -447,7 +457,7 @@ public class Controleur implements Observateur {
             getIHM().afficheCartesSac(getJoueurCourant().getMain());
         }
     }
-
+    
     //imcomplète par rapport à l'ihm
     private boolean gererCarteOrange() {
         /*
@@ -718,7 +728,7 @@ public class Controleur implements Observateur {
             this.nbActions = 3;
         }
         getIHM().dessinCartes(getJoueurCourant().getMain());
-        getIHM().dessinCarteAventurier(joueurCourant);
+        getIHM().dessinCarteAventurier(getJoueurCourant());
         getIHM().actualiserNiveauEau(getNiveau());
     }
     
@@ -808,7 +818,8 @@ public class Controleur implements Observateur {
     private int getNiveau() {
         return niveauEau;
     }
-    private ArrayList<Tuile> calculTouteTuileDispo(Grille g) {
+    private ArrayList<Tuile> calculTouteTuileDispo() {
+        Grille g = getGrille();
         ArrayList<Tuile> touteTuileDispo = new ArrayList<Tuile>();
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
@@ -821,10 +832,24 @@ public class Controleur implements Observateur {
         }
         return touteTuileDispo;
     }
-    public HashMap<Aventurier, String> getNomJoueurs() {
+    private ArrayList<Tuile> calculTouteTuileInnon() {
+        Grille g = getGrille();
+        ArrayList<Tuile> touteTuileInnon = new ArrayList<Tuile>();
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (g.getTuile(i, j) != null) {
+                    if (g.getTuile(i, j).getEtat() == Utils.EtatTuile.INONDEE) {
+                        touteTuileInnon.add(g.getTuile(i, j));
+                    }
+                }
+            }
+        }
+        return touteTuileInnon;
+    }
+    private HashMap<Aventurier, String> getNomJoueurs() {
         return nomJoueurs;
     }
-    public ArrayList<Aventurier> getJoueurs() {
+    private ArrayList<Aventurier> getJoueurs() {
         return this.joueurs;
     }
 
