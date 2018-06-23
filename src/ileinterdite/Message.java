@@ -2,7 +2,6 @@ package ileinterdite;
 
 import java.util.HashMap;
 import model.Aventurier;
-import model.CarteOrange;
 import model.Tuile;
 
 public class Message {
@@ -20,5 +19,5 @@ public class Message {
     public Tuile tuile;                         //Champ utilisé pour ACTION_ASSECHER, ACTION_DEPLACEMENT ou ASSECHER (sac de sable)
     
     public int numCarte;                        //Champ utilisé pour SELECTIONNER_CARTE, JOUER_SPECIALE
-    public Aventurier receveur;                 //Champ utilisé pour ACTION_DONNER
+    public Aventurier receveur, joueurAffiché;  //Champ utilisé pour ACTION_DONNER | VOIR_JOUEUR
 }

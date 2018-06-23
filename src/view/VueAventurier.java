@@ -43,9 +43,11 @@ public class VueAventurier extends Observe {
     public static final int ETAT_TROP_CARTES = 6;
     public static final int ETAT_SOUHAITE_JOUER_SPECIALE = 7;
     public static final int ETAT_JOUEUR = 8;
+    public static final int ETAT_VOIR_JOUEUR = 9;
 
     private TypesMessages MESSAGE_PRECEDENT;
     private boolean cartesCliquable, cartesSpeCliquable;
+    private Aventurier affichageEnCours;
 
     private JFrame window;
     private JButton bDepl, bAss, bPioch, bGagner, bSpecial, bAnnuler, bFinir, bPerso;
@@ -269,6 +271,15 @@ public class VueAventurier extends Observe {
         layer4center.setOpaque(false);
         layer4north.setBackground(new Color(255, 229, 204, 100));
 
+        // COULEUR DES BOUTONS
+        bDepl.setBackground(new Color(255, 205, 0, 90));
+        bAss.setBackground(new Color(255, 205, 0, 90));
+        bPioch.setBackground(new Color(255, 205, 0, 90));
+        bGagner.setBackground(new Color(255, 205, 0, 90));
+        bAnnuler.setBackground(new Color(255, 45, 0, 90));
+        bFinir.setBackground(new Color(0, 180, 15, 90));
+        bSpecial.setBackground(new Color(170, 0, 255, 90));
+        
         // ACTIONLISTENER DES BOUTONS
         bDepl.addActionListener(new ActionListener() {
             @Override
@@ -337,6 +348,17 @@ public class VueAventurier extends Observe {
                 m.type = TypesMessages.SOUHAITE_JOUER_SPECIALE;
                 MESSAGE_PRECEDENT = m.type;
 
+                notifierObservateur(m);
+            }
+        });
+        bPerso.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                Message m = new Message();
+                m.type = TypesMessages.VOIR_JOUEUR;
+                MESSAGE_PRECEDENT = m.type;
+                m.joueurAffiché = affichageEnCours;
+                
                 notifierObservateur(m);
             }
         });
@@ -645,9 +667,9 @@ public class VueAventurier extends Observe {
     }
 
     public void afficherEtatAction(int etat, String joueur, Integer nbaction) {
+        margeHaut.setPreferredSize(new Dimension(400, 9));
         switch (etat) {
             case ETAT_COMMENCER:
-                margeHaut.setPreferredSize(new Dimension(400, 9));
                 instructions.setText("Bienvenue " + joueur + ". Il vous reste " + nbaction + " actions");
                 break;
             case ETAT_SOUHAITE_DEPLACEMENT:
@@ -663,7 +685,6 @@ public class VueAventurier extends Observe {
                 break;
 
             case ETAT_TROP_CARTES:
-                margeHaut.setPreferredSize(new Dimension(400, 9));
                 instructions.setText("Votre main est pleine, choisissez une carte à défausser/jouer");
                 break;
 
@@ -672,8 +693,11 @@ public class VueAventurier extends Observe {
                 break;
 
             case ETAT_JOUEUR:
-                margeHaut.setPreferredSize(new Dimension(400, 9));
                 instructions.setText("Joueur " + joueur + " c'est à vous de jouer. Il vous reste " + nbaction + ((nbaction < 2) ? " action" : " actions"));
+                break;
+             
+            case ETAT_VOIR_JOUEUR:
+                instructions.setText("Vous observez la main du joueur " + joueur);
                 break;
 
         }
@@ -681,6 +705,7 @@ public class VueAventurier extends Observe {
     }
     
     public void dessinCarteAventurier(Aventurier joueur) {
+        this.affichageEnCours = joueur;
         perso.setImage(System.getProperty("user.dir") + "/src/images/personnages/" + joueur.getClass().toString().substring(12).toLowerCase() + ".png");
     }
 
@@ -742,6 +767,18 @@ public class VueAventurier extends Observe {
         this.grille.repaint();
     }
 
+    public void afficherJoueur(ArrayList<CarteOrange> cartes, Aventurier joueur) {
+        dessinCarteAventurier(joueur);
+        dessinCartes(cartes);
+        this.affichageEnCours = joueur;
+        bFinir.setEnabled(false);
+        bDepl.setEnabled(false);
+        bAss.setEnabled(false);
+        bPioch.setEnabled(false);
+        bGagner.setEnabled(false);
+        bSpecial.setEnabled(false);
+    }
+    
     public void selectionCarte() {
         this.cartesCliquable = true;
         bDepl.setEnabled(false);

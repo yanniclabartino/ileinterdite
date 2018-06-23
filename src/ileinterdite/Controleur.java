@@ -179,6 +179,20 @@ public class Controleur implements Observateur {
                     actualiserJeu();
                 }
                 break;
+            case VOIR_JOUEUR:
+                Aventurier joueurSuivant;
+                if (getJoueurs().indexOf(m.joueurAffiché) + 1 >= getNbJoueur()){
+                    joueurSuivant = getJoueurs().get(0);
+                } else {
+                    joueurSuivant = getJoueurs().get(getJoueurs().indexOf(m.joueurAffiché) + 1);
+                }
+                if (joueurSuivant == getJoueurCourant()) {
+                    actualiserJeu();
+                } else {
+                    getIHM().afficherJoueur(joueurSuivant.getMain(), joueurSuivant);
+                    getIHM().afficherEtatAction(ihm.ETAT_VOIR_JOUEUR, getNomJoueurs().get(joueurSuivant), null);
+                }
+                break;
             case FINIR_TOUR:
                 this.nbActions = 0;
                 actualiserJeu();
@@ -734,8 +748,9 @@ public class Controleur implements Observateur {
     
     private void actualiserJeu() {
         Aventurier jCourant = getJoueurCourant();
-        pouvoirIngénieurUsé = false;
+        getIHM().dessinCarteAventurier(jCourant);
         
+        pouvoirIngénieurUsé = false;
         boolean mainDuJoueurPleine = (jCourant.getMain().size() > 5);
         
         if (getNbAction() == 0) {
