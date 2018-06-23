@@ -16,7 +16,7 @@ import util.Utils;
 public class Grille extends JPanel {
 
     private Tuile tuile[][];
-
+    
     public Grille(ArrayList<Tuile> tuiles) {
         tuile = new Tuile[6][6];
         int index = 0;//index pour parcourir l'arraylist des tuiles
@@ -194,9 +194,6 @@ public class Grille extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         Dimension size = getSize();
-        
-        g.setColor(new Color(255, 242, 230, 90));
-        g.fillRect(0, 0, size.width, size.height);
 
         double largeurTuile = (size.width / 6) * 0.89;
         double hauteurTuile = (size.height / 6) * 0.89;
