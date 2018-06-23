@@ -4,9 +4,9 @@ import model.Aventurier;
 import java.util.ArrayList;
 import util.Utils;
 
-public class Ingénieur extends Aventurier {
+public class Ingenieur extends Aventurier {
 
-    public Ingénieur() {
+    public Ingenieur() {
         super();
         setCouleur(Utils.Pion.ROUGE);
     }

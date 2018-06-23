@@ -2,12 +2,12 @@ package model;
 
 import util.NomTresor;
 
-public class Trésor {
+public class Tresor {
 
     private boolean gagne;
     private NomTresor nom;
 
-    public Trésor(NomTresor nom) {
+    public Tresor(NomTresor nom) {
         this.nom = nom;
         this.gagne = false;
     }
