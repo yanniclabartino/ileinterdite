@@ -625,6 +625,7 @@ public class Controleur implements Observateur {
         }
         ihm = new VueAventurier(getGrille());
         getIHM().dessinCartes(getJoueurCourant().getMain());
+        getIHM().dessinCarteAventurier(joueurCourant);
         ihm.addObservateur(this);
     }
 
@@ -667,13 +668,11 @@ public class Controleur implements Observateur {
         for (int i = 1; i < 25; i++) {
             Tuiles.add(new Tuile(NomTuile.getFromNb(i)));
         }
-
         //Initialisation de la Grille
         if (Parameters.ALEAS) { //ALEAS == true
             Collections.shuffle(Tuiles);
         }
         grille = new Grille(Tuiles);
-
     }
     private void iniTrésor() {
         //Création des Trésors
@@ -725,6 +724,7 @@ public class Controleur implements Observateur {
             } else {
                 this.nbActions = 3;
             }
+            getIHM().dessinCarteAventurier(getJoueurCourant());
         }
 
         /*while (!this.estTerminé()) {}
@@ -843,6 +843,8 @@ public class Controleur implements Observateur {
         accueil = new VueAccueil();
         accueil.addObservateur(this);
          */
+        Parameters.setLogs(false);
+        Parameters.setAleas(false);
         iniJeu();
         this.niveauEau = 1;
         this.nbJoueurs = 2;
@@ -850,8 +852,6 @@ public class Controleur implements Observateur {
         //this.nomJoueurs.put(new Messager(), "j2");
         this.nomJoueurs.put(new Ingénieur(), "j3");
         this.nomJoueurs.put(new Plongeur(), "j4");
-        Parameters.setLogs(false);
-        Parameters.setAleas(true);
         debutJeu();
     }
 

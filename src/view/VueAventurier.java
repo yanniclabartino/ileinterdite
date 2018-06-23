@@ -28,6 +28,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import static javax.swing.SwingConstants.CENTER;
+import model.Aventurier;
 import model.CarteOrange;
 import model.CarteTrésor;
 import model.Grille;
@@ -120,7 +121,7 @@ public class VueAventurier extends Observe {
         cartesBleues = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png", 6);
         defausseO = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond rouge.png", 6);
         defausseB = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/cartes/Fond bleu.png", 6);
-        perso = new ImagePanel(87, 130, System.getProperty("user.dir") + "/src/images/personnages/explorateur.png", 6);
+        perso = new ImagePanel(87, 130, "", 6);
 
         this.MESSAGE_PRECEDENT = null;
 
@@ -604,6 +605,10 @@ public class VueAventurier extends Observe {
 
         }
 
+    }
+    
+    public void dessinCarteAventurier(Aventurier joueur) {
+        perso.setImage(System.getProperty("user.dir") + "/src/images/personnages/" + joueur.getClass().toString().substring(12).toLowerCase() + ".png");
     }
 
     public void interfaceParDefaut(ArrayList<CarteOrange> cartes) {
