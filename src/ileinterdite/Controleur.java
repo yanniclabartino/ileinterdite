@@ -76,14 +76,32 @@ public class Controleur implements Observateur {
                 }
                 break;
             case ACTION_ASSECHER:
-                if (m.tuile.getSelected() != 0) {
+                if (m.tuile.getSelected() == 1 && getJoueurCourant().getCouleur() == Pion.ROUGE && !pouvoirIngénieurUsé) {
+                    //il s'agit de l'ingénieur et c'est son premier assèchement.
+                    pouvoirIngénieurUsé = true;
                     m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
                     this.nbActions--;
                     getGrille().deselectionnerTuiles();
-                    if (getJoueurCourant().getCouleur() == Pion.ROUGE && assechementPossible()) {
+                    if (assechementPossible()) {
                         gererAssechement();
-                        pouvoirIngénieurUsé = true;
                     } else {
+                        actualiserJeu();
+                        getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
+                        getIHM().interfaceParDefaut(getJoueurCourant().getMain());
+                    }
+                } else if (m.tuile.getSelected() == 1 && getJoueurCourant().getCouleur() != Pion.ROUGE) { 
+                    //application en règle générale pour les autres aventuriers
+                    m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
+                    this.nbActions--;
+                    getGrille().deselectionnerTuiles();
+                    actualiserJeu();
+                    getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
+                    getIHM().interfaceParDefaut(getJoueurCourant().getMain());
+                } else { 
+                    if (m.tuile.getSelected() == 1) {
+                        //c'est l'ingénieur mais il a déjà assècher une fois.
+                        m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
+                        getGrille().deselectionnerTuiles();
                         actualiserJeu();
                         getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
                         getIHM().interfaceParDefaut(getJoueurCourant().getMain());
@@ -135,8 +153,11 @@ public class Controleur implements Observateur {
                 this.nbActions = 0;
                 actualiserJeu();
                 getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
+                getGrille().deselectionnerTuiles();
+                getIHM().interfaceParDefaut(getJoueurCourant().getMain());
                 break;
             case ANNULER:
+                actualiserJeu();
                 getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
                 getGrille().deselectionnerTuiles();
                 getIHM().interfaceParDefaut(getJoueurCourant().getMain());
@@ -177,11 +198,7 @@ public class Controleur implements Observateur {
 
     private boolean assechementPossible() {
         ArrayList<Tuile> tuilesDispo = getJoueurCourant().calculTuileAss(getGrille());
-        if (getJoueurCourant().getCouleur() == Pion.ROUGE) {
-            return (!tuilesDispo.isEmpty() && !pouvoirIngénieurUsé);
-        } else {
-            return (!tuilesDispo.isEmpty());
-        }
+        return (!tuilesDispo.isEmpty());
     }
 
     private void gererAssechement() {
@@ -827,10 +844,10 @@ public class Controleur implements Observateur {
         accueil.addObservateur(this);
          */
         iniJeu();
-        this.niveauEau = 4;
-        this.nbJoueurs = 4;
-        this.nomJoueurs.put(new Pilote(), "j1");
-        this.nomJoueurs.put(new Messager(), "j2");
+        this.niveauEau = 1;
+        this.nbJoueurs = 2;
+        //this.nomJoueurs.put(new Pilote(), "j1");
+        //this.nomJoueurs.put(new Messager(), "j2");
         this.nomJoueurs.put(new Ingénieur(), "j3");
         this.nomJoueurs.put(new Plongeur(), "j4");
         Parameters.setLogs(false);

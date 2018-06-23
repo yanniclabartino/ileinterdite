@@ -356,6 +356,7 @@ public class VueAventurier extends Observe {
                         m.type = TypesMessages.ACTION_DEPLACEMENT;
                         break;
                     case SOUHAITE_ASSECHER:
+                    case ACTION_ASSECHER:
                         m.type = TypesMessages.ACTION_ASSECHER;
                         break;
                     /*case SOUHAITE_DONNER:
@@ -366,7 +367,7 @@ public class VueAventurier extends Observe {
                         m.type = TypesMessages.JOUER_SPECIALE;
                         break;
                 }
-                if (m.type != MESSAGE_PRECEDENT && grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight()).getSelected() != 0) {
+                if (grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight()).getSelected() != 0) {
                     m.tuile = grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight());
                     MESSAGE_PRECEDENT = m.type;
                     notifierObservateur(m);
