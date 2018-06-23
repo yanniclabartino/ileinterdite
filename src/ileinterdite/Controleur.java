@@ -24,7 +24,7 @@ public class Controleur implements Observateur {
     private VueAventurier ihm;
 
     private Grille grille;
-    private Trésor[] trésors;
+    private Tresor[] trésors;
     private HashMap<Aventurier, String> nomJoueurs;
     private ArrayList<Aventurier> joueurs;
     private Aventurier joueurCourant;
@@ -539,22 +539,6 @@ public class Controleur implements Observateur {
         }
     }
 
-    private void iniJeu() {
-        //initialisations des tableaux/vecteurs
-        nomJoueurs = new HashMap<Aventurier, String>();
-        trésors = new Trésor[4];
-        piocheOranges = new Stack<CarteOrange>();
-        defausseOranges = new ArrayList<CarteOrange>();
-        piocheBleues = new Stack<CarteBleue>();
-        defausseBleues = new ArrayList<CarteBleue>();
-        joueurs = new ArrayList<Aventurier>();
-
-        //initialisations
-        iniTrésor();
-        iniGrille();
-        iniCartes();
-    }
-
     //à compléter avec l'ihm
     private void debutJeu() {
         //méthode qui :
@@ -629,6 +613,21 @@ public class Controleur implements Observateur {
         ihm.addObservateur(this);
     }
 
+    private void iniJeu() {
+        //initialisations des tableaux/vecteurs
+        nomJoueurs = new HashMap<Aventurier, String>();
+        trésors = new Tresor[4];
+        piocheOranges = new Stack<CarteOrange>();
+        defausseOranges = new ArrayList<CarteOrange>();
+        piocheBleues = new Stack<CarteBleue>();
+        defausseBleues = new ArrayList<CarteBleue>();
+        joueurs = new ArrayList<Aventurier>();
+
+        //initialisations
+        iniTrésor();
+        iniGrille();
+        iniCartes();
+    }
     private void iniCartes() {
         //Création des cartes oranges (trésor)        
         ArrayList<CarteOrange> tmpOranges = new ArrayList<CarteOrange>();
@@ -676,10 +675,10 @@ public class Controleur implements Observateur {
     }
     private void iniTrésor() {
         //Création des Trésors
-        trésors[0] = new Trésor(NomTresor.LA_PIERRE_SACREE);
-        trésors[1] = new Trésor(NomTresor.LA_STATUE_DU_ZEPHYR);
-        trésors[2] = new Trésor(NomTresor.LE_CRISTAL_ARDENT);
-        trésors[3] = new Trésor(NomTresor.LE_CALICE_DE_L_ONDE);
+        trésors[0] = new Tresor(NomTresor.LA_PIERRE_SACREE);
+        trésors[1] = new Tresor(NomTresor.LA_STATUE_DU_ZEPHYR);
+        trésors[2] = new Tresor(NomTresor.LE_CRISTAL_ARDENT);
+        trésors[3] = new Tresor(NomTresor.LE_CALICE_DE_L_ONDE);
     }
 
     private boolean estTerminé() {
@@ -761,7 +760,7 @@ public class Controleur implements Observateur {
     private Aventurier getJoueurCourant() {
         return this.joueurCourant;
     }
-    private Trésor[] getTrésors() {
+    private Tresor[] getTrésors() {
         return trésors;
     }
     private int getNbJoueur() {
@@ -850,7 +849,7 @@ public class Controleur implements Observateur {
         this.nbJoueurs = 2;
         //this.nomJoueurs.put(new Pilote(), "j1");
         //this.nomJoueurs.put(new Messager(), "j2");
-        this.nomJoueurs.put(new Ingénieur(), "j3");
+        this.nomJoueurs.put(new Ingenieur(), "j3");
         this.nomJoueurs.put(new Plongeur(), "j4");
         debutJeu();
     }

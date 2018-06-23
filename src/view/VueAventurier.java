@@ -32,7 +32,7 @@ import model.Aventurier;
 import model.CarteOrange;
 import model.CarteTrésor;
 import model.Grille;
-import model.Trésor;
+import model.Tresor;
 
 /**
  *
@@ -664,7 +664,7 @@ public class VueAventurier extends Observe {
         this.grille.repaint();
     }
 
-    public void actualiserTrésor(Trésor[] trésors) {
+    public void actualiserTrésor(Tresor[] trésors) {
         if (trésors[1].isGagne()) {
             tresor1.setVisible(true);
         } else if (trésors[2].isGagne()) {

@@ -16,7 +16,7 @@ import java.util.Random;
 import javax.swing.*;
 import model.Aventurier;
 import model.Explorateur;
-import model.Ingénieur;
+import model.Ingenieur;
 import model.Messager;
 import model.Navigateur;
 import model.Pilote;
@@ -386,7 +386,7 @@ public class VueAccueil extends Observe {
         } else if (joueur.getAventurier() == "Navigateur") {
             aventurier = new Navigateur();
         } else if (joueur.getAventurier() == "Ingénieur") {
-            aventurier = new Ingénieur();
+            aventurier = new Ingenieur();
         } else if (joueur.getAventurier() == "Explorateur") {
             aventurier = new Explorateur();
         } else if (joueur.getAventurier() == "Messager") {
