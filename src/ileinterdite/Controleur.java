@@ -76,35 +76,37 @@ public class Controleur implements Observateur {
                 }
                 break;
             case ACTION_ASSECHER:
-                if (m.tuile.getSelected() == 1 && getJoueurCourant().getCouleur() == Pion.ROUGE && !pouvoirIngénieurUsé) {
-                    //il s'agit de l'ingénieur et c'est son premier assèchement.
-                    pouvoirIngénieurUsé = true;
-                    m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
-                    this.nbActions--;
-                    getGrille().deselectionnerTuiles();
-                    if (assechementPossible()) {
-                        gererAssechement();
-                    } else {
-                        actualiserJeu();
-                        getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
-                        getIHM().interfaceParDefaut(getJoueurCourant().getMain());
-                    }
-                } else if (m.tuile.getSelected() == 1 && getJoueurCourant().getCouleur() != Pion.ROUGE) { 
-                    //application en règle générale pour les autres aventuriers
-                    m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
-                    this.nbActions--;
-                    getGrille().deselectionnerTuiles();
-                    actualiserJeu();
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
-                    getIHM().interfaceParDefaut(getJoueurCourant().getMain());
-                } else { 
-                    if (m.tuile.getSelected() == 1) {
-                        //c'est l'ingénieur mais il a déjà assècher une fois.
+                if (m.tuile.getSelected() == 1) {
+                    if (getJoueurCourant().getCouleur() != Pion.ROUGE) { 
+                        //application en règle générale pour les autres aventuriers que l'ingénieur
                         m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
+                        this.nbActions--;
                         getGrille().deselectionnerTuiles();
                         actualiserJeu();
                         getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
                         getIHM().interfaceParDefaut(getJoueurCourant().getMain());
+                    } else {
+                        if (!pouvoirIngénieurUsé) {
+                            //il s'agit de l'ingénieur et c'est son premier assèchement.
+                            pouvoirIngénieurUsé = true;
+                            m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
+                            this.nbActions--;
+                            getGrille().deselectionnerTuiles();
+                            if (assechementPossible()) {
+                                gererAssechement();
+                            } else {
+                                actualiserJeu();
+                                getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
+                                getIHM().interfaceParDefaut(getJoueurCourant().getMain());
+                            }
+                        } else {
+                            //c'est l'ingénieur mais il a déjà assècher une fois.
+                            m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
+                            getGrille().deselectionnerTuiles();
+                            actualiserJeu();
+                            getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
+                            getIHM().interfaceParDefaut(getJoueurCourant().getMain());
+                        }
                     }
                 }
                 break;
@@ -506,11 +508,9 @@ public class Controleur implements Observateur {
             Tuile t = getGrille().getTuile(c.getInnonde().getNom());
             if (t.getEtat() == Utils.EtatTuile.ASSECHEE) {
                 t.setEtat(Utils.EtatTuile.INONDEE);
-                t.affiche();
                 addDefausseBleues(c);
             } else if (t.getEtat() == Utils.EtatTuile.INONDEE) {
                 t.setEtat(Utils.EtatTuile.COULEE);
-                t.affiche();
                 if (!t.getPossede().isEmpty() && !this.estPerdu()) {
                     boolean joueurNoyé = false;
                     int indice = 0;
