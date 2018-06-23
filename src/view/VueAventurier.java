@@ -272,14 +272,14 @@ public class VueAventurier extends Observe {
         layer4north.setBackground(new Color(255, 229, 204, 100));
 
         // COULEUR DES BOUTONS
-        bDepl.setBackground(new Color(255, 205, 0, 90));
-        bAss.setBackground(new Color(255, 205, 0, 90));
-        bPioch.setBackground(new Color(255, 205, 0, 90));
-        bGagner.setBackground(new Color(255, 205, 0, 90));
-        bAnnuler.setBackground(new Color(255, 45, 0, 90));
-        bFinir.setBackground(new Color(0, 180, 15, 90));
-        bSpecial.setBackground(new Color(170, 0, 255, 90));
-        bPerso.setBackground(new Color(125, 0, 0, 90));
+        bDepl.setBackground(new Color(255, 205, 0));
+        bAss.setBackground(new Color(255, 205, 0));
+        bPioch.setBackground(new Color(255, 205, 0));
+        bGagner.setBackground(new Color(255, 205, 0));
+        bAnnuler.setBackground(new Color(255, 45, 0));
+        bFinir.setBackground(new Color(0, 180, 15));
+        bSpecial.setBackground(new Color(170, 0, 255));
+        bPerso.setBackground(new Color(200, 0, 0));
         
         // ACTIONLISTENER DES BOUTONS
         bDepl.addActionListener(new ActionListener() {
