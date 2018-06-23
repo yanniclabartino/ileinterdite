@@ -279,7 +279,7 @@ public class VueAventurier extends Observe {
         bAnnuler.setBackground(new Color(255, 45, 0));
         bFinir.setBackground(new Color(0, 180, 15));
         bSpecial.setBackground(new Color(170, 0, 255));
-        bPerso.setBackground(new Color(200, 0, 0));
+        bPerso.setBackground(new Color(255, 205, 0));
         
         // ACTIONLISTENER DES BOUTONS
         bDepl.addActionListener(new ActionListener() {
