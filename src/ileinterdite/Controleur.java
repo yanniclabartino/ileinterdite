@@ -32,7 +32,7 @@ public class Controleur implements Observateur {
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
     private ArrayList<CarteOrange> defausseOranges;
-    private boolean pouvoirPiloteDispo, jeuEnCours;
+    private boolean pouvoirPiloteDispo, pouvoirIngénieurUsé, jeuEnCours;
     private int niveauEau, nbJoueurs, nbActions;
 
     @Override
@@ -58,6 +58,9 @@ public class Controleur implements Observateur {
                 break;
             case ACTION_DEPLACEMENT:
                 if (m.tuile.getSelected() != 0) {
+                    if (m.tuile.getSelected() == 2) {
+                        pouvoirPiloteDispo = false;
+                    }
                     getJoueurCourant().seDeplace(m.tuile);
                     this.nbActions--;
                     actualiserJeu();
@@ -76,10 +79,15 @@ public class Controleur implements Observateur {
                 if (m.tuile.getSelected() != 0) {
                     m.tuile.setEtat(Utils.EtatTuile.ASSECHEE);
                     this.nbActions--;
-                    actualiserJeu();
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
                     getGrille().deselectionnerTuiles();
-                    getIHM().interfaceParDefaut(getJoueurCourant().getMain());
+                    if (getJoueurCourant().getCouleur() == Pion.ROUGE && assechementPossible()) {
+                        gererAssechement();
+                        pouvoirIngénieurUsé = true;
+                    } else {
+                        actualiserJeu();
+                        getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
+                        getIHM().interfaceParDefaut(getJoueurCourant().getMain());
+                    }
                 }
                 break;
             case SOUHAITE_DONNER:
@@ -156,21 +164,24 @@ public class Controleur implements Observateur {
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = new ArrayList<Tuile>();
         ArrayList<Tuile> tuilesPilote = new ArrayList<Tuile>();
+        tuilesDispo.addAll(joueur.calculTuileDispo(g));
+        g.selectionTuileDispo(tuilesDispo, 1);
+        getIHM().afficherTuilesDispo();
         if (joueur.getCouleur() == Utils.Pion.BLEU && pouvoirPiloteDispo) {
             tuilesPilote.addAll(calculTouteTuileDispo(g));
+            tuilesPilote.removeAll(tuilesDispo);
             g.selectionTuileDispo(tuilesPilote, 2);
             getIHM().afficherTuilesPilote();
         }
-        tuilesDispo.addAll(joueur.calculTuileDispo(g));
-        tuilesPilote.removeAll(tuilesDispo);
-        System.out.println(tuilesDispo);
-        g.selectionTuileDispo(tuilesDispo, 1);
-        getIHM().afficherTuilesDispo();
     }
 
     private boolean assechementPossible() {
         ArrayList<Tuile> tuilesDispo = getJoueurCourant().calculTuileAss(getGrille());
-        return (!tuilesDispo.isEmpty());
+        if (getJoueurCourant().getCouleur() == Pion.ROUGE) {
+            return (!tuilesDispo.isEmpty() && !pouvoirIngénieurUsé);
+        } else {
+            return (!tuilesDispo.isEmpty());
+        }
     }
 
     private void gererAssechement() {
@@ -178,16 +189,8 @@ public class Controleur implements Observateur {
         Aventurier joueur = getJoueurCourant();
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = joueur.calculTuileAss(g);
-        int nbAssechement = 1;
-        //Si le joueur est un ingénieur : 
-        if ((joueur.getCouleur() == Utils.Pion.ROUGE) && (tuilesDispo.size() >= 2)) {
-            nbAssechement = 2;
-        }
-        //à compléter avec l'ihm en fonction du nombre d'assèchement possible.
-        for (int i = 0; i < nbAssechement; i++) {
-            g.selectionTuileDispo(tuilesDispo, 1);
-            getIHM().afficherTuilesDispo();
-        }
+        g.selectionTuileDispo(tuilesDispo, 1);
+        getIHM().afficherTuilesDispo();
     }
 
     private boolean donationPossible() {
@@ -548,7 +551,8 @@ public class Controleur implements Observateur {
         for (Aventurier a : getNomJoueurs().keySet()) {
             getJoueurs().add(a);
         }
-
+        this.pouvoirPiloteDispo = true;
+        this.pouvoirIngénieurUsé = false;
         this.jeuEnCours = true;
         Grille g = getGrille();
         //tout ceci dépendant du parametres.ALEAS
@@ -686,8 +690,10 @@ public class Controleur implements Observateur {
     private void actualiserJeu() {
 
         Aventurier jCourant = getJoueurCourant();
-
+        pouvoirIngénieurUsé = false;
+        
         if (getNbAction() == 0) {
+            pouvoirPiloteDispo = true;
             int indexJNext;
             if (getJoueurs().indexOf(jCourant) + 1 >= getNbJoueur()) {
                 indexJNext = 0;
