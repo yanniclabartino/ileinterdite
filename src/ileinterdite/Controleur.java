@@ -706,7 +706,7 @@ public class Controleur implements Observateur {
         getIHM().dessinCartes(getJoueurCourant().getMain());
         getIHM().dessinCarteAventurier(getJoueurCourant());
         getIHM().actualiserNiveauEau(getNiveau());
-           getIHM().actualiserNiveauEau(getNiveau() + 1);
+           getIHM().actualiserNiveauEau(getNiveau());
         if (getJoueurCourant().getCouleur() == Pion.JAUNE) {
             this.nbActions = 4;
         } else {
