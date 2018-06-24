@@ -281,7 +281,7 @@ public class VueAccueil extends Observe {
                 } else {
                     //création du message de début de partie
                     m.type = TypesMessages.COMMENCER;
-                    m.difficulté = choixDiff.getSelectedIndex();
+                    m.difficulté = choixDiff.getSelectedIndex()+1;
                     m.logs = ouiL.isSelected();
                     m.aleas = ouiA.isSelected();
                     m.nbJoueurs = (int)choixNbJoueurs.getSelectedItem();

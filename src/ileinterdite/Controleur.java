@@ -188,7 +188,7 @@ public class Controleur implements Observateur {
             this.sauvetageEnCours = false;
         }
     }
-    
+
     private boolean assechementPossible() {
         ArrayList<Tuile> tuilesDispo = getJoueurCourant().calculTuileAss(getGrille());
         return (!tuilesDispo.isEmpty());
@@ -201,29 +201,27 @@ public class Controleur implements Observateur {
         g.selectionTuileDispo(tuilesDispo, 1);
         getIHM().afficherTuilesDispo();
     }
-    private void assechement(Tuile t){
+    private void assechement(Tuile t) {
         if (t.getSelected() == 1) {
-            if (getJoueurCourant().getCouleur() != Pion.ROUGE) { 
+            if (getJoueurCourant().getCouleur() != Pion.ROUGE) {
                 //application en règle générale pour les autres aventuriers que l'ingénieur
                 t.setEtat(Utils.EtatTuile.ASSECHEE);
                 this.nbActions--;
                 actualiserJeu();
-            } else {
-                if (!pouvoirIngénieurUsé) {
-                    //il s'agit de l'ingénieur et c'est son premier assèchement.
-                    pouvoirIngénieurUsé = true;
-                    t.setEtat(Utils.EtatTuile.ASSECHEE);
-                    this.nbActions--;
-                    if (assechementPossible()) {
-                        gererAssechement();
-                    } else {
-                        actualiserJeu();
-                    }
+            } else if (!pouvoirIngénieurUsé) {
+                //il s'agit de l'ingénieur et c'est son premier assèchement.
+                pouvoirIngénieurUsé = true;
+                t.setEtat(Utils.EtatTuile.ASSECHEE);
+                this.nbActions--;
+                if (assechementPossible()) {
+                    gererAssechement();
                 } else {
-                    //c'est l'ingénieur mais il a déjà assècher une fois.
-                    t.setEtat(Utils.EtatTuile.ASSECHEE);
                     actualiserJeu();
                 }
+            } else {
+                //c'est l'ingénieur mais il a déjà assècher une fois.
+                t.setEtat(Utils.EtatTuile.ASSECHEE);
+                actualiserJeu();
             }
         } else {
             actualiserJeu();
@@ -274,7 +272,7 @@ public class Controleur implements Observateur {
         if (getJoueurCourant().getMain().get(numCarte).getRole().equals("Trésor")) {
             carteTMP = getJoueurCourant().getMain().get(numCarte);
             getIHM().afficherEtatAction(ihm.ETAT_DONNER_CARTE, null, null);
-            if (getJoueurCourant().getCouleur() == Pion.BLANC){
+            if (getJoueurCourant().getCouleur() == Pion.BLANC) {
                 for (Tuile t : getGrille().getGrille()) {
                     if (getJoueurCourant().getTuile() == t && t.getPossede().size() > 1) {
                         t.setSelected(1);
@@ -290,7 +288,7 @@ public class Controleur implements Observateur {
             actualiserJeu();
         }
     }
-    private void donation(Aventurier receveur){
+    private void donation(Aventurier receveur) {
         if (getJoueurCourant() != receveur && receveur.getMain().size() < 9 && receveur != null) {
             getJoueurCourant().defausseCarte(carteTMP);
             receveur.piocheCarte(carteTMP);
@@ -435,7 +433,7 @@ public class Controleur implements Observateur {
             actualiserJeu();
         }
     }
-    private void jouerSpecial(int numCarte){
+    private void jouerSpecial(int numCarte) {
         if (getJoueurCourant().getMain().get(numCarte).getRole().equals("Helicoptere") && specialePossible() == 1) {
             getJoueurCourant().defausseCarte(getJoueurCourant().getMain().get(numCarte));
             addDefausseOranges(getJoueurCourant().getMain().get(numCarte));
@@ -448,8 +446,8 @@ public class Controleur implements Observateur {
             getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_ASSECHER, getNomJoueurs().get(getJoueurCourant()), getNbAction());
         }
     }
-    
-    private void gererCarteSelect(int numCarte){
+
+    private void gererCarteSelect(int numCarte) {
         if ((getJoueurCourant().getMain().size() - 1) >= numCarte) {
             CarteOrange c = getJoueurCourant().getMain().get(numCarte);
             if (specialePossible() == 1 && c.getRole().equals("Helicoptere")) {
@@ -470,7 +468,7 @@ public class Controleur implements Observateur {
             getIHM().dessinCartes(getJoueurCourant().getMain());
         }
     }
-    
+
     private boolean gererCarteOrange() {
         /*
             ATTENTION : cette méthode influence les piles de cartes, il faudra donc rajouté des lignes pour actualiser l'IHM
@@ -510,7 +508,7 @@ public class Controleur implements Observateur {
                 addPiocheBleue(b);
             }
             viderDefausseBleues();
-            if (vue != null){
+            if (vue != null) {
                 vue.actualiserNiveauEau(niveauEau);
             }
         }
@@ -652,6 +650,7 @@ public class Controleur implements Observateur {
                 || (g.getTuile(NomTuile.LE_PALAIS_DE_CORAIL).getEtat() == coulee && g.getTuile(NomTuile.LE_PALAIS_DES_MAREES).getEtat() == coulee && !getTrésors()[3].isGagne())
                 || joueurVivant < nbJoueurs);
     }
+    
     private void debutJeu() {
         //méthode qui :
         /*
@@ -660,7 +659,7 @@ public class Controleur implements Observateur {
             - place les aventuriers
             - distribue les cartes Trésor
          */
-        
+
         for (Aventurier a : getNomJoueurs().keySet()) {
             getJoueurs().add(a);
         }
@@ -718,12 +717,14 @@ public class Controleur implements Observateur {
         getIHM().dessinCartes(getJoueurCourant().getMain());
         getIHM().dessinCarteAventurier(getJoueurCourant());
         getIHM().actualiserNiveauEau(getNiveau());
+        getIHM().actualiserNiveauEau(getNiveau());
         if (getJoueurCourant().getCouleur() == Pion.JAUNE) {
             this.nbActions = 4;
         } else {
             this.nbActions = 3;
         }
     }
+    
     private void actualiserJeu() {
         getIHM().actualiserNiveauEau(getNiveau());
         getGrille().deselectionnerTuiles();
@@ -805,11 +806,10 @@ public class Controleur implements Observateur {
             }
         }
     }
-
     //METHODES UTILES
     private void voirJoueur(Aventurier joueurAffiché) {
         Aventurier joueurSuivant;
-        if (getJoueurs().indexOf(joueurAffiché) + 1 >= getNbJoueur()){
+        if (getJoueurs().indexOf(joueurAffiché) + 1 >= getNbJoueur()) {
             joueurSuivant = getJoueurs().get(0);
         } else {
             joueurSuivant = getJoueurs().get(getJoueurs().indexOf(joueurAffiché) + 1);
@@ -913,6 +913,7 @@ public class Controleur implements Observateur {
     private void addPiocheOrange(CarteOrange c) {
         this.piocheOranges.push(c);
     }
+
     //défausse
     private ArrayList<CarteOrange> getDefausseOranges() {
         return this.defausseOranges;
