@@ -256,7 +256,7 @@ public class Controleur implements Observateur {
         }
     }
     private void donation(Aventurier receveur){
-        if (getJoueurCourant() != receveur && receveur.getMain().size() < 9) {
+        if (getJoueurCourant() != receveur && receveur.getMain().size() < 9 && receveur != null) {
             getJoueurCourant().defausseCarte(carteTMP);
             receveur.piocheCarte(carteTMP);
             nbActions--;
