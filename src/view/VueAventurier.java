@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -693,6 +694,7 @@ public class VueAventurier extends Observe {
         // PROPRIÉTÉS DU JFRAME
         window.setTitle("L'Île Interdite");
         window.setSize(lfenetre, hfenetre); // équivalent 16:9
+        window.setLocation((int)((Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2) - (window.getWidth() / 2)), (int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2) - (window.getHeight() / 2)));
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
         window.setResizable(false);
