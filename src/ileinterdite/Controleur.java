@@ -691,14 +691,14 @@ public class Controleur implements Observateur {
             }
         }
         this.joueurCourant = getJoueurs().get(0);
+        getIHM().dessinCartes(getJoueurCourant().getMain());
+        getIHM().dessinCarteAventurier(getJoueurCourant());
+        getIHM().actualiserNiveauEau(getNiveau());
         if (getJoueurCourant().getCouleur() == Pion.JAUNE) {
             this.nbActions = 4;
         } else {
             this.nbActions = 3;
         }
-        getIHM().dessinCartes(getJoueurCourant().getMain());
-        getIHM().dessinCarteAventurier(getJoueurCourant());
-        getIHM().actualiserNiveauEau(getNiveau());
     }
     private void actualiserJeu() {
         getIHM().actualiserNiveauEau(getNiveau());
