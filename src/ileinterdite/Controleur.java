@@ -700,6 +700,7 @@ public class Controleur implements Observateur {
         getIHM().actualiserNiveauEau(getNiveau());
     }
     private void actualiserJeu() {
+        getIHM().actualiserNiveauEau(getNiveau());
         getGrille().deselectionnerTuiles();
         boolean mainDuJoueurPleine = (getJoueurCourant().getMain().size() > 5);
         this.pouvoirIngénieurUsé = false;
@@ -774,74 +775,6 @@ public class Controleur implements Observateur {
                 }
             }
         }
-        
-        /*
-        Aventurier jCourant = getJoueurCourant();
-        getIHM().dessinCarteAventurier(jCourant);
-        
-        pouvoirIngénieurUsé = false;
-        boolean mainDuJoueurPleine = (jCourant.getMain().size() > 5);
-        
-        if (getNbAction() == 0) {
-            if (!this.àPioché) {
-                mainDuJoueurPleine = gererCarteOrange();
-            }
-            if (!mainDuJoueurPleine) {
-                gererCarteBleue();
-                pouvoirPiloteDispo = true;
-                int indexJNext;
-                if (getJoueurs().indexOf(jCourant) + 1 >= getNbJoueur()) {
-                    indexJNext = 0;
-                } else {
-                    indexJNext = getJoueurs().indexOf(jCourant) + 1;
-                }
-                this.joueurCourant = getJoueurs().get(indexJNext);
-                if (getJoueurCourant().getCouleur() == Pion.JAUNE) {
-                    this.nbActions = 4;
-                } else {
-                    this.nbActions = 3;
-                }
-                getIHM().dessinCarteAventurier(getJoueurCourant());
-                this.àPioché = false;
-                if (getJoueurCourant().getMain().size() > 5) {
-                    
-                } else {
-                    getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(jCourant), getNbAction());
-                    getGrille().deselectionnerTuiles();
-                    getIHM().interfaceParDefaut(getJoueurCourant().getMain());
-                }
-            } else {
-                this.àPioché = true;
-                getIHM().dessinCartes(jCourant.getMain());
-            }
-        } else {
-            getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(jCourant), getNbAction());
-            getGrille().deselectionnerTuiles();
-            getIHM().interfaceParDefaut(getJoueurCourant().getMain());
-        }*/
-
-        /*while (!this.estTerminé()) {}
-        //à compléter avec l'ihm.
-        if (estPerdu()) {
-            //partie perdue (a afficher sur l'ihm)
-            int joueurVivant = getNbJoueur();
-            for (Aventurier a : getNomJoueurs().keySet()) {
-                if (a.getTuile() == null) {
-                    joueurVivant--;
-                }
-            }
-            if (grille.getTuile(NomTuile.HELIPORT).getEtat() == Utils.EtatTuile.COULEE) {
-                //L'héliport à sombré.
-            } else if (getNiveau() >= 10) {
-                //Le niveau d'eau vous a submergé.
-            } else if (joueurVivant < getNbJoueur()) {
-                //Un de vos coéquipier à sombré.
-            } else {
-                //Les tuiles de trésor ont sombrées.
-            }
-        } else {
-            //Partie gagnée, WP !
-        }*/
     }
 
     //METHODES UTILES
