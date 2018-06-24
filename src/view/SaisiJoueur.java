@@ -16,7 +16,7 @@ public class SaisiJoueur extends JPanel {
 
     SaisiJoueur(Integer num) {
         titre = new JLabel("Joueur " + num);
-        nomJ = new JTextField();
+        nomJ = new JTextField("");
         choixAv = new JComboBox(avDispo);
         this.setLayout(new GridLayout(4, 1, 10, 10));
         JPanel nom = new JPanel(new GridLayout(1, 2));
@@ -50,7 +50,6 @@ public class SaisiJoueur extends JPanel {
     }
 
     public void setenabled(boolean b) {
-
         this.setEnabled(b);
         this.choixAv.setEnabled(b);
         this.nomJ.setEnabled(b);

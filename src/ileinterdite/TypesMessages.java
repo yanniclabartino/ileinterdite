@@ -22,9 +22,12 @@ public enum TypesMessages {
             - la tuile concerné
     */
     SOUHAITE_DONNER, /* type de message quand un joueur veut donner une carte. */
+    DONNER_CARTE, /* type de message quand un joueur selectionne une carte à donner, accompagné de :
+            - la carte a envoyer
+    */
     ACTION_DONNER, /*
     type de message quand un joueur donne une carte, accompagné de :
-            - le destinataire de cette carte
+            - destinataire de cette carte
     */
     ACTION_GAGNER_TRESOR, /* type de message quand un joueur veut gagner un trésor. */
     SOUHAITE_JOUER_SPECIALE, /* type de message quand un joueur veut jouer une carte spéciale. */

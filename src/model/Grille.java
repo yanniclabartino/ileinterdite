@@ -194,11 +194,33 @@ public class Grille extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         Dimension size = getSize();
-
+        
         double largeurTuile = (size.width / 6) * 0.89;
         double hauteurTuile = (size.height / 6) * 0.89;
         double ecartTuilesL = (size.width / 6) * 0.1;
         double ecartTuilesH = (size.height / 6) * 0.1;
+        
+        /* DESSIN DU FOND DE LA GRILLE */
+        g.setColor(new Color(135, 74, 48));
+        g.fillRect((int)(ecartTuilesL*2 + largeurTuile*2), (int) (ecartTuilesH), (int) (ecartTuilesL*3+largeurTuile*2), (int) (ecartTuilesH*5+hauteurTuile*6));
+        g.fillRect((int)(ecartTuilesL*3+largeurTuile*2),(int)(0),(int)(ecartTuilesL+largeurTuile*2),(int)(ecartTuilesH*7+hauteurTuile*6));
+        g.fillRect((int)(ecartTuilesL*2+largeurTuile),(int)(ecartTuilesH+hauteurTuile),(int)(largeurTuile*4+ecartTuilesL*3),(int)(hauteurTuile*4+ecartTuilesH*5));
+        g.fillRect((int)(ecartTuilesL+largeurTuile),(int)(ecartTuilesH*2+hauteurTuile),(int)(largeurTuile*4+ecartTuilesL*5),(int)(hauteurTuile*4+ecartTuilesH*3));
+        g.fillRect((int)(ecartTuilesL),(int)(ecartTuilesH*2+hauteurTuile*2),(int)(ecartTuilesL*5+largeurTuile*6),(int)(ecartTuilesH*3+hauteurTuile*2));
+        g.fillRect((int)(0),(int)(ecartTuilesH*3+hauteurTuile*2),(int)(ecartTuilesL*7+largeurTuile*6),(int)(hauteurTuile*2+ecartTuilesH));
+        g.fillOval((int)(ecartTuilesL*2+largeurTuile*2),(int)(0),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        g.fillOval((int)(ecartTuilesL*3+largeurTuile*4),(int)(0),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        g.fillOval((int)(ecartTuilesL*1+largeurTuile),(int)(ecartTuilesH+hauteurTuile),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        g.fillOval((int)(ecartTuilesL*4+largeurTuile*5),(int)(ecartTuilesH+hauteurTuile),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        g.fillOval((int)(0),(int)(ecartTuilesH*2+hauteurTuile*2),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        g.fillOval((int)(0),(int)(ecartTuilesH*3+hauteurTuile*4),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        g.fillOval((int)(ecartTuilesL*5+largeurTuile*6),(int)(ecartTuilesH*2+hauteurTuile*2),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        g.fillOval((int)(ecartTuilesL*5+largeurTuile*6),(int)(ecartTuilesH*3+hauteurTuile*4),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        g.fillOval((int)(ecartTuilesL+largeurTuile),(int)(ecartTuilesH*4+hauteurTuile*5),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        g.fillOval((int)(ecartTuilesL*4+largeurTuile*5),(int)(ecartTuilesH*4+hauteurTuile*5),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        g.fillOval((int)(ecartTuilesL*2+largeurTuile*2),(int)(ecartTuilesH*5+hauteurTuile*6),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        g.fillOval((int)(ecartTuilesL*3+largeurTuile*4),(int)(ecartTuilesH*5+hauteurTuile*6),(int)(ecartTuilesL*2),(int)(ecartTuilesH*2));
+        /*                             */
         
         int coordX, coordY;
         
@@ -247,8 +269,7 @@ public class Grille extends JPanel {
                                 break;
                         }
                     } else {
-                        g.clearRect(coordX, coordY, (int) largeurTuile, (int) hauteurTuile);
-                        g.setColor(new Color(0, 0, 0, 1));
+                        g.setColor(new Color(135, 74, 48));
                         g.fillRect(coordX, coordY, (int) largeurTuile, (int) hauteurTuile);
                     }
                     
@@ -285,4 +306,38 @@ public class Grille extends JPanel {
         }
     }
     
+    public Aventurier getAventurier(Tuile t, int X, int Y){
+        //X et Y sont les coordonées d'un clique sur une tuile de la grille.
+        X = X - 3; //pour régler la marge perdue
+        Y = Y - 3; //pour régler la marge perdue
+        
+        
+        Dimension size = getSize();
+        double largeurTuile = (size.width / 6) * 0.89;
+        double hauteurTuile = (size.height / 6) * 0.89;
+        double ecartTuilesL = (size.width / 6) * 0.1;
+        double ecartTuilesH = (size.height / 6) * 0.1;
+        
+        while (X > ecartTuilesL + largeurTuile) {
+            X = (int) (X - ecartTuilesL - largeurTuile);
+        }
+        while (Y > ecartTuilesH + hauteurTuile) {
+            Y = (int) (Y - ecartTuilesH - hauteurTuile);
+        }
+        if (Y >= 18+ecartTuilesH && Y <= 23+hauteurTuile/4+ecartTuilesH) {
+            X = X - (int) ecartTuilesL;
+            if (X >= 2 && X <= largeurTuile / 5 + 6 && !t.getPossede().isEmpty()){
+                return t.getPossede().get(0);
+            } else if (X >= 20 && X <= largeurTuile / 5 + 24 && t.getPossede().size() > 1) {
+                return t.getPossede().get(1);
+            } else if (X >= 38 && X <= largeurTuile / 5 + 42 && t.getPossede().size() > 2) {
+                return t.getPossede().get(2);
+            } else if (X >= 56 && X <= largeurTuile / 5 + 60 && t.getPossede().size() > 3) {
+                return t.getPossede().get(3);
+            } else {
+                return null;
+            }
+        }
+        return null;
+    }
 }

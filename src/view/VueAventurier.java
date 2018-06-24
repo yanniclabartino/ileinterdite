@@ -39,11 +39,12 @@ public class VueAventurier extends Observe {
     public static final int ETAT_SOUHAITE_DEPLACEMENT = 2;
     public static final int ETAT_SOUHAITE_ASSECHER = 3;
     public static final int ETAT_SOUHAITE_DONNER = 4;
-    public static final int ETAT_GAGNER_TRESOR = 5;
-    public static final int ETAT_TROP_CARTES = 6;
-    public static final int ETAT_SOUHAITE_JOUER_SPECIALE = 7;
-    public static final int ETAT_JOUEUR = 8;
-    public static final int ETAT_VOIR_JOUEUR = 9;
+    public static final int ETAT_DONNER_CARTE = 5;
+    public static final int ETAT_GAGNER_TRESOR = 6;
+    public static final int ETAT_TROP_CARTES = 7;
+    public static final int ETAT_SOUHAITE_JOUER_SPECIALE = 8;
+    public static final int ETAT_JOUEUR = 9;
+    public static final int ETAT_VOIR_JOUEUR = 10;
 
     private TypesMessages MESSAGE_PRECEDENT;
     private boolean cartesCliquable, cartesSpeCliquable;
@@ -88,10 +89,10 @@ public class VueAventurier extends Observe {
         Font font = new Font("Arial", Font.BOLD, 15);
         instructions.setFont(font);
 
-        tresor1 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/calice.png");
-        tresor2 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/cristal.png");;
-        tresor3 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/pierre.png");
-        tresor4 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/zephyr.png");
+        tresor1 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/pierre.png");
+        tresor2 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/zephyr.png");;
+        tresor3 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/cristal.png");
+        tresor4 = new ImagePanel(60, 90, System.getProperty("user.dir") + "/src/images/tresors/calice.png");
         niveauEau = new ImagePanel(130, 395, System.getProperty("user.dir") + "/src/images/autre/Niveau.png");
 
         carte1 = new ImagePanel(67, 100, "", 14);
@@ -279,7 +280,7 @@ public class VueAventurier extends Observe {
         bAnnuler.setBackground(new Color(255, 45, 0));
         bFinir.setBackground(new Color(0, 180, 15));
         bSpecial.setBackground(new Color(170, 0, 255));
-        bPerso.setBackground(new Color(255, 205, 0));
+        bPerso.setBackground(new Color(135, 74, 48));
         
         // ACTIONLISTENER DES BOUTONS
         bDepl.addActionListener(new ActionListener() {
@@ -377,16 +378,21 @@ public class VueAventurier extends Observe {
                     case ACTION_ASSECHER:
                         m.type = TypesMessages.ACTION_ASSECHER;
                         break;
-                    /*case SOUHAITE_DONNER:
+                    case DONNER_CARTE:
                         m.type = TypesMessages.ACTION_DONNER;
                         
-                        break;*/
+                        break;
                     case JOUER_SPECIALE:
+                    case SELECTIONNER_CARTE:
                         m.type = TypesMessages.ASSECHER;
                         break;
                 }
                 if (grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight()).getSelected() != 0) {
-                    m.tuile = grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight());
+                    if (m.type != TypesMessages.ACTION_DONNER) {
+                        m.tuile = grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight());
+                    } else {
+                        m.receveur = grille.getAventurier(grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight()), e.getX(), e.getY());
+                    }
                     MESSAGE_PRECEDENT = m.type;
                     notifierObservateur(m);
                 }
@@ -410,7 +416,11 @@ public class VueAventurier extends Observe {
             public void mouseClicked(MouseEvent e) {
                 if (cartesCliquable) {
                     Message m = new Message();
-                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    if (MESSAGE_PRECEDENT == TypesMessages.SOUHAITE_DONNER) {
+                        m.type = TypesMessages.DONNER_CARTE;
+                    } else {
+                        m.type = TypesMessages.SELECTIONNER_CARTE;
+                    }
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 0;
                     notifierObservateur(m);
@@ -436,7 +446,11 @@ public class VueAventurier extends Observe {
             public void mouseClicked(MouseEvent e) {
                 if (cartesCliquable) {
                     Message m = new Message();
-                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    if (MESSAGE_PRECEDENT == TypesMessages.SOUHAITE_DONNER) {
+                        m.type = TypesMessages.DONNER_CARTE;
+                    } else {
+                        m.type = TypesMessages.SELECTIONNER_CARTE;
+                    }
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 1;
                     notifierObservateur(m);
@@ -462,7 +476,11 @@ public class VueAventurier extends Observe {
             public void mouseClicked(MouseEvent e) {
                 if (cartesCliquable) {
                     Message m = new Message();
-                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    if (MESSAGE_PRECEDENT == TypesMessages.SOUHAITE_DONNER) {
+                        m.type = TypesMessages.DONNER_CARTE;
+                    } else {
+                        m.type = TypesMessages.SELECTIONNER_CARTE;
+                    }
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 2;
                     notifierObservateur(m);
@@ -488,7 +506,11 @@ public class VueAventurier extends Observe {
             public void mouseClicked(MouseEvent e) {
                 if (cartesCliquable) {
                     Message m = new Message();
-                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    if (MESSAGE_PRECEDENT == TypesMessages.SOUHAITE_DONNER) {
+                        m.type = TypesMessages.DONNER_CARTE;
+                    } else {
+                        m.type = TypesMessages.SELECTIONNER_CARTE;
+                    }
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 3;
                     notifierObservateur(m);
@@ -514,7 +536,11 @@ public class VueAventurier extends Observe {
             public void mouseClicked(MouseEvent e) {
                 if (cartesCliquable) {
                     Message m = new Message();
-                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    if (MESSAGE_PRECEDENT == TypesMessages.SOUHAITE_DONNER) {
+                        m.type = TypesMessages.DONNER_CARTE;
+                    } else {
+                        m.type = TypesMessages.SELECTIONNER_CARTE;
+                    }
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 4;
                     notifierObservateur(m);
@@ -540,7 +566,11 @@ public class VueAventurier extends Observe {
             public void mouseClicked(MouseEvent e) {
                 if (cartesCliquable) {
                     Message m = new Message();
-                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    if (MESSAGE_PRECEDENT == TypesMessages.SOUHAITE_DONNER) {
+                        m.type = TypesMessages.DONNER_CARTE;
+                    } else {
+                        m.type = TypesMessages.SELECTIONNER_CARTE;
+                    }
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 5;
                     notifierObservateur(m);
@@ -566,7 +596,11 @@ public class VueAventurier extends Observe {
             public void mouseClicked(MouseEvent e) {
                 if (cartesCliquable) {
                     Message m = new Message();
-                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    if (MESSAGE_PRECEDENT == TypesMessages.SOUHAITE_DONNER) {
+                        m.type = TypesMessages.DONNER_CARTE;
+                    } else {
+                        m.type = TypesMessages.SELECTIONNER_CARTE;
+                    }
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 6;
                     notifierObservateur(m);
@@ -592,7 +626,11 @@ public class VueAventurier extends Observe {
             public void mouseClicked(MouseEvent e) {
                 if (cartesCliquable) {
                     Message m = new Message();
-                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    if (MESSAGE_PRECEDENT == TypesMessages.SOUHAITE_DONNER) {
+                        m.type = TypesMessages.DONNER_CARTE;
+                    } else {
+                        m.type = TypesMessages.SELECTIONNER_CARTE;
+                    }
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 7;
                     notifierObservateur(m);
@@ -618,7 +656,11 @@ public class VueAventurier extends Observe {
             public void mouseClicked(MouseEvent e) {
                 if (cartesCliquable) {
                     Message m = new Message();
-                    m.type = TypesMessages.SELECTIONNER_CARTE;
+                    if (MESSAGE_PRECEDENT == TypesMessages.SOUHAITE_DONNER) {
+                        m.type = TypesMessages.DONNER_CARTE;
+                    } else {
+                        m.type = TypesMessages.SELECTIONNER_CARTE;
+                    }
                     MESSAGE_PRECEDENT = m.type;
                     m.numCarte = 8;
                     notifierObservateur(m);
@@ -685,6 +727,10 @@ public class VueAventurier extends Observe {
                 instructions.setText("Choissisez une carte à donner :");
                 break;
 
+            case ETAT_DONNER_CARTE:    
+                instructions.setText("Choisissez un aventurier sur la grille pour la lui céder");
+                break;
+                
             case ETAT_TROP_CARTES:
                 instructions.setText("Votre main est pleine, choisissez une carte à défausser/jouer");
                 break;
@@ -755,6 +801,8 @@ public class VueAventurier extends Observe {
 
     public void afficherTuilesDispo() {
         this.grille.repaint();
+        this.cartesCliquable = false;
+        this.cartesSpeCliquable = false;
         bDepl.setEnabled(false);
         bAss.setEnabled(false);
         bPioch.setEnabled(false);
@@ -769,6 +817,7 @@ public class VueAventurier extends Observe {
     }
 
     public void afficherJoueur(ArrayList<CarteOrange> cartes, Aventurier joueur) {
+        grille.repaint();
         dessinCarteAventurier(joueur);
         dessinCartes(cartes);
         this.affichageEnCours = joueur;
@@ -787,18 +836,22 @@ public class VueAventurier extends Observe {
         bPioch.setEnabled(false);
         bGagner.setEnabled(false);
         bSpecial.setEnabled(false);
-        bAnnuler.setEnabled(false);
+        if (MESSAGE_PRECEDENT == TypesMessages.SOUHAITE_DONNER) {
+            bAnnuler.setEnabled(true);
+        } else {
+            bAnnuler.setEnabled(false);
+        }
         bFinir.setEnabled(false);
     }
     
     public void actualiserTrésor(Tresor[] trésors) {
-        if (trésors[1].isGagne()) {
+        if (trésors[0].isGagne()) {
             tresor1.setVisible(true);
-        } else if (trésors[2].isGagne()) {
+        } else if (trésors[1].isGagne()) {
             tresor2.setVisible(true);
-        } else if (trésors[3].isGagne()) {
+        } else if (trésors[2].isGagne()) {
             tresor3.setVisible(true);
-        } else if (trésors[4].isGagne()) {
+        } else if (trésors[3].isGagne()) {
             tresor4.setVisible(true);
         }
     }

@@ -283,15 +283,14 @@ public class VueAccueil extends Observe {
                     m.type = TypesMessages.COMMENCER;
                     m.difficulté = choixDiff.getSelectedIndex();
                     m.logs = ouiL.isSelected();
+                    m.aleas = ouiA.isSelected();
                     m.nbJoueurs = (int)choixNbJoueurs.getSelectedItem();
                     m.joueurs = new HashMap<>();
                     for (SaisiJoueur joueur : saisiJoueurs) {
                         if(joueur.isEnabled()){               //si le nom du joueur n'as pas était saisi on renvoi "Joueur 1" ou "Joueur 2" etc. selon le rang du joueur
-                            m.joueurs.put(stringEnAventurier(joueur), (joueur.getNom().equals(null))?"Joueur "+(saisiJoueurs.indexOf(joueur)+1):joueur.getNom());
+                            m.joueurs.put(stringEnAventurier(joueur), (joueur.getNom().equals(""))?"Joueur "+(saisiJoueurs.indexOf(joueur)+1):joueur.getNom());
                         }
-                        m.aleas = ouiA.isSelected();
                     }
-
                     notifierObservateur(m);
                 }
             }
@@ -433,6 +432,12 @@ public class VueAccueil extends Observe {
             }
             
         }
+    }
+    
+    public void fermer(){
+        this.setVisible(false);
+        this.validate();
+        this.repaint();
     }
     
 }
