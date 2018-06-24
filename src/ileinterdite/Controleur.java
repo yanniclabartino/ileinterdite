@@ -139,6 +139,7 @@ public class Controleur implements Observateur {
         if (joueur.getCouleur() == Utils.Pion.BLEU && pouvoirPiloteDispo) {
             tuilesPilote.addAll(calculTouteTuileDispo());
             tuilesPilote.removeAll(tuilesDispo);
+            tuilesPilote.remove(joueur.getTuile());
             g.selectionTuileDispo(tuilesPilote, 2);
             getIHM().afficherTuilesPilote();
         }
