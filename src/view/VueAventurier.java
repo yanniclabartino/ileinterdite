@@ -918,7 +918,6 @@ public class VueAventurier extends Observe {
     public void actualiserDefausseB(CarteBleue carte){
         if (carte != null) {
             defausseB.setImage(System.getProperty("user.dir") + "/src/images/cartes/" + carte.getInnonde().getNom().toString() + ".png");
-            System.out.println("l'image de"+ carte.getInnonde().getNom().toString() +"est ajoutée a la pioche");
         } else {
             defausseB.setImage(System.getProperty("user.dir") + "/src/images/cartes/Vide bleu.png");
         }

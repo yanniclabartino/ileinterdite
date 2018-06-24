@@ -19,4 +19,8 @@ public class Tresor {
     public void setGagne(boolean gagne) {
         this.gagne = gagne;
     }
+    
+    public void affiche() {
+        System.out.println("\tTrésor \033[33;34m"+this.nom.toString()+"\033[36m"+(this.isGagne() ? "est gagné." : "n'est pas encore gagné") + "\033[0m");
+    }
 }

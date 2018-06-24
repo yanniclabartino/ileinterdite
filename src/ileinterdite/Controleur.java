@@ -110,12 +110,21 @@ public class Controleur implements Observateur {
                 break;
             case FINIR_TOUR:
                 this.nbActions = 0;
+                if (Parameters.LOGS) {
+                    System.out.println("\t\033[31mFin du tour\033[0m");
+                }
                 actualiserJeu();
                 break;
             case ANNULER:
+                if (Parameters.LOGS) {
+                    System.out.println("\033[31mAnulation\033[0m");
+                }
                 actualiserJeu();
                 break;
             case QUITTER :
+                if (Parameters.LOGS) {
+                    System.out.println("\n\n\t\t\033[31;45;4;21mFermeture du jeu\033[0m\n\n");
+                }
                 getIHM().quitter();
         }
     }
@@ -156,6 +165,9 @@ public class Controleur implements Observateur {
                 pouvoirPiloteDispo = false;
             }
             joueur.seDeplace(t);
+            if (Parameters.LOGS) {
+                System.out.println("\t\033[32;46mLe joueur "+getNomJoueurs().get(joueur)+" s'est déplacé sur la tuile "+t.getNom().toString()+".\033[0m");
+            }
             if (!sauvetageEnCours){
                 this.nbActions--;
             }
@@ -175,7 +187,9 @@ public class Controleur implements Observateur {
             }
         }
         if (sauvetageNecessaire) {
-            System.out.println("Sauvetage nécessaire du joueur : "+nomJoueur+" "+joueurSubmergé.getClass());
+            if (Parameters.LOGS) {
+                System.out.println("\t\033[31mSauvetage nécéssaire du joueur : "+nomJoueur+"\033[0m");
+            }
             if (deplacementPossible(joueurSubmergé)) {
                 getIHM().afficherEtatAction(ihm.ETAT_SAUVETAGE, nomJoueur, null);
                 gererDeplacement(joueurSubmergé);
@@ -206,12 +220,20 @@ public class Controleur implements Observateur {
             if (getJoueurCourant().getCouleur() != Pion.ROUGE) {
                 //application en règle générale pour les autres aventuriers que l'ingénieur
                 t.setEtat(Utils.EtatTuile.ASSECHEE);
+                if (Parameters.LOGS) {
+                    System.out.println("\033[32mAsséchement de la tuile :\033[0m");
+                    t.affiche();
+                }
                 this.nbActions--;
                 actualiserJeu();
             } else if (!pouvoirIngénieurUsé) {
                 //il s'agit de l'ingénieur et c'est son premier assèchement.
                 pouvoirIngénieurUsé = true;
                 t.setEtat(Utils.EtatTuile.ASSECHEE);
+                if (Parameters.LOGS) {
+                    System.out.println("\033[32mAsséchement de la tuile :\033[0m");
+                    t.affiche();
+                }
                 this.nbActions--;
                 if (assechementPossible()) {
                     gererAssechement();
@@ -221,6 +243,10 @@ public class Controleur implements Observateur {
             } else {
                 //c'est l'ingénieur mais il a déjà assècher une fois.
                 t.setEtat(Utils.EtatTuile.ASSECHEE);
+                if (Parameters.LOGS) {
+                    System.out.println("\033[32mAsséchement de la tuile :\033[0m");
+                    t.affiche();
+                }
                 actualiserJeu();
             }
         } else {
@@ -291,6 +317,9 @@ public class Controleur implements Observateur {
     private void donation(Aventurier receveur) {
         if (getJoueurCourant() != receveur && receveur.getMain().size() < 9 && receveur != null) {
             getJoueurCourant().defausseCarte(carteTMP);
+            if (Parameters.LOGS) {
+                System.out.println("\033[32mDonation de la carte.\033[0m");
+            }
             receveur.piocheCarte(carteTMP);
             nbActions--;
             getIHM().dessinCartes(getJoueurCourant().getMain());
@@ -336,6 +365,10 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[0].setGagne(true);
+                        if (Parameters.LOGS) {
+                            System.out.println("\033[33mVous avez gagné le Trésor :\033[0m");
+                            getTrésors()[0].affiche();
+                        }
                     }
                 } else if (joueur.getTuile().getNom() == NomTuile.LE_JARDIN_DES_HURLEMENTS || joueur.getTuile().getNom() == NomTuile.LE_JARDIN_DES_MURMURES) {
                     if (nbCarteTresorSZ >= 4) {
@@ -348,6 +381,10 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[1].setGagne(true);
+                        if (Parameters.LOGS) {
+                            System.out.println("\033[mVous avez gagné le Trésor :\033[0m");
+                            getTrésors()[1].affiche();
+                        }
                     }
                 } else if (joueur.getTuile().getNom() == NomTuile.LA_CAVERNE_DES_OMBRES || joueur.getTuile().getNom() == NomTuile.LA_CAVERNE_DES_OMBRES) {
                     if (nbCarteTresorCA >= 4) {
@@ -360,6 +397,10 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[2].setGagne(true);
+                        if (Parameters.LOGS) {
+                            System.out.println("\033[mVous avez gagné le Trésor :\033[0m");
+                            getTrésors()[2].affiche();
+                        }
                     }
                 } else if (joueur.getTuile().getNom() == NomTuile.LE_PALAIS_DE_CORAIL || joueur.getTuile().getNom() == NomTuile.LE_PALAIS_DES_MAREES) {
                     if (nbCarteTresorCO >= 4) {
@@ -372,11 +413,18 @@ public class Controleur implements Observateur {
                             }
                         }
                         getTrésors()[3].setGagne(true);
+                        if (Parameters.LOGS) {
+                            System.out.println("\033[mVous avez gagné le Trésor :\033[0m");
+                            getTrésors()[3].affiche();
+                        }
                     }
                 }
             }
         }
         getIHM().actualiserTrésor(getTrésors());
+        if (Parameters.LOGS) {
+            System.out.println("\t\033[33mNombre d'action(s) réstante(s) : \033[31;43m"+getNbAction()+"\033[0m");
+        }
         actualiserJeu();
     }
 
@@ -426,9 +474,15 @@ public class Controleur implements Observateur {
         if (specialePossible() == 1) {
             getIHM().afficheCartesHelico(getJoueurCourant().getMain());
             getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_JOUER_SPECIALE, getNomJoueurs().get(getJoueurCourant()), getNbAction());
+            if (Parameters.LOGS) {
+                System.out.println("\033[32mVous pouvez cliquer sur une carte Helicoptère pour la jouer\033[0m");
+            }
         } else if (specialePossible() == 2) {
             getIHM().afficheCartesSac(getJoueurCourant().getMain());
             getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_JOUER_SPECIALE, getNomJoueurs().get(getJoueurCourant()), getNbAction());
+            if (Parameters.LOGS) {
+                System.out.println("\033[32mVous pouvez cliquer sur une carte Sac de sable pour la jouer\033[0m");
+            }
         } else {
             actualiserJeu();
         }
@@ -450,6 +504,10 @@ public class Controleur implements Observateur {
     private void gererCarteSelect(int numCarte) {
         if ((getJoueurCourant().getMain().size() - 1) >= numCarte) {
             CarteOrange c = getJoueurCourant().getMain().get(numCarte);
+            if (Parameters.LOGS) {
+                System.out.println("\033[32mVous avez sélectionnez cette carte :\033[0m");
+                c.affiche();
+            }
             if (specialePossible() == 1 && c.getRole().equals("Helicoptere")) {
                 getJoueurCourant().defausseCarte(c);
                 addDefausseOranges(c);
@@ -470,10 +528,7 @@ public class Controleur implements Observateur {
     }
 
     private boolean gererCarteOrange() {
-        /*
-            ATTENTION : cette méthode influence les piles de cartes, il faudra donc rajouté des lignes pour actualiser l'IHM
-         */
- /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
+        /*Méthode qui permet a un joueur de piocher deux cartes a la fin de son tour*/
         Aventurier joueur = getJoueurCourant();
         boolean mainTropPleine = true;
         boolean carteMDEpiochée = false;
@@ -490,11 +545,17 @@ public class Controleur implements Observateur {
                 viderDefausseOranges();
             }
         }
+        if (Parameters.LOGS) {
+            System.out.println("\033[33mVous avez pioché deux cartes oranges\033[0m");
+        }
         //Pour les cartes les piochées, on vérifie si celle-ci sont des cartes "montée des eaux"
         for (CarteOrange c : cartesPiochées) {
             if (c.getRole().equals("Montée des eaux")) {
                 this.niveauEau++;
                 carteMDEpiochée = true;
+                if (Parameters.LOGS) {
+                    System.out.println("\033[36mCarte montée des eaux piochée, le niveau d'eau monte et passe à : \033[34;45m"+getNiveau()+"\033[0m");
+                }
                 addDefausseOranges(c);
             } else {
                 joueur.piocheCarte(c);
@@ -508,9 +569,7 @@ public class Controleur implements Observateur {
                 addPiocheBleue(b);
             }
             viderDefausseBleues();
-            if (vue != null) {
-                vue.actualiserNiveauEau(niveauEau);
-            }
+            vue.actualiserNiveauEau(niveauEau);
         }
         //Si la main contient plus de 5 cartes
         if (joueur.getMain().size() > 5) {
@@ -532,6 +591,9 @@ public class Controleur implements Observateur {
         } else {
             nbPioche = 2;
         }
+        if (Parameters.LOGS) {
+            System.out.println("\033[35mLe niveau d'eau s'élève à : "+nivEau+", vous piochez donc : "+nbPioche+" cartes\033[0m");
+        }
         CarteBleue c;
         //On influence donc l'état de la tuile concernée par cette carte
         for (int i = 0; i < nbPioche; i++) {
@@ -547,9 +609,10 @@ public class Controleur implements Observateur {
                 }
             }
             if (getPiocheBleues().empty()) {
-                if (Parameters.ALEAS) {
-                    Collections.shuffle(getDefausseBleues());
+                if (Parameters.LOGS) {
+                    System.out.println("\033[34;36mMélange de la défausse de carte bleues sur la pile\033[0m");
                 }
+                Collections.shuffle(getDefausseBleues());
                 for (CarteBleue b : getDefausseBleues()) {
                     addPiocheBleue(b);
                 }
@@ -574,6 +637,9 @@ public class Controleur implements Observateur {
         ihm = new VueAventurier(getGrille());
         ihm.addObservateur(this);
         iniCartes();
+        if (Parameters.LOGS) {
+            System.out.println("\033[31;44mJeu initialisé au complet.\033[0m");
+        }
     }
     private void iniCartes() {
         //Création des cartes oranges (trésor)        
@@ -607,6 +673,9 @@ public class Controleur implements Observateur {
         for (CarteBleue c : tmpBleues) {
             piocheBleues.push(c);
         }
+        if (Parameters.LOGS) {
+            System.out.println("\033[32mCartes initialisées\033[0m");
+        }
     }
     private void iniGrille() {
         //Génération des 24 tuiles
@@ -619,6 +688,9 @@ public class Controleur implements Observateur {
             Collections.shuffle(Tuiles);
         }
         grille = new Grille(Tuiles);
+        if (Parameters.LOGS) {
+            System.out.println("\033[32mGrille initialisée\033[0m");
+        }
     }
     private void iniTrésor() {
         //Création des Trésors
@@ -626,6 +698,9 @@ public class Controleur implements Observateur {
         trésors[1] = new Tresor(NomTresor.LA_STATUE_DU_ZEPHYR);
         trésors[2] = new Tresor(NomTresor.LE_CRISTAL_ARDENT);
         trésors[3] = new Tresor(NomTresor.LE_CALICE_DE_L_ONDE);
+        if (Parameters.LOGS) {
+            System.out.println("\033[32mTrésors initialisés\033[0m");
+        }
     }
 
     private boolean estTerminé() {
@@ -635,13 +710,11 @@ public class Controleur implements Observateur {
         Grille g = getGrille();
         Utils.EtatTuile coulee = Utils.EtatTuile.COULEE;
         int joueurVivant = getNbJoueur();
-        System.out.println("Nombre joueur = "+getNbJoueur());
         for (Aventurier a : getJoueurs()) {
             if (a.getTuile().getEtat() == Utils.EtatTuile.COULEE) {
                 joueurVivant--;
             }
         }
-        System.out.println("Joueurs vivants : "+joueurVivant);
         return (g.getTuile(NomTuile.HELIPORT).getEtat() == coulee
                 || getNiveau() >= 10
                 || (g.getTuile(NomTuile.LE_TEMPLE_DU_SOLEIL).getEtat() == coulee && g.getTuile(NomTuile.LE_TEMPLE_DE_LA_LUNE).getEtat() == coulee && !getTrésors()[0].isGagne())
@@ -717,14 +790,15 @@ public class Controleur implements Observateur {
         getIHM().dessinCartes(getJoueurCourant().getMain());
         getIHM().dessinCarteAventurier(getJoueurCourant());
         getIHM().actualiserNiveauEau(getNiveau());
-        getIHM().actualiserNiveauEau(getNiveau());
         if (getJoueurCourant().getCouleur() == Pion.JAUNE) {
             this.nbActions = 4;
         } else {
             this.nbActions = 3;
         }
+        if (Parameters.LOGS) {
+            System.out.println("\033[31mLe jeu commence...\033[0m");
+        }
     }
-    
     private void actualiserJeu() {
         getIHM().actualiserNiveauEau(getNiveau());
         getGrille().deselectionnerTuiles();
@@ -733,9 +807,12 @@ public class Controleur implements Observateur {
         if (this.estTerminé() && !sauvetageEnCours) {
             if (this.estPerdu()) {
                 //partie perdue (a afficher sur l'ihm)
+                if (Parameters.LOGS) {
+                    System.out.println("\033[31mPartie perdue... Fin du jeu\033[0m");
+                }
                 int joueurVivant = getNbJoueur();
                 for (Aventurier a : getJoueurs()) {
-                    if (a.getTuile() == null) {
+                    if (a.getTuile().getEtat()==Utils.EtatTuile.COULEE) {
                         joueurVivant--;
                     }
                 }
@@ -750,6 +827,9 @@ public class Controleur implements Observateur {
                 }
             } else {
                 getIHM().etatFin(4);
+                if (Parameters.LOGS) {
+                    System.out.println("\033[33mPartie gagnée !\033[0m");
+                }
             }
         } else {
             if (getNbAction() == 0) {
@@ -806,6 +886,7 @@ public class Controleur implements Observateur {
             }
         }
     }
+    
     //METHODES UTILES
     private void voirJoueur(Aventurier joueurAffiché) {
         Aventurier joueurSuivant;
