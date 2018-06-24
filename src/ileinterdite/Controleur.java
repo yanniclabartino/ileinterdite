@@ -32,7 +32,7 @@ public class Controleur implements Observateur {
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
     private ArrayList<CarteOrange> defausseOranges;
-    
+
     private boolean pouvoirPiloteDispo, pouvoirIngénieurUsé, jeuEnCours, àPioché;
     private int niveauEau, nbJoueurs, nbActions;
     private CarteOrange carteTMP;
@@ -129,6 +129,7 @@ public class Controleur implements Observateur {
         }
         return !deplDispo;
     }
+
     private void gererDeplacement(Aventurier joueur) {
         Grille g = getGrille();
         ArrayList<Tuile> tuilesDispo = new ArrayList<Tuile>();
@@ -144,7 +145,8 @@ public class Controleur implements Observateur {
             getIHM().afficherTuilesPilote();
         }
     }
-    private void deplacement(Tuile t){
+
+    private void deplacement(Tuile t) {
         if (t.getSelected() != 0) {
             if (t.getSelected() == 2) {
                 pouvoirPiloteDispo = false;
@@ -154,11 +156,12 @@ public class Controleur implements Observateur {
         }
         actualiserJeu();
     }
-    
+
     private boolean assechementPossible() {
         ArrayList<Tuile> tuilesDispo = getJoueurCourant().calculTuileAss(getGrille());
         return (!tuilesDispo.isEmpty());
     }
+
     private void gererAssechement() {
         //méthode qui permet a un aventurier d'assécher une tuile
         Aventurier joueur = getJoueurCourant();
@@ -167,29 +170,28 @@ public class Controleur implements Observateur {
         g.selectionTuileDispo(tuilesDispo, 1);
         getIHM().afficherTuilesDispo();
     }
-    private void assechement(Tuile t){
+
+    private void assechement(Tuile t) {
         if (t.getSelected() == 1) {
-            if (getJoueurCourant().getCouleur() != Pion.ROUGE) { 
+            if (getJoueurCourant().getCouleur() != Pion.ROUGE) {
                 //application en règle générale pour les autres aventuriers que l'ingénieur
                 t.setEtat(Utils.EtatTuile.ASSECHEE);
                 this.nbActions--;
                 actualiserJeu();
-            } else {
-                if (!pouvoirIngénieurUsé) {
-                    //il s'agit de l'ingénieur et c'est son premier assèchement.
-                    pouvoirIngénieurUsé = true;
-                    t.setEtat(Utils.EtatTuile.ASSECHEE);
-                    this.nbActions--;
-                    if (assechementPossible()) {
-                        gererAssechement();
-                    } else {
-                        actualiserJeu();
-                    }
+            } else if (!pouvoirIngénieurUsé) {
+                //il s'agit de l'ingénieur et c'est son premier assèchement.
+                pouvoirIngénieurUsé = true;
+                t.setEtat(Utils.EtatTuile.ASSECHEE);
+                this.nbActions--;
+                if (assechementPossible()) {
+                    gererAssechement();
                 } else {
-                    //c'est l'ingénieur mais il a déjà assècher une fois.
-                    t.setEtat(Utils.EtatTuile.ASSECHEE);
                     actualiserJeu();
                 }
+            } else {
+                //c'est l'ingénieur mais il a déjà assècher une fois.
+                t.setEtat(Utils.EtatTuile.ASSECHEE);
+                actualiserJeu();
             }
         } else {
             actualiserJeu();
@@ -236,11 +238,12 @@ public class Controleur implements Observateur {
         }
         return !donnDispo;
     }
+
     private void gererDonation(int numCarte) {
         if (getJoueurCourant().getMain().get(numCarte).getRole().equals("Trésor")) {
             carteTMP = getJoueurCourant().getMain().get(numCarte);
             getIHM().afficherEtatAction(ihm.ETAT_DONNER_CARTE, null, null);
-            if (getJoueurCourant().getCouleur() == Pion.BLANC){
+            if (getJoueurCourant().getCouleur() == Pion.BLANC) {
                 for (Tuile t : getGrille().getGrille()) {
                     if (getJoueurCourant().getTuile() == t && t.getPossede().size() > 1) {
                         t.setSelected(1);
@@ -256,7 +259,8 @@ public class Controleur implements Observateur {
             actualiserJeu();
         }
     }
-    private void donation(Aventurier receveur){
+
+    private void donation(Aventurier receveur) {
         if (getJoueurCourant() != receveur && receveur.getMain().size() < 9 && receveur != null) {
             getJoueurCourant().defausseCarte(carteTMP);
             receveur.piocheCarte(carteTMP);
@@ -390,6 +394,7 @@ public class Controleur implements Observateur {
         }
         return 0;
     }
+
     private void gererCarteSpecial() {
         if (specialePossible() == 1) {
             getIHM().afficheCartesHelico(getJoueurCourant().getMain());
@@ -401,7 +406,8 @@ public class Controleur implements Observateur {
             actualiserJeu();
         }
     }
-    private void jouerSpecial(int numCarte){
+
+    private void jouerSpecial(int numCarte) {
         if (getJoueurCourant().getMain().get(numCarte).getRole().equals("Helicoptere") && specialePossible() == 1) {
             getJoueurCourant().defausseCarte(getJoueurCourant().getMain().get(numCarte));
             addDefausseOranges(getJoueurCourant().getMain().get(numCarte));
@@ -414,8 +420,8 @@ public class Controleur implements Observateur {
             getIHM().afficherEtatAction(ihm.ETAT_SOUHAITE_ASSECHER, getNomJoueurs().get(getJoueurCourant()), getNbAction());
         }
     }
-    
-    private void gererCarteSelect(int numCarte){
+
+    private void gererCarteSelect(int numCarte) {
         if ((getJoueurCourant().getMain().size() - 1) >= numCarte) {
             CarteOrange c = getJoueurCourant().getMain().get(numCarte);
             if (specialePossible() == 1 && c.getRole().equals("Helicoptere")) {
@@ -436,7 +442,7 @@ public class Controleur implements Observateur {
             getIHM().dessinCartes(getJoueurCourant().getMain());
         }
     }
-    
+
     private boolean gererCarteOrange() {
         /*
             ATTENTION : cette méthode influence les piles de cartes, il faudra donc rajouté des lignes pour actualiser l'IHM
@@ -476,7 +482,7 @@ public class Controleur implements Observateur {
                 addPiocheBleue(b);
             }
             viderDefausseBleues();
-            if (vue != null){
+            if (vue != null) {
                 vue.actualiserNiveauEau(niveauEau);
             }
         }
@@ -486,6 +492,7 @@ public class Controleur implements Observateur {
         }
         return !mainTropPleine;
     }
+
     private void gererCarteBleue() {
         /*Méthode qui permet au joueur de piocher des cartes innondation a la fin de son tour*/
         //On pioche un certain nombre de cartes en fonction du niveau d'eau
@@ -555,6 +562,7 @@ public class Controleur implements Observateur {
         ihm.addObservateur(this);
         iniCartes();
     }
+
     private void iniCartes() {
         //Création des cartes oranges (trésor)        
         ArrayList<CarteOrange> tmpOranges = new ArrayList<CarteOrange>();
@@ -588,6 +596,7 @@ public class Controleur implements Observateur {
             piocheBleues.push(c);
         }
     }
+
     private void iniGrille() {
         //Génération des 24 tuiles
         ArrayList<Tuile> Tuiles = new ArrayList<Tuile>();
@@ -600,6 +609,7 @@ public class Controleur implements Observateur {
         }
         grille = new Grille(Tuiles);
     }
+
     private void iniTrésor() {
         //Création des Trésors
         trésors[0] = new Tresor(NomTresor.LA_PIERRE_SACREE);
@@ -611,6 +621,7 @@ public class Controleur implements Observateur {
     private boolean estTerminé() {
         return (estPerdu() || !jeuEnCours);
     }
+
     private boolean estPerdu() {
         Grille g = getGrille();
         Utils.EtatTuile coulee = Utils.EtatTuile.COULEE;
@@ -628,6 +639,7 @@ public class Controleur implements Observateur {
                 || (g.getTuile(NomTuile.LE_PALAIS_DE_CORAIL).getEtat() == coulee && g.getTuile(NomTuile.LE_PALAIS_DES_MAREES).getEtat() == coulee && !getTrésors()[3].isGagne())
                 || joueurVivant < nbJoueurs);
     }
+
     private void debutJeu() {
         //méthode qui :
         /*
@@ -636,7 +648,7 @@ public class Controleur implements Observateur {
             - place les aventuriers
             - distribue les cartes Trésor
          */
-        
+
         for (Aventurier a : getNomJoueurs().keySet()) {
             getJoueurs().add(a);
         }
@@ -696,10 +708,13 @@ public class Controleur implements Observateur {
         getIHM().actualiserNiveauEau(getNiveau());
         if (getJoueurCourant().getCouleur() == Pion.JAUNE) {
             this.nbActions = 4;
+            getIHM().actualiserNiveauEau(getNiveau() + 1);
         } else {
             this.nbActions = 3;
+            getIHM().actualiserNiveauEau(getNiveau());
         }
     }
+
     private void actualiserJeu() {
         getIHM().actualiserNiveauEau(getNiveau());
         getGrille().deselectionnerTuiles();
@@ -726,62 +741,58 @@ public class Controleur implements Observateur {
             } else {
                 //à compléter (victoire).
             }
-        } else {
-            if (getNbAction() == 0) {
-                if (!this.àPioché) {
-                    mainDuJoueurPleine = gererCarteOrange();
-                }
-                if (mainDuJoueurPleine) {
-                    this.àPioché = true;
-                    getIHM().dessinCartes(getJoueurCourant().getMain());
-                    getIHM().afficherEtatAction(ihm.ETAT_TROP_CARTES, getNomJoueurs().get(getJoueurCourant()), null);
-                    getIHM().selectionCarte();
-                } else {
-                    gererCarteBleue();
-                    pouvoirPiloteDispo = true;
-                    int indexJNext;
-                    if (getJoueurs().indexOf(getJoueurCourant()) + 1 >= getNbJoueur()) {
-                        indexJNext = 0;
-                    } else {
-                        indexJNext = getJoueurs().indexOf(getJoueurCourant()) + 1;
-                    }
-                    this.joueurCourant = getJoueurs().get(indexJNext);
-                    if (getJoueurCourant().getCouleur() == Pion.JAUNE) {
-                        this.nbActions = 4;
-                    } else {
-                        this.nbActions = 3;
-                    }
-                    getIHM().dessinCarteAventurier(getJoueurCourant());
-                    this.àPioché = false;
-                    if (getJoueurCourant().getMain().size() <= 5) {
-                        getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
-                        getGrille().deselectionnerTuiles();
-                        getIHM().interfaceParDefaut(getJoueurCourant().getMain());
-                    } else {
-                        getIHM().afficherEtatAction(ihm.ETAT_TROP_CARTES, getNomJoueurs().get(getJoueurCourant()), null);
-                        getIHM().dessinCartes(getJoueurCourant().getMain());
-                        getIHM().selectionCarte();
-                    }
-                }
+        } else if (getNbAction() == 0) {
+            if (!this.àPioché) {
+                mainDuJoueurPleine = gererCarteOrange();
+            }
+            if (mainDuJoueurPleine) {
+                this.àPioché = true;
+                getIHM().dessinCartes(getJoueurCourant().getMain());
+                getIHM().afficherEtatAction(ihm.ETAT_TROP_CARTES, getNomJoueurs().get(getJoueurCourant()), null);
+                getIHM().selectionCarte();
             } else {
-                if (mainDuJoueurPleine) {
-                    getIHM().afficherEtatAction(ihm.ETAT_TROP_CARTES, getNomJoueurs().get(getJoueurCourant()), null);
-                    getIHM().dessinCartes(getJoueurCourant().getMain());
-                    getIHM().selectionCarte();
+                gererCarteBleue();
+                pouvoirPiloteDispo = true;
+                int indexJNext;
+                if (getJoueurs().indexOf(getJoueurCourant()) + 1 >= getNbJoueur()) {
+                    indexJNext = 0;
                 } else {
+                    indexJNext = getJoueurs().indexOf(getJoueurCourant()) + 1;
+                }
+                this.joueurCourant = getJoueurs().get(indexJNext);
+                if (getJoueurCourant().getCouleur() == Pion.JAUNE) {
+                    this.nbActions = 4;
+                } else {
+                    this.nbActions = 3;
+                }
+                getIHM().dessinCarteAventurier(getJoueurCourant());
+                this.àPioché = false;
+                if (getJoueurCourant().getMain().size() <= 5) {
                     getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
                     getGrille().deselectionnerTuiles();
-                    getIHM().dessinCarteAventurier(getJoueurCourant());
                     getIHM().interfaceParDefaut(getJoueurCourant().getMain());
+                } else {
+                    getIHM().afficherEtatAction(ihm.ETAT_TROP_CARTES, getNomJoueurs().get(getJoueurCourant()), null);
+                    getIHM().dessinCartes(getJoueurCourant().getMain());
+                    getIHM().selectionCarte();
                 }
             }
+        } else if (mainDuJoueurPleine) {
+            getIHM().afficherEtatAction(ihm.ETAT_TROP_CARTES, getNomJoueurs().get(getJoueurCourant()), null);
+            getIHM().dessinCartes(getJoueurCourant().getMain());
+            getIHM().selectionCarte();
+        } else {
+            getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
+            getGrille().deselectionnerTuiles();
+            getIHM().dessinCarteAventurier(getJoueurCourant());
+            getIHM().interfaceParDefaut(getJoueurCourant().getMain());
         }
     }
 
     //METHODES UTILES
     private void voirJoueur(Aventurier joueurAffiché) {
         Aventurier joueurSuivant;
-        if (getJoueurs().indexOf(joueurAffiché) + 1 >= getNbJoueur()){
+        if (getJoueurs().indexOf(joueurAffiché) + 1 >= getNbJoueur()) {
             joueurSuivant = getJoueurs().get(0);
         } else {
             joueurSuivant = getJoueurs().get(getJoueurs().indexOf(joueurAffiché) + 1);
@@ -794,27 +805,35 @@ public class Controleur implements Observateur {
             getIHM().afficherEtatAction(ihm.ETAT_VOIR_JOUEUR, getNomJoueurs().get(joueurSuivant), null);
         }
     }
+
     private int getNbAction() {
         return this.nbActions;
     }
+
     private VueAventurier getIHM() {
         return this.ihm;
     }
+
     private Aventurier getJoueurCourant() {
         return this.joueurCourant;
     }
+
     private Tresor[] getTrésors() {
         return trésors;
     }
+
     private int getNbJoueur() {
         return this.nbJoueurs;
     }
+
     private Grille getGrille() {
         return grille;
     }
+
     private int getNiveau() {
         return niveauEau;
     }
+
     private ArrayList<Tuile> calculTouteTuileDispo() {
         Grille g = getGrille();
         ArrayList<Tuile> touteTuileDispo = new ArrayList<Tuile>();
@@ -829,6 +848,7 @@ public class Controleur implements Observateur {
         }
         return touteTuileDispo;
     }
+
     private ArrayList<Tuile> calculTouteTuileInnon() {
         Grille g = getGrille();
         ArrayList<Tuile> touteTuileInnon = new ArrayList<Tuile>();
@@ -843,9 +863,11 @@ public class Controleur implements Observateur {
         }
         return touteTuileInnon;
     }
+
     private HashMap<Aventurier, String> getNomJoueurs() {
         return nomJoueurs;
     }
+
     private ArrayList<Aventurier> getJoueurs() {
         return this.joueurs;
     }
@@ -855,20 +877,25 @@ public class Controleur implements Observateur {
     private Stack<CarteBleue> getPiocheBleues() {
         return piocheBleues;
     }
+
     private CarteBleue piocheCarteBleue() {
         return this.piocheBleues.pop();
     }
+
     private void addPiocheBleue(CarteBleue c) {
         this.piocheBleues.push(c);
     }
+
     //défausse
     private ArrayList<CarteBleue> getDefausseBleues() {
         return this.defausseBleues;
     }
+
     private void addDefausseBleues(CarteBleue carte) {
         this.defausseBleues.add(carte);
         getIHM().actualiserDefausseB(carte);
     }
+
     private void viderDefausseBleues() {
         this.defausseBleues.removeAll(this.defausseBleues);
         getIHM().actualiserDefausseB(null);
@@ -879,20 +906,25 @@ public class Controleur implements Observateur {
     private Stack<CarteOrange> getPiocheOranges() {
         return piocheOranges;
     }
+
     private CarteOrange piocheCarteOrange() {
         return this.piocheOranges.pop();
     }
+
     private void addPiocheOrange(CarteOrange c) {
         this.piocheOranges.push(c);
     }
+
     //défausse
     private ArrayList<CarteOrange> getDefausseOranges() {
         return this.defausseOranges;
     }
+
     private void addDefausseOranges(CarteOrange carte) {
         this.defausseOranges.add(carte);
         getIHM().actualiserDefausseO(carte);
     }
+
     private void viderDefausseOranges() {
         this.defausseOranges.removeAll(this.defausseOranges);
         getIHM().actualiserDefausseO(null);
