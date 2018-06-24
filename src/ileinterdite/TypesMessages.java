@@ -41,5 +41,6 @@ public enum TypesMessages {
     FINIR_TOUR, /* type de message quand un joueur termine son tour. */
     ANNULER, /* type de message quand un joueur veut annuler son intéraction en cours. */
     SELECTIONNER_CARTE, /* type de message quand un joueur doit sélectionner une carte à utiliser ou donner */
-    VOIR_JOUEUR; /* type de message pour voir un joueur depuis le bouton autres joueurs */
+    VOIR_JOUEUR, /* type de message pour voir un joueur depuis le bouton autres joueurs */
+    QUITTER; /* type de message a la fin d'une partie pour quitter la fenetre de jeu */
 }

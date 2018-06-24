@@ -435,9 +435,8 @@ public class VueAccueil extends Observe {
     }
     
     public void fermer(){
-        this.setVisible(false);
-        this.validate();
-        this.repaint();
+        this.accueil.setVisible(false);
+        this.accueil.dispose();
     }
     
 }

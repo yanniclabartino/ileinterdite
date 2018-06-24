@@ -45,7 +45,8 @@ public class VueAventurier extends Observe {
     public static final int ETAT_SOUHAITE_JOUER_SPECIALE = 8;
     public static final int ETAT_JOUEUR = 9;
     public static final int ETAT_VOIR_JOUEUR = 10;
-
+    public static final int ETAT_SAUVETAGE = 11;
+    
     private TypesMessages MESSAGE_PRECEDENT;
     private boolean cartesCliquable, cartesSpeCliquable;
     private Aventurier affichageEnCours;
@@ -317,7 +318,11 @@ public class VueAventurier extends Observe {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Message m = new Message();
-                m.type = TypesMessages.FINIR_TOUR;
+                if (bFinir.getText().equals("Quitter")) {
+                    m.type = TypesMessages.QUITTER;
+                } else {
+                    m.type = TypesMessages.FINIR_TOUR;
+                }
                 MESSAGE_PRECEDENT = m.type;
 
                 notifierObservateur(m);
@@ -385,6 +390,9 @@ public class VueAventurier extends Observe {
                     case JOUER_SPECIALE:
                     case SELECTIONNER_CARTE:
                         m.type = TypesMessages.ASSECHER;
+                        break;
+                    default:
+                        m.type = TypesMessages.ACTION_DEPLACEMENT;
                         break;
                 }
                 if (grille.getTuile(e.getX() * 6 / grille.getWidth(), e.getY() * 6 / grille.getHeight()).getSelected() != 0) {
@@ -715,6 +723,7 @@ public class VueAventurier extends Observe {
             case ETAT_COMMENCER:
                 instructions.setText("Bienvenue " + joueur + ". Il vous reste " + nbaction + " actions");
                 break;
+                
             case ETAT_SOUHAITE_DEPLACEMENT:
                 instructions.setText("Choissisez une tuile où vous déplacer :");
                 break;
@@ -747,8 +756,39 @@ public class VueAventurier extends Observe {
                 instructions.setText("Vous observez la main du joueur " + joueur);
                 break;
 
+            case ETAT_SAUVETAGE:
+                instructions.setText(joueur + ", vous devez nager vers une des tuiles disponibles !");
+                break;
         }
 
+    }
+    
+    public void etatFin(int etatFin) {
+        //0 => niveau d'eau à 10
+        //1 => un joueur a coulé
+        //2 => héliport à sombré
+        //3 => deux tuiles d'un meme trésor ont sombrées
+        //4 => gagné
+        bFinir.setText("Quitter");
+        bFinir.setEnabled(true);
+        bAss.setEnabled(false);
+        bDepl.setEnabled(false);
+        bGagner.setEnabled(false);
+        bPerso.setEnabled(false);
+        bPioch.setEnabled(false);
+        bSpecial.setEnabled(false);
+        bAnnuler.setEnabled(false);
+        if (etatFin == 0) {
+            instructions.setText("Le niveau d'eau à débordé !");
+        } else if (etatFin == 1) {
+            instructions.setText("Un de vos coéquipier a sombré !");
+        } else if (etatFin == 2) {
+            instructions.setText("L'héliport à sombré !");
+        } else if (etatFin == 3) {
+            instructions.setText("Deux tuiles d'un même trésor ont sombrées !");
+        } else if (etatFin == 4) {
+            instructions.setText("Bien joué ! Vous vous êtes enfuis de l'île interdite !");
+        }
     }
     
     public void dessinCarteAventurier(Aventurier joueur) {
@@ -816,6 +856,12 @@ public class VueAventurier extends Observe {
         this.grille.repaint();
     }
 
+    public void afficherSauvetage() {
+        bAnnuler.setEnabled(false);
+        bFinir.setEnabled(false);
+        bPerso.setEnabled(false);
+    }
+    
     public void afficherJoueur(ArrayList<CarteOrange> cartes, Aventurier joueur) {
         grille.repaint();
         dessinCarteAventurier(joueur);
@@ -878,8 +924,13 @@ public class VueAventurier extends Observe {
         }
     }
     
-    public void actualiserNiveauEau(int nivo){
-        niveauEau.setImage(System.getProperty("user.dir") + "/src/images/autre/n"+nivo+".png");
+    public void actualiserNiveauEau(int nivEau){
+        niveauEau.setImage(System.getProperty("user.dir") + "/src/images/autre/n"+nivEau+".png");
     }
 
+    public void quitter() {
+        this.window.setVisible(false);
+        this.window.dispose();
+    }
+    
 }

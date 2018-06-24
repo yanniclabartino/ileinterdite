@@ -27,13 +27,13 @@ public class Controleur implements Observateur {
     private Tresor[] trésors;
     private HashMap<Aventurier, String> nomJoueurs;
     private ArrayList<Aventurier> joueurs;
-    private Aventurier joueurCourant;
+    private Aventurier joueurCourant, joueurEnDetresse;
     private Stack<CarteBleue> piocheBleues;
     private ArrayList<CarteBleue> defausseBleues;
     private Stack<CarteOrange> piocheOranges;
     private ArrayList<CarteOrange> defausseOranges;
     
-    private boolean pouvoirPiloteDispo, pouvoirIngénieurUsé, jeuEnCours, àPioché;
+    private boolean pouvoirPiloteDispo, pouvoirIngénieurUsé, jeuEnCours, àPioché, sauvetageEnCours;
     private int niveauEau, nbJoueurs, nbActions;
     private CarteOrange carteTMP;
 
@@ -58,7 +58,11 @@ public class Controleur implements Observateur {
                 }
                 break;
             case ACTION_DEPLACEMENT:
-                deplacement(m.tuile);
+                if (!sauvetageEnCours) {
+                    deplacement(getJoueurCourant(), m.tuile);
+                } else {
+                    deplacement(this.joueurEnDetresse, m.tuile);
+                }
                 break;
             case SOUHAITE_ASSECHER:
                 if (assechementPossible()) {
@@ -111,6 +115,8 @@ public class Controleur implements Observateur {
             case ANNULER:
                 actualiserJeu();
                 break;
+            case QUITTER :
+                getIHM().quitter();
         }
     }
 
@@ -144,15 +150,43 @@ public class Controleur implements Observateur {
             getIHM().afficherTuilesPilote();
         }
     }
-    private void deplacement(Tuile t){
+    private void deplacement(Aventurier joueur, Tuile t){
         if (t.getSelected() != 0) {
             if (t.getSelected() == 2) {
                 pouvoirPiloteDispo = false;
             }
-            getJoueurCourant().seDeplace(t);
-            this.nbActions--;
+            joueur.seDeplace(t);
+            if (!sauvetageEnCours){
+                this.nbActions--;
+            }
         }
         actualiserJeu();
+    }
+    
+    private void gererSauvetage(){
+        String nomJoueur = "Bradley";
+        Aventurier joueurSubmergé = null;
+        boolean sauvetageNecessaire = false;
+        for (Tuile t : getGrille().getGrille()) {
+            if (t.getEtat() == Utils.EtatTuile.COULEE && !t.getPossede().isEmpty()) {
+                nomJoueur = getNomJoueurs().get(t.getPossede().get(0));
+                joueurSubmergé = t.getPossede().get(0);
+                sauvetageNecessaire = true;
+            }
+        }
+        if (sauvetageNecessaire) {
+            System.out.println("Sauvetage nécessaire du joueur : "+nomJoueur+" "+joueurSubmergé.getClass());
+            if (deplacementPossible(joueurSubmergé)) {
+                getIHM().afficherEtatAction(ihm.ETAT_SAUVETAGE, nomJoueur, null);
+                gererDeplacement(joueurSubmergé);
+                this.joueurEnDetresse = joueurSubmergé;
+                getIHM().afficherSauvetage();
+            } else {
+                this.sauvetageEnCours = false;
+            }
+        } else {
+            this.sauvetageEnCours = false;
+        }
     }
     
     private boolean assechementPossible() {
@@ -510,20 +544,8 @@ public class Controleur implements Observateur {
                 addDefausseBleues(c);
             } else if (t.getEtat() == Utils.EtatTuile.INONDEE) {
                 t.setEtat(Utils.EtatTuile.COULEE);
-                if (!t.getPossede().isEmpty() && !this.estPerdu()) {
-                    boolean joueurNoyé = false;
-                    int indice = 0;
-                    ArrayList<Aventurier> jEnDetresse = new ArrayList<Aventurier>();
-                    jEnDetresse.addAll(t.getPossede());
-                    while (indice < jEnDetresse.size() && !joueurNoyé) {
-                        if (deplacementPossible(jEnDetresse.get(indice))) {
-                            gererDeplacement(jEnDetresse.get(indice));
-                        } else {
-                            jEnDetresse.get(indice).setTuile(null);
-                            joueurNoyé = true;
-                        }
-                        indice++;
-                    }
+                if (!t.getPossede().isEmpty()) {
+                    this.sauvetageEnCours = true;
                 }
             }
             if (getPiocheBleues().empty()) {
@@ -615,11 +637,13 @@ public class Controleur implements Observateur {
         Grille g = getGrille();
         Utils.EtatTuile coulee = Utils.EtatTuile.COULEE;
         int joueurVivant = getNbJoueur();
-        for (Aventurier a : getNomJoueurs().keySet()) {
-            if (a.getTuile() == null) {
+        System.out.println("Nombre joueur = "+getNbJoueur());
+        for (Aventurier a : getJoueurs()) {
+            if (a.getTuile().getEtat() == Utils.EtatTuile.COULEE) {
                 joueurVivant--;
             }
         }
+        System.out.println("Joueurs vivants : "+joueurVivant);
         return (g.getTuile(NomTuile.HELIPORT).getEtat() == coulee
                 || getNiveau() >= 10
                 || (g.getTuile(NomTuile.LE_TEMPLE_DU_SOLEIL).getEtat() == coulee && g.getTuile(NomTuile.LE_TEMPLE_DE_LA_LUNE).getEtat() == coulee && !getTrésors()[0].isGagne())
@@ -705,7 +729,7 @@ public class Controleur implements Observateur {
         getGrille().deselectionnerTuiles();
         boolean mainDuJoueurPleine = (getJoueurCourant().getMain().size() > 5);
         this.pouvoirIngénieurUsé = false;
-        if (this.estTerminé()) {
+        if (this.estTerminé() && !sauvetageEnCours) {
             if (this.estPerdu()) {
                 //partie perdue (a afficher sur l'ihm)
                 int joueurVivant = getNbJoueur();
@@ -715,16 +739,16 @@ public class Controleur implements Observateur {
                     }
                 }
                 if (grille.getTuile(NomTuile.HELIPORT).getEtat() == Utils.EtatTuile.COULEE) {
-                    //L'héliport à sombré.
+                    getIHM().etatFin(2);
                 } else if (getNiveau() >= 10) {
-                    //Le niveau d'eau vous a submergé.
+                    getIHM().etatFin(0);
                 } else if (joueurVivant < getNbJoueur()) {
-                    //Un de vos coéquipier à sombré.
+                    getIHM().etatFin(1);
                 } else {
-                    //Les tuiles de trésor ont sombrées.
+                    getIHM().etatFin(3);
                 }
             } else {
-                //à compléter (victoire).
+                getIHM().etatFin(4);
             }
         } else {
             if (getNbAction() == 0) {
@@ -753,14 +777,18 @@ public class Controleur implements Observateur {
                     }
                     getIHM().dessinCarteAventurier(getJoueurCourant());
                     this.àPioché = false;
-                    if (getJoueurCourant().getMain().size() <= 5) {
-                        getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
-                        getGrille().deselectionnerTuiles();
-                        getIHM().interfaceParDefaut(getJoueurCourant().getMain());
+                    if (sauvetageEnCours) {
+                        gererSauvetage();
                     } else {
-                        getIHM().afficherEtatAction(ihm.ETAT_TROP_CARTES, getNomJoueurs().get(getJoueurCourant()), null);
-                        getIHM().dessinCartes(getJoueurCourant().getMain());
-                        getIHM().selectionCarte();
+                        if (getJoueurCourant().getMain().size() <= 5) {
+                            getIHM().afficherEtatAction(ihm.ETAT_JOUEUR, getNomJoueurs().get(getJoueurCourant()), getNbAction());
+                            getGrille().deselectionnerTuiles();
+                            getIHM().interfaceParDefaut(getJoueurCourant().getMain());
+                        } else {
+                            getIHM().afficherEtatAction(ihm.ETAT_TROP_CARTES, getNomJoueurs().get(getJoueurCourant()), null);
+                            getIHM().dessinCartes(getJoueurCourant().getMain());
+                            getIHM().selectionCarte();
+                        }
                     }
                 }
             } else {
